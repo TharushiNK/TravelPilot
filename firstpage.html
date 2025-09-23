@@ -79,6 +79,7 @@
 
         .logo {
             font-weight: 700;
+            font-family: 'Brush Script MT', cursive;
             font-size: 24px;
         }
         
@@ -294,35 +295,45 @@
         }
 .about-us {
   position: relative;
-  background: url("5\ Handmade\ Sri\ Lanka\ Crafts\ You\ Must\ Shop\ For\ _\ LesterLost.jpg") center/cover no-repeat;
-  padding: 80px 0;
+  padding: 80px 20px;
   color: var(--text-color-light);
   overflow: hidden;
-}
-
-.about-us::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3); /* Lighter overlay to show ancient carvings */
   z-index: 1;
 }
 
+.about-bg {
+  position: absolute;
+  inset: 0;
+  background: url("sunset.jpg") center center / cover no-repeat;
+  filter: brightness(0.4);
+  z-index: 0;
+}
+
+/* Section title */
 .about-us h2 {
   text-align: center;
   color: #fff;
   margin-bottom: 50px;
-  z-index: 2;
   position: relative;
+  z-index: 2;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+.about-us h2::after {
+  content: '';
+  display: block;
+  width: 60%;
+  height: 2px;
+  background-color: var(--primary-color);
+  margin: 10px auto 0;
 }
 
-/* Wrapper that covers the rest of section */
+/* Content Wrapper */
 .about-cover {
   display: flex;
   align-items: stretch;
+  justify-content: center;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -330,13 +341,15 @@
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 2;
 }
 
-/* Left image with vibrant colors and rounded edges */
+/* Left image */
 .about-image {
   flex: 1.2;
-  overflow: visible; /* Allow image to scale beyond container */
-  position: relative; /* Ensure proper z-index for hover effect */
+  position: relative;
+  overflow: hidden;
 }
 
 .about-image img {
@@ -344,7 +357,6 @@
   height: 100%;
   object-fit: cover;
   border-radius: 15px 0 0 15px;
-  filter: none;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   display: block;
 }
@@ -352,34 +364,29 @@
 .about-image:hover img {
   transform: scale(1.05);
   box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-  z-index: 5; /* Bring image above other elements */
 }
 
-
-
-/* Right card with dark opaque background */
+/* Right card */
 .about-card {
   flex: 1;
-  background: rgba(39, 26, 8, 0.95); /* Dark opaque background */
+  background: rgba(39, 26, 8, 0.95);
   color: var(--text-color-light);
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 40px;
   border-radius: 0 15px 15px 0;
-  position: relative;
-  z-index: 2;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
+
 .about-card:hover {
-  transform: translateY(-15px) scale(1.05); /* elevate and slightly enlarge */
-  box-shadow: 0 20px 40px rgba(0,0,0,0.6); /* stronger shadow for popup effect */
-  z-index: 5; /* bring above other elements */
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
 }
 
 .about-card h3 {
   font-size: 32px;
-  color: #e59902; /* Bright golden-orange */
+  color: var(--primary-color);
   margin-bottom: 20px;
   font-weight: 600;
 }
@@ -388,12 +395,12 @@
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 30px;
-  color: #fef1e8; /* Light off-white for readability */
+  color: var(--text-color-light);
 }
 
 .about-card a {
   display: inline-block;
-  background: linear-gradient(135deg, #e59902, #ffb84d); /* Solid golden-orange with gradient */
+  background: linear-gradient(135deg, #e59902, #ffb84d);
   color: #2c1a00;
   padding: 12px 28px;
   border-radius: 25px;
@@ -401,13 +408,37 @@
   text-decoration: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: fit-content;
-  border: none;
   box-shadow: 0 4px 15px rgba(229, 153, 2, 0.3);
 }
 
 .about-card a:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(229, 153, 2, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .about-cover {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .about-image,
+  .about-card {
+    width: 100%;
+    height: auto;
+  }
+
+  .about-image img {
+    border-radius: 15px 15px 0 0;
+    height: 300px;
+  }
+
+  .about-card {
+    border-radius: 0 0 15px 15px;
+    text-align: center;
+    padding: 30px 20px;
+  }
 }
 
 /* Responsive */
@@ -1018,7 +1049,7 @@ footer::before {
     <!-- Header Section -->
     <header class="header">
         <nav>
-            <div class="logo">Travel<span>Pilot</span></div>
+            <div class="logo"><b>Travel</b><span><b>Pilot</b></span></div>
             <ul>
                 <li><a href="#"><b>Home</b></a></li>
                 <li><a href="#"><b>Destinations</b></a></li>
@@ -1075,13 +1106,20 @@ footer::before {
 
 <!-- About Us Section -->
 <section class="section about-us">
+  <!-- Background overlay image -->
+  <div class="about-bg"></div>
+
+  <!-- Section Title -->
   <h2>ABOUT US</h2>
+
+  <!-- Content Wrapper -->
   <div class="about-cover">
-    <!-- Left image -->
+    <!-- Left Image -->
     <div class="about-image">
       <img src="TravelPilot_Swings.PNG" alt="About Us Image">
     </div>
-    <!-- Right transparent card -->
+
+    <!-- Right Card -->
     <div class="about-card">
       <h3>Get to know us</h3>
       <p>
@@ -1094,7 +1132,6 @@ footer::before {
     </div>
   </div>
 </section>
-
 
 
 
