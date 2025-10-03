@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelPilot - Cultural Highlights Tour</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            background-color: #000;
+        }
+
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: url('image/img1.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .navbar {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            padding: 20px 0;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+
+        .nav-links li a:hover {
+            color: #ddae12;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-btn,
+        .lang-selector {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn {
+            background-color: #d19a4e;
+            color: #fff;
+            border: none;
+        }
+
+        .login-btn:hover {
+            background-color: #c08b41;
+        }
+
+        .lang-selector {
+            border: 1px solid #fff;
+            color: #fff;
+        }
+
+        .lang-selector:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            margin-top: 150px;
+        }
+
+        .hero-content h1 {
+            font-size: 50px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            background-color: #d19a4e;
+            color: #fff;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #c08b41;
+        }
+
+        /* POPUP STYLES */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #f0b86a, #d19a4e);
+            color: #333;
+            padding: 20px;
+            /* Reduced padding */
+            border-radius: 8px;
+            /* Slightly smaller border-radius */
+            width: 90%;
+            max-width: 300px;
+            /* Even smaller max-width for the text popup */
+            text-align: center;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .popup-content h2 {
+            margin-bottom: 8px;
+            /* Reduced margin */
+            font-size: 22px;
+            /* Smaller font size */
+            color: #1e1e1e;
+        }
+
+        .popup-content p {
+            font-size: 13px;
+            /* Smaller font size */
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 20px;
+            /* Smaller close button */
+            color: #444;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .popup-close:hover {
+            transform: scale(1.2);
+            color: #1e1e1e;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Small, Simple Image Popup Styles */
+        .image-popup-content {
+            background-color: #1a1a1a;
+            padding: 5px;
+            /* Reduced padding */
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 350px;
+            /* Much smaller max-width for image popup */
+            position: relative;
+        }
+
+        .image-popup-content img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 5px;
+        }
+
+
+        /* Tours Section Styles */
+        .tours-section {
+            padding: 50px 0;
+            background: url('image/backimg.jpg') no-repeat center center/cover;
+            position: relative;
+            color: #333;
+        }
+
+        .tours-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+        }
+
+        .tours-container {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .tours-container h2 {
+            font-size: 40px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 10px;
+        }
+
+        .tours-container .description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 50px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #444;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+        }
+
+        .tour-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .tour-card {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            text-align: left;
+        }
+
+        .tour-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tour-card:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .tour-card-image {
+            width: 60%;
+            min-height: 300px;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            /* Add cursor pointer to indicate it's clickable */
+        }
+
+        .tour-card-content {
+            width: 40%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tour-card-content h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e1e1e;
+            margin-bottom: 10px;
+        }
+
+        .tour-card-content p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .view-more-btn {
+            background-color: #d19a4e;
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: flex-start;
+            text-decoration: none;
+        }
+
+        .view-more-btn:hover {
+            background-color: #c08b41;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: url('image/footer.jpg') no-repeat center center/cover;
+            color: #fff;
+            padding: 50px 0 20px;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .footer-container,
+        .footer-bottom {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer-column {
+            flex: 1 1 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer-column h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #d19a4e;
+        }
+
+        .footer-column p,
+        .footer-column ul,
+        .footer-column address {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #d19a4e;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 20px;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #d19a4e;
+        }
+
+        .footer-bottom {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Click Animation Styles */
+        .clicked {
+            animation: click-transform 0.3s ease-in-out forwards;
+        }
+
+        @keyframes click-transform {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.95);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+        @media (max-width: 768px) {
+
+            .tour-card,
+            .tour-card:nth-child(even) {
+                flex-direction: column;
+            }
+
+            .tour-card-image,
+            .tour-card-content {
+                width: 100%;
+            }
+
+            .tour-card-image {
+                min-height: 250px;
+            }
+
+            .tour-card-content {
+                padding: 30px 20px;
+            }
+
+            .view-more-btn {
+                align-self: center;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-column {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="hero-section">
+        <nav class="navbar">
+            <a href="#" class="logo">TravelPilot</a>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-item" data-title="Welcome Home!"
+                        data-message="You are on the homepage. Navigate to a destination or plan your trip.">Home</a>
+                </li>
+                <li><a href="#" class="nav-item" data-title="Explore Destinations"
+                        data-message="Discover the beauty and culture of our featured locations.">Destinations</a></li>
+                <li><a href="#" class="nav-item" data-title="Plan Your Trip"
+                        data-message="Get started with planning your next unforgettable adventure.">Plan Your Trip</a>
+                </li>
+                <li><a href="#" class="nav-item" data-title="Our Services"
+                        data-message="Explore the range of services we offer for your journey.">Services</a></li>
+                <li><a href="#" class="nav-item" data-title="Contact Us"
+                        data-message="Have a question? Get in touch with our friendly team.">Contact us</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="#" class="login-btn action-item" data-title="Login to Your Account"
+                    data-message="Log in to manage your bookings and personal information.">Login</a>
+                <a href="#" class="lang-selector action-item" data-title="Select Language"
+                    data-message="Choose your preferred language for the website.">En</a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <h1>CULTURAL HIGHLIGHTS TOUR</h1>
+            <p>Visit renowned cultural sites on the island and experience a rich heritage.</p>
+            <button class="cta-button" data-title="Begin Your Cultural Journey"
+                data-message="Ready to explore a rich heritage? Book this tour today!">BEGIN YOUR JOURNEY</button>
+        </div>
+    </header>
+
+    <section class="tours-section">
+        <div class="tours-container">
+            <h2>TOURS</h2>
+            <p class="description">
+                Discover the island of treasures with Aitken Spence Travels, the most renowned amongst Sri Lanka tour
+                operators. Keeping your comfort in mind, we offer tailor-made tours that provide plenty of opportunities
+                to experience and explore the country's rich heritage, diverse culture, golden sandy beaches, nature and
+                wildlife. Your first steps begin with the traditional greeting of "Ayubowan"!
+            </p>
+
+            <div class="tour-grid">
+                <div class="tour-card">
+                    <div class="tour-card-image" style="background-image: url('image/CulturHeritage.jpg');"></div>
+                    <div class="tour-card-content">
+                        <h3>Cultural & Heritage</h3>
+                        <p>
+                            Explore ancient sites seemingly lost in time, uncover the stories behind ancient ruins and
+                            local legends and be awed by monuments that are intertwined with the island's culture.
+                        </p>
+                        <a href="#" class="view-more-btn">VIEW MORE</a>
+                    </div>
+                </div>
+
+                <div class="tour-card">
+                    <div class="tour-card-image" style="background-image: url('image/HillCountry.jpg');"></div>
+                    <div class="tour-card-content">
+                        <h3>Hill Country</h3>
+                        <p>
+                            A perfect blend of beauty, history and culture, the hill country of Sri Lanka tucked away
+                            amidst emerald covered mountains.
+                        </p>
+                        <a href="#" class="view-more-btn">VIEW MORE</a>
+                    </div>
+                </div>
+
+                <div class="tour-card">
+                    <div class="tour-card-image" style="background-image: url('image/WildlifeNature.jpeg');"></div>
+                    <div class="tour-card-content">
+                        <h3>Wildlife & Nature</h3>
+                        <p>
+                            Indulge in an exquisite monsoon forest safari and feel where your heart and complete well
+                            being is at the centre of a relaxing holiday experience.
+                        </p>
+                        <a href="#" class="view-more-btn">VIEW MORE</a>
+                    </div>
+                </div>
+
+                <div class="tour-card">
+                    <div class="tour-card-image" style="background-image: url('image/DalawellBeach,.jpeg');"></div>
+                    <div class="tour-card-content">
+                        <h3>Beaches & Coastal Beauty</h3>
+                        <p>
+                            Surrounded by the Indian Ocean, Sri Lanka has some of the best beaches in Asia. Explore the
+                            beauty of a paradise amidst seaside serenades.
+                        </p>
+                        <a href="#" class="view-more-btn">VIEW MORE</a>
+                    </div>
+                </div>
+
+                <div class="tour-card">
+                    <div class="tour-card-image" style="background-image: url('image/surf.jpg');"></div>
+                    <div class="tour-card-content">
+                        <h3>Excursions & Adventures</h3>
+                        <p>
+                            Immerse yourself in truly enriching activities that let you explore the island's scenic
+                            landscapes, traditional culture and more.
+                        </p>
+                        <a href="#" class="view-more-btn">VIEW MORE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>TravelPilot</h4>
+                <p>
+                    Your trusted partner for unforgettable journeys. We specialize in crafting personalized tours
+                    that let you explore the world's most breathtaking cultural, natural, and adventurous sites.
+                </p>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Destinations</a></li>
+                    <li><a href="#">Plan Your Trip</a></li>
+                    <li><a href="#">Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact Us</h4>
+                <address>
+                    123 Wanderlust Lane,<br>
+                    Global City, GC 12345<br>
+                    Email: info@travelpilot.com<br>
+                    Phone: +1 (234) 567-8901
+                </address>
+            </div>
+            <div class="footer-column">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TravelPilot. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <div class="popup-overlay" id="text-popup">
+        <div class="popup-content">
+            <span class="popup-close">&times;</span>
+            <h2 id="popup-title"></h2>
+            <p id="popup-message"></p>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="image-popup">
+        <div class="image-popup-content">
+            <span class="popup-close">&times;</span>
+            <img src="" alt="Popup Image">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const textPopup = document.getElementById('text-popup');
+            const imagePopup = document.getElementById('image-popup');
+            const popupTitle = document.getElementById('popup-title');
+            const popupMessage = document.getElementById('popup-message');
+            const popupImage = document.querySelector('#image-popup img');
+
+            const interactiveElements = document.querySelectorAll('.nav-links a, .nav-actions a, .cta-button, .view-more-btn');
+            const tourImages = document.querySelectorAll('.tour-card-image');
+
+            const tourDetails = {
+                'Cultural & Heritage': 'Explore ancient sites seemingly lost in time, uncover the stories behind ancient ruins and local legends and be awed by monuments that are intertwined with the island\'s culture.',
+                'Hill Country': 'A perfect blend of beauty, history and culture, the hill country of Sri Lanka tucked away amidst emerald covered mountains.',
+                'Wildlife & Nature': 'Indulge in an exquisite monsoon forest safari and feel where your heart and complete well being is at the centre of a relaxing holiday experience.',
+                'Beaches & Coastal Beauty': 'Surrounded by the Indian Ocean, Sri Lanka has some of the best beaches in Asia. Explore the beauty of a paradise amidst seaside serenades.',
+                'Excursions & Adventures': 'Immerse yourself in truly enriching activities that let you explore the island\'s scenic landscapes, traditional culture and more.'
+            };
+
+            const showTextPopup = (title, message) => {
+                popupTitle.textContent = title;
+                popupMessage.textContent = message;
+                textPopup.style.display = 'flex';
+                imagePopup.style.display = 'none'; // Hide image popup if text is shown
+            };
+
+            const showImagePopup = (imageSrc) => {
+                popupImage.src = imageSrc;
+                imagePopup.style.display = 'flex';
+                textPopup.style.display = 'none'; // Hide text popup if image is shown
+            };
+
+            const hidePopups = () => {
+                textPopup.style.display = 'none';
+                imagePopup.style.display = 'none';
+            };
+
+            interactiveElements.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    // Add animation class
+                    item.classList.add('clicked');
+                    item.addEventListener('animationend', () => {
+                        item.classList.remove('clicked');
+                    }, {
+                        once: true
+                    });
+
+                    // Show the text popup
+                    let title, message;
+                    if (item.classList.contains('view-more-btn')) {
+                        const cardTitle = item.closest('.tour-card').querySelector('h3').textContent;
+                        title = cardTitle;
+                        message = tourDetails[cardTitle];
+                    } else {
+                        title = item.getAttribute('data-title');
+                        message = item.getAttribute('data-message');
+                    }
+                    showTextPopup(title, message);
+                });
+            });
+
+            tourImages.forEach(imageDiv => {
+                imageDiv.addEventListener('click', () => {
+                    const backgroundImage = window.getComputedStyle(imageDiv).getPropertyValue('background-image');
+                    const imageUrl = backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/, '$1');
+                    showImagePopup(imageUrl);
+                });
+            });
+
+            // Close popups when the close button is clicked
+            document.querySelectorAll('.popup-close').forEach(closeBtn => {
+                closeBtn.addEventListener('click', hidePopups);
+            });
+
+            // Close popups when clicking outside the content
+            window.addEventListener('click', (e) => {
+                if (e.target === textPopup || e.target === imagePopup) {
+                    hidePopups();
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
