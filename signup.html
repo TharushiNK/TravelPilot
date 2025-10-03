@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-light: #ffffff;
+            --input-bg: rgba(255, 255, 255, 0.3);
+            --button-bg: #4b5e7d;
+            --ash-card: rgba(128, 128, 128, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            /* Adjusted overlay to be lighter for better image visibility */
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                url('image/signin.png') center center/cover no-repeat;
+            background-attachment: fixed;
+            /* Ensures image stays crisp */
+        }
+
+        .left-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .left-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            animation: slideUp 1s ease-out;
+        }
+
+        .left-section p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            line-height: 1.5;
+            animation: slideUp 1s ease-out 0.2s backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .right-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+        }
+
+        .signup-box {
+            width: 100%;
+            max-width: 380px;
+            background: var(--ash-card);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+        }
+
+        .signup-box label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .signup-box input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 10px;
+            background: var(--input-bg);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .signup-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .signup-box input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .signup-box .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+            color: #fff;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .forgot-password,
+        .signup-box a {
+            display: block;
+            text-align: right;
+            color: #fff;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .signup-box a:hover {
+            text-decoration: underline;
+        }
+
+        .sign-up-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--button-bg);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .sign-up-btn:hover {
+            transform: scale(1.05);
+            background: #3a4b63;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .left-section {
+                height: 40vh;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 30px;
+            }
+
+            .left-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .left-section p {
+                font-size: 1rem;
+            }
+
+            .right-section {
+                height: auto;
+                padding: 20px;
+            }
+
+            .signup-box {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="left-section">
+        <h1>Your Adventure Starts Here</h1>
+        <p>Begin your journey today and explore the world with ease.</p>
+    </div>
+
+    <div class="right-section">
+        <div class="signup-box">
+            <form id="signup-form">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Email" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Username" required>
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <button type="button" class="show-password" onclick="togglePassword()">Show</button>
+                </div>
+                <label class="checkbox-label"><input type="checkbox" required> I agree with privacy policy</label>
+                <button type="submit" class="sign-up-btn">SIGN UP</button>
+                <a href="#">Have an account?</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Signed up!');
+        });
+
+        document.querySelectorAll('.sign-up-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                if (this.type === 'submit') e.preventDefault();
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => this.style.transform = 'scale(1)', 300);
+            });
+        });
+
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const showPasswordBtn = document.querySelector('.show-password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                showPasswordBtn.textContent = 'Hide';
+            } else {
+                passwordField.type = 'password';
+                showPasswordBtn.textContent = 'Show';
+            }
+        }
+    </script>
+</body>
+
+</html>
