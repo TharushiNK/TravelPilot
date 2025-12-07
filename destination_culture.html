@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TravelPilot</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-p1ZmWcZBjPjZ1u8xZpENqf/vL8Pq6CMsYwZH5sX+zXjN7o8UQnv9U+4r4u1D9V1FHe8OZqLz9Wz1vI5fG1VdVg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            height: 100%;
+        }
+
+        /* TOP SECTION */
+        .top-section {
+            width: 100%;
+            height: 100vh;
+            background:
+                linear-gradient(rgba(255, 140, 0, 0.35), rgba(0, 0, 0, 0.55)),
+                url("image/Polonnaruwa.jpeg") center center / cover no-repeat;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        nav {
+            width: 100%;
+            padding: 18px 48px;
+            position: absolute;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(3px);
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: "Pacifico", cursive;
+            font-size: 26px;
+            color: white;
+        }
+
+        .menu {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .login-btn {
+            padding: 8px 18px;
+            background: #d8a04d;
+            color: white;
+            border-radius: 18px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown {
+            position: relative;
+            /* VERY IMPORTANT */
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            /* appear BELOW button */
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            padding: 8px 0;
+            min-width: 120px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            display: none;
+            z-index: 9999;
+            /* make sure not hidden */
+        }
+
+        .dropdown-content a {
+            padding: 10px 16px;
+            display: block;
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .dropdown-content a:hover {
+            background: #f2f2f2;
+        }
+
+        .show {
+            display: block;
+        }
+
+
+        .hero-content {
+            position: absolute;
+            bottom: 12%;
+            left: 6%;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 46px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .breadcrumb {
+            font-size: 16px;
+            color: #e3e3e3;
+        }
+
+        /* CULTURAL SECTION */
+        .cultural-section {
+            background: url("image/bd0df31521a2a1e07b8d4e0e212068cf.jpg") repeat;
+            padding: 70px 20px;
+            text-align: center;
+            background-color: #e7d4ad;
+        }
+
+        .cultural-title {
+            font-size: 40px;
+            font-weight: 700;
+            color: #6a3c0a;
+        }
+
+        .cultural-box {
+            max-width: 900px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 32px;
+            border-radius: 16px;
+            font-size: 18px;
+            color: #6b3b00;
+        }
+
+        /* ITINERARY */
+        .day-section {
+            background:
+                linear-gradient(rgba(245, 230, 210, 0.80), rgba(245, 230, 210, 0.85)),
+                url("image/bd0df31521a2a1e07b8d4e0e212068cf.jpg") center / cover fixed no-repeat;
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .itinerary-wrap {
+            width: 1100px;
+            max-width: 96%;
+        }
+
+        .yellow-header {
+            background: #4b2a1d;
+            padding: 22px 26px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 18px;
+        }
+
+        .yellow-small {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .yellow-big {
+            font-size: 32px;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .itinerary-header {
+            background: #663300;
+            padding: 28px 26px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            margin-top: 22px;
+        }
+
+        .duration {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .it-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-left: 20px;
+        }
+
+        .it-body {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(3px);
+            padding: 40px;
+            border-radius: 0 0 14px 14px;
+            display: none;
+        }
+
+        .it-inner {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 14px;
+            font-size: 19px;
+            line-height: 1.7;
+            position: relative;
+            color: #4b2a1d;
+        }
+
+        .map-control {
+            position: absolute;
+            bottom: 22px;
+            right: 22px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .map-pin {
+            width: 40px;
+            height: 40px;
+            background: #c27421;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .map-label {
+            font-size: 15px;
+            color: #c27421;
+            font-weight: 700;
+        }
+
+        /* NEW SECTIONS */
+        .route-section {
+            padding: 60px 20px;
+            background: #f4e7d3;
+            text-align: center;
+        }
+
+        .related-section {
+            padding: 70px 20px;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+                url("image/bd0df31521a2a1e07b8d4e0e212068cf.jpg") center/cover no-repeat;
+        }
+
+        /* Footer Styles */
+        /* Footer Styles */
+        .footer {
+            background: url('image/download (17).jpg') no-repeat center center/cover;
+            color: #fff;
+            padding: 50px 0 20px;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .footer-container,
+        .footer-bottom {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer-column {
+            flex: 1 1 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer-column h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #d19a4e;
+        }
+
+        .footer-column p,
+        .footer-column ul,
+        .footer-column address {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #d19a4e;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 20px;
+            margin-right: 15px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #d19a4e;
+            transform: scale(1.2);
+        }
+
+        .footer-bottom {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Responsive Footer */
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-column {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <div class="top-section">
+        <div class="overlay"></div>
+
+        <nav>
+            <div class="logo">TravelPilot</div>
+            <div class="menu">
+                <a href="#">Home</a>
+                <a href="#">Destinations</a>
+                <a href="#">Plan Your Trip</a>
+                <a href="#">Services</a>
+                <a href="#">Contact</a>
+                <button class="login-btn">Login</button>
+                <div class="dropdown" onclick="toggleDropdown()">
+                    Lang▼
+                    <div class="dropdown-content" id="dropMenu">
+                        <a>English</a>
+                        <a>සිංහල</a>
+                        <a>தமிழ்</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <div class="hero-title">DISCOVER THE TREASURE OF SRI LANKA</div>
+            <div class="breadcrumb">Home › destinations › Cultural</div>
+        </div>
+    </div>
+
+    <!-- CULTURAL -->
+    <section class="cultural-section">
+        <div class="cultural-title">CULTURAL & HERITAGE</div>
+        <div class="cultural-box">
+            <b>
+                Known by many ancient names, Sri Lanka is rich in timeless culture and historical experience.
+                Explore UNESCO wonders with our curated cultural tours.
+            </b>
+        </div>
+    </section>
+
+    <!-- ITINERARY -->
+    <section class="day-section">
+        <div class="itinerary-wrap">
+
+            <div class="yellow-header">
+                <div class="yellow-small">DURATION</div>
+                <div class="yellow-big">3 DAYS</div>
+            </div>
+
+            <!-- Day 1 -->
+            <div class="itinerary-header" onclick="toggleItinerary('d1')">
+                <div style="display:flex; align-items:center;">
+                    <div class="duration">Day 1</div>
+                    <div class="it-title">Airport | Kandy</div>
+                </div>
+                <div style="font-size:26px; font-weight:900;">⌄</div>
+            </div>
+
+            <div class="it-body" id="d1">
+                <div class="it-inner">
+                    Upon arrival at Bandaranaike International Airport, you will be welcomed by your tour guide and
+                    start your journey to Kandy, the hill capital surrounded by beautiful greenery.
+
+                    In the evening, visit the famous Temple of the Sacred Tooth Relic, a UNESCO World Heritage Site.
+                    Afterwards, enjoy a cultural show with traditional music and dance.<br><br>
+                    <b>Overnight stay in Kandy.</b>
+<div style="
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    z-index: 1000;
+">
+    <div style="font-size: 24px;">📚</div>
+    <div style="
+        background-color: #7e4a06;
+        color: #000;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        transition: background 0.3s;
+    " 
+    onmouseover="this.style.backgroundColor='#FFC107';" 
+    onmouseout="this.style.backgroundColor='#FFD700';"
+    >
+        Book Now
+    </div>
+</div>
+
+
+
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="itinerary-header" onclick="toggleItinerary('d2')">
+                <div style="display:flex; align-items:center;">
+                    <div class="duration">Day 2</div>
+                    <div class="it-title">Kandy | Sigiriya | Dambulla | Matale</div>
+                </div>
+                <div style="font-size:26px; font-weight:900;">⌄</div>
+            </div>
+
+            <div class="it-body" id="d2">
+                <div class="it-inner">
+                    After breakfast at your hotel in Kandy, begin your journey towards Sigiriya, with enriching stops
+                    along the way. Your first stop will be at Matale, where you can explore a renowned spice garden and
+                    learn about Sri Lanka’s centuries-old spice trade and Ayurvedic uses.
+
+                    Continue your journey to Dambulla Cave Temple, a UNESCO World Heritage Site, famed for its ancient
+                    cave paintings and hundreds of Buddha statues that showcase the island’s deep spiritual traditions.
+
+                    By late afternoon, arrive in Sigiriya and check into your hotel. In the evening, you may relax or
+                    take a stroll through the village surroundings, preparing for the next day’s exploration of the
+                    iconic Sigiriya Rock Fortress.
+
+                    Conclude the day with a delightful Sri Lankan dinner and unwind at your hotel.<br><br>
+                    <b>Overnight stay in Sigiriya.</b>
+
+                    <div style="
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    z-index: 1000;
+">
+    <div style="font-size: 24px;">📚</div>
+    <div style="
+        background-color: #70490d;
+        color: #000;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        transition: background 0.3s;
+    " 
+    onmouseover="this.style.backgroundColor='#FFC107';" 
+    onmouseout="this.style.backgroundColor='#FFD700';"
+    >
+        Book Now
+    </div>
+</div>
+
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div class="itinerary-header" onclick="toggleItinerary('d3')">
+                <div style="display:flex; align-items:center;">
+                    <div class="duration">Day 3</div>
+                    <div class="it-title">Kandy | Peradeniya | Pinnawala</div>
+                </div>
+                <div style="font-size:26px; font-weight:900;">⌄</div>
+            </div>
+
+            <div class="it-body" id="d3">
+                <div class="it-inner">
+                    After breakfast, set out to explore the Royal Botanical Garden in Peradeniya, home to a vast
+                    collection of orchids, tropical plants, and rare trees. This garden is a true paradise for nature
+                    lovers and one of the most beautiful in South Asia.
+
+                    Next, proceed to a tea estate and factory in the hill country, where you will discover the process
+                    of making world-famous Ceylon Tea. Enjoy a guided tour through the lush plantations, learn the art
+                    of tea production, and savor a refreshing cup of freshly brewed tea.
+
+                    In the afternoon, continue to Pinnawala Elephant Orphanage, a sanctuary dedicated to caring for
+                    rescued elephants. Witness these majestic animals as they bathe and play by the river—a truly
+                    unforgettable experience.
+                    <br><br>
+                    <b>Overnight stay in Kandy / Nuwara Eliya.</b>
+
+                    <div style="
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    z-index: 1000;
+">
+    <div style="font-size: 24px;">📚</div>
+    <div style="
+        background-color: #6d380c;
+        color: #000;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        transition: background 0.3s;
+    " 
+    onmouseover="this.style.backgroundColor='#FFC107';" 
+    onmouseout="this.style.backgroundColor='#FFD700';"
+    >
+        Book Now
+    </div>
+</div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ⭐⭐⭐ NEW SECTION: ROUTE MAP ⭐⭐⭐ -->
+    <section class="route-section">
+        <h2 style="color:#5a3410; font-size:34px; font-weight:800;">ROUTE MAP</h2>
+        <img src="image/WhatsApp Image 2025-09-21 at 05.29.13_81cd3f42.jpg"
+            style="width:90%; max-width:1100px; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.25);">
+    </section>
+
+    <!-- ⭐⭐⭐ CUSTOMIZE YOUR JOURNEY ⭐⭐⭐ -->
+    <section style="padding:60px 20px; background:#f5efe4; text-align:center;">
+        <h2 style="font-size:36px; color:#4b2a1d; font-weight:800;">Customize Your Journey With Us</h2>
+        <button style="
+            background:#8b5a2b; 
+            color:white; 
+            padding:18px 48px; 
+            border:none; 
+            border-radius:40px; 
+            font-size:20px; 
+            cursor:pointer;
+        ">Start Customizing</button>
+    </section>
+
+  <section style="padding: 40px 0; background: rgba(255, 255, 255, 0.7) url('image/bd0df31521a2a1e07b8d4e0e212068cf.jpg') repeat; background-color: #f7f3ed;">
+    <h2 style="text-align: center; font-size: 38px; color: #4b2a1d; font-weight: 800; margin-bottom: 30px;">RELATED TOURS</h2>
+
+    <div style="position: relative; max-width: 1200px; margin: auto; padding: 0 10px;">
+        <div onclick="document.getElementById('toursScrollContainer').scrollLeft -= 300;" 
+             style="position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(255, 255, 255, 0.8); border: 1px solid #4b2a1d; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 10; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); font-size: 18px; color: #4b2a1d; user-select: none; left: 5px;">
+            &lt;
+        </div>
+        
+        <div onclick="document.getElementById('toursScrollContainer').scrollLeft += 300;" 
+             style="position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(255, 255, 255, 0.8); border: 1px solid #4b2a1d; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 10; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); font-size: 18px; color: #4b2a1d; user-select: none; right: 5px;">
+            &gt;
+        </div>
+
+        <div id="toursScrollContainer"
+             style="display: flex; overflow-x: auto; gap: 22px; padding: 20px 0; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;">
+            
+            <div style="min-width: 280px; height: 350px; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                <img src="image/anuradapura.jpg" alt="Ancient stupa at Anuradhapura at sunset" 
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div style="position: absolute; bottom: 0; width: 100%; padding: 15px 20px; background-color: rgba(75, 42, 29, 0.9); color: white; text-transform: uppercase;">
+                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 5px; line-height: 1.2;">Anuraghapura</div>
+                    <a href="#" style="display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #d4a77e; text-decoration: none;">
+                        <span style="margin-right: 8px;">VIEW DIRECTION</span>
+                        <span style="font-size: 18px;">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+            <div style="min-width: 280px; height: 350px; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                <img src="image/hortan.jpg" alt="Sambar deer at Horton Plains National Park" 
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div style="position: absolute; bottom: 0; width: 100%; padding: 15px 20px; background-color: rgba(75, 42, 29, 0.9); color: white; text-transform: uppercase;">
+                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 5px; line-height: 1.2;">Hortan Plains</div>
+                    <a href="#" style="display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #d4a77e; text-decoration: none;">
+                        <span style="margin-right: 8px;">VIEW DIRECTION</span>
+                        <span style="font-size: 18px;">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+            <div style="min-width: 280px; height: 350px; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                <img src="image/Polonnaruwa2.jpg" alt="Ruins in Polonnaruwa" 
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div style="position: absolute; bottom: 0; width: 100%; padding: 15px 20px; background-color: rgba(75, 42, 29, 0.9); color: white; text-transform: uppercase;">
+                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 5px; line-height: 1.2;">Polonnaruwa</div>
+                    <a href="#" style="display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #d4a77e; text-decoration: none;">
+                        <span style="margin-right: 8px;">VIEW DIRECTION</span>
+                        <span style="font-size: 18px;">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+            <div style="min-width: 280px; height: 350px; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                <img src="image/Sinharaja.jpg" alt="Lush forest canopy of Sinharaja" 
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div style="position: absolute; bottom: 0; width: 100%; padding: 15px 20px; background-color: rgba(75, 42, 29, 0.9); color: white; text-transform: uppercase;">
+                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 5px; line-height: 1.2;">Sinharaja</div>
+                    <a href="#" style="display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #d4a77e; text-decoration: none;">
+                        <span style="margin-right: 8px;">VIEW DIRECTION</span>
+                        <span style="font-size: 18px;">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+            <div style="min-width: 280px; height: 350px; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                <img src="image/negembo.jpg" alt="Beach in Negombo" 
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div style="position: absolute; bottom: 0; width: 100%; padding: 15px 20px; background-color: rgba(75, 42, 29, 0.9); color: white; text-transform: uppercase;">
+                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 5px; line-height: 1.2;">Negombo</div>
+                    <a href="#" style="display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #d4a77e; text-decoration: none;">
+                        <span style="margin-right: 8px;">VIEW DIRECTION</span>
+                        <span style="font-size: 18px;">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>TravelPilot</h4>
+                <p>
+                    Your trusted partner for unforgettable journeys. We craft personalized tours that let you explore
+                    the world's most breathtaking cultural, natural, and adventurous sites.
+                </p>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Destinations</a></li>
+                    <li><a href="#">Plan Your Trip</a></li>
+                    <li><a href="#">Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact Us</h4>
+                <address>
+                    123 Wanderlust Lane,<br>
+                    Global City, GC 12345<br>
+                    Email: info@travelpilot.com<br>
+                    Phone: +1 (234) 567-8901
+                </address>
+            </div>
+            <div class="footer-column">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TravelPilot. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleDropdown() {
+            document.getElementById("dropMenu").classList.toggle("show");
+        }
+
+        function toggleItinerary(id) {
+            var box = document.getElementById(id);
+            box.style.display = box.style.display === "block" ? "none" : "block";
+        }
+    </script>
+
+</body>
+
+</html>
