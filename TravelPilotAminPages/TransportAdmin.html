@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelPilot - Add New Accommodation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="main.css">
+</head>
+ <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --primary-color: #915414;
+    --secondary-color: #806c39;
+    --accent-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #503f2c;
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --border-color: #ddd;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body {
+    background-image: "C:\Users\Lakshani\OneDrive\Documents\EEY 4189_ doc\21ed1c1e107a96d44e9bfd2fa8e3b0c8.jpg";
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Styles */
+/* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: linear-gradient(135deg, #3d1f03 0%, #6b3c04 100%);
+            backdrop-filter: blur(10px);
+            padding-top: 20px;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar.open ~ .main-content {
+            margin-left: 250px;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .sidebar-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary-color);
+            border-radius: 3px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .sidebar-menu a:hover::before {
+            width: 100%;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .sidebar-menu i {
+            width: 25px;
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+
+/* Main Content Styles */
+/* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 0;
+            padding: 30px;
+            transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            color: var(--dark-color);
+            font-size: 2rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary-color);
+            border-radius: 3px;
+        }
+
+
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid var(--light-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-info .dropdown {
+    position: relative;
+}
+
+.user-info button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: var(--dark-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.user-info button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Form Styles */
+.form-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    animation: fadeInUp 0.6s ease-out;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.form-container:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.form-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: var(--secondary-color);
+    border-radius: 3px;
+}
+
+.form-header h2 {
+    color: var(--dark-color);
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 250px;
+    padding: 0 15px;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: var(--dark-color);
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(128, 108, 57, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-group.full-width {
+    width: 100%;
+}
+
+.form-group.half-width {
+    width: 50%;
+}
+
+/* Photo Upload Section */
+.photo-upload {
+    margin: 30px 0;
+    padding: 25px;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    text-align: center;
+    background-color: rgba(249, 249, 249, 0.8);
+    transition: var(--transition);
+}
+
+.photo-upload:hover {
+    border-color: var(--secondary-color);
+    background-color: rgba(249, 249, 249, 1);
+}
+
+.photo-upload h3 {
+    margin-bottom: 15px;
+    color: var(--dark-color);
+    font-weight: 600;
+}
+
+.photo-upload-area {
+    padding: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.photo-upload-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(128, 108, 57, 0.05);
+    transform: scale(0);
+    border-radius: 8px;
+    transition: transform 0.5s ease;
+    z-index: -1;
+}
+
+.photo-upload-area:hover::before {
+    transform: scale(1);
+}
+
+.photo-upload-area:hover {
+    background-color: rgba(240, 240, 240, 0.5);
+}
+
+.photo-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.photo-preview-item {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.photo-preview-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.photo-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.photo-preview-item:hover img {
+    transform: scale(1.1);
+}
+
+.photo-preview-item .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(231, 76, 60, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.photo-preview-item:hover .remove-btn {
+    opacity: 1;
+}
+
+.photo-preview-item .remove-btn:hover {
+    background-color: rgba(231, 76, 60, 1);
+    transform: scale(1.1);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-left: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #b98b29 100%);
+    color: white;
+    box-shadow: 0 4px 10px rgba(128, 108, 57, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(128, 108, 57, 0.4);
+}
+
+.btn-secondary {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+    background-color: #d5dbdc;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Notification Toast */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, var(--success-color) 0%, #27ae60 100%);
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: var(--transition);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast::before {
+    content: '✓';
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Loading State */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    border: 3px solid rgba(128, 108, 57, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--secondary-color);
+    animation: spin 1s ease-in-out infinite;
+    z-index: 11;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary-color);
+            border: none;
+            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            margin-right: 15px;
+        }
+
+        .menu-toggle:hover {
+            background: #b98b29;
+            transform: scale(1.05);
+        }
+
+ 
+ @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                left: -280px;
+            }
+            
+            .sidebar.open {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .sidebar.open ~ .main-content {
+                margin-left: 0;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+    </style>
+<body>
+    <div class="container">
+
+    <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>TravelPilot</h2>
+                <p>Transport Provider</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="Dashboard.html" ><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#"class="active"><i class="fas fa-taxi"></i> Transport</a></li>
+                <li><a href="#id1"><i class="fas fa-bed"></i> </a></li>
+                <li><a href="#"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Guests</a></li>
+                <li><a href="#"><i class="fas fa-chart-line"></i> Reports</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <div style="display: flex; align-items: center;">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Add New Transport </h1>
+                </div>
+                <div class="user-info">
+                    <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User Avatar">
+                    <div class="dropdown">
+                        <button id="userDropdown">
+                            Admin User <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+
+
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Property Information</h2>
+                </div>
+
+                <form id="accommodationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="propertyName">Business / personal Name *</label>
+                            <input type="text" id="propertyName" name="propertyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="propertyType">Vehicle Type *</label>
+                            <select id="propertyType" name="propertyType" required>
+                                <option value="">Select Type</option>
+                                <option value="hotel">sedan</option>
+                                <option value="resort">Hatchback</option>
+                                <option value="apartment">Suv</option>
+                                <option value="villa">Electric car</option>
+                                <option value="hostel">Mini Van</option>
+                                <option value="guesthouse">Luxury Van</option>
+                                <option value="hotel">4WD/ Jeep</option>
+                                <option value="resort"> Mini Bus</option>
+                                <option value="apartment">Tourist coach</option>
+                                <option value="villa">Tuk Tuk</option>
+                                <option value="hostel">Motobike</option>
+                                <option value="guesthouse">Saffari Vehicle</option>
+                                <option value="hostel">Boat</option>
+                                <option value="guesthouse">Luxury Train</option>
+                           
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" placeholder="Brief description of the property..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="state">State/Province</label>
+                            <input type="text" id="state" name="state">
+                        </div>
+                        
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="country">Country *</label>
+                            <input type="text" id="country" name="country" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="url" id="website" name="website" placeholder="https://example.com">
+                        </div>
+                    </div>
+
+                    <div class="form-header">
+                        <h2 id = "id1">Vehicle Information</h2>
+                    </div>
+
+                    
+
+                    <div class="form-row">
+                        
+                        <div class="form-group">
+                            <label for="totalPssen">Number of Passengers *</label>
+                            <input type="number" id="totalPssen" name="totalPssen" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="basePrice">Base Price (per KM) *</label>
+                            <input type="number" id="basePrice" name="basePrice" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        
+
+                        <div class="form-group">
+                            <label for="paymentType">Available payment type*</label>
+                                <label class="payment-option">
+
+
+                             <label>
+                                <input type="checkbox" name="payment[]" value="cash"class="fa-solid fa-money-bill-wave"> Cash
+                            </label><br>
+
+                            <label>
+                             <hr>
+                             <input type="checkbox" name="payment[]" value="card" class="fa-solid fa-credit-card">
+                              Card
+                            </label><br>
+
+                           <label>
+                            <hr>
+                             <input type="checkbox" name="payment[]" value="online"class="fa-solid fa-building-columns">
+                           Bank Transfer
+                             </label><br>
+
+                          <label>
+                             <hr>
+                            <input type="checkbox" name="payment[]" value="mobile" class="fa-solid fa-mobile-screen">
+                             Mobile Payment
+                            </label><br>
+                        </div>
+                    
+
+                    <!-- Added Range Slider for Rating -->
+                    
+                        <div class="form-group">
+                            <label for="rating">Rating</label>
+                            <div class="slider-container">
+                                <input type="range" id="rating" name="rating" min="1" max="10" value="5" class="slider">
+                                <span class="slider-value">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="photo-upload">
+                        <h3>Vehicle Photos</h3>
+                        <div class="photo-upload-area" id="photoUploadArea">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #999; margin-bottom: 10px;"></i>
+                            <p>Click to upload or drag and drop</p>
+                            <p style="font-size: 0.8rem; color: #999;">PNG, JPG, GIF up to 10MB</p>
+                            <input type="file" id="photoInput" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <div class="photo-preview" id="photoPreview"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Transport</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Accommodation added successfully!</div>
+
+    <script>
+        // Toggle sidebar
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        // Slider value update
+        const slider = document.getElementById("rating");
+        const output = document.querySelector(".slider-value");
+        
+        // Set the initial display value
+        output.textContent = slider.value;
+        
+        // Update the current slider value
+        slider.oninput = function() {
+            output.textContent = this.value;
+        }
+
+        // Photo upload functionality
+        const photoUploadArea = document.getElementById('photoUploadArea');
+        const photoInput = document.getElementById('photoInput');
+        const photoPreview = document.getElementById('photoPreview');
+        const uploadedPhotos = [];
+
+        photoUploadArea.addEventListener('click', () => {
+            photoInput.click();
+        });
+
+        photoInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        // Drag and drop functionality
+        photoUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            photoUploadArea.style.backgroundColor = '#f0f0f0';
+        });
+
+        photoUploadArea.addEventListener('dragleave', () => {
+            photoUploadArea.style.backgroundColor = '';
+        });
+
+        photoUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            photoUploadArea.style.backgroundColor = '';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        function handleFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const photoId = Date.now() + '_' + i;
+                        uploadedPhotos.push({
+                            id: photoId,
+                            url: e.target.result,
+                            name: file.name
+                        });
+                        displayPhoto(photoId, e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+
+        function displayPhoto(id, url) {
+            const photoItem = document.createElement('div');
+            photoItem.className = 'photo-preview-item';
+            photoItem.id = 'photo_' + id;
+            photoItem.innerHTML = `
+                <img src="${url}" alt="Property Photo">
+                <button class="remove-btn" data-id="${id}"><i class="fas fa-times"></i></button>
+            `;
+            photoPreview.appendChild(photoItem);
+
+            // Add remove functionality
+            photoItem.querySelector('.remove-btn').addEventListener('click', function() {
+                const photoId = this.getAttribute('data-id');
+                removePhoto(photoId);
+            });
+        }
+
+        function removePhoto(id) {
+            // Remove from array
+            const index = uploadedPhotos.findIndex(photo => photo.id == id);
+            if (index > -1) {
+                uploadedPhotos.splice(index, 1);
+            }
+
+            // Remove from DOM
+            const photoElement = document.getElementById('photo_' + id);
+            if (photoElement) {
+                photoElement.remove();
+            }
+        }
+
+        // Form submission
+        document.getElementById('accommodationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Add photos to data
+            data.photos = uploadedPhotos;
+            
+            // Log data (in a real application, this would be sent to a server)
+            console.log('Form submitted with data:', data);
+            
+            // Show success notification
+            showToast('Accommodation added successfully!');
+            
+            // Reset form after successful submission
+            setTimeout(() => {
+                this.reset();
+                photoPreview.innerHTML = '';
+                uploadedPhotos.length = 0;
+            }, 2000);
+        });
+
+        // Cancel button
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to cancel? All unsaved changes will be lost.')) {
+                document.getElementById('accommodationForm').reset();
+                photoPreview.innerHTML = '';
+                uploadedPhotos.length = 0;
+            }
+        });
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            
+            // Set background color based on type
+            if (type === 'success') {
+                toast.style.backgroundColor = 'var(--success-color)';
+            } else if (type === 'error') {
+                toast.style.backgroundColor = 'var(--accent-color)';
+            } else if (type === 'warning') {
+                toast.style.backgroundColor = 'var(--warning-color)';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
