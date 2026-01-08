@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= isEdit ? 'Edit' : 'Add' %> Transport Service | TransportPro Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --golden: #FFD700;
+            --golden-dark: #DAA520;
+            --golden-light: #FFF8DC;
+            --dark-bg: #1a1a2e;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --border-color: #e0e0e0;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-dark);
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 250px;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--golden);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--golden);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .user-profile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+        }
+
+        .user-profile img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--golden);
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .user-profile h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .user-profile p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: transparent;
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            text-decoration: none;
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+            color: var(--golden);
+            width: 24px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--golden);
+            transform: translateX(5px);
+        }
+
+        .nav-btn.danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            margin-top: auto;
+        }
+
+        .nav-btn.danger:hover {
+            background: rgba(220, 53, 69, 0.2);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--golden);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header h1 i {
+            color: var(--golden);
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            flex-grow: 1;
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--golden-light);
+        }
+
+        .form-header h2 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+        }
+
+        .form-header i {
+            color: var(--golden);
+            font-size: 1.8rem;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: #f9f9f9;
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border-left: 4px solid var(--golden);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section h3 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section h3 i {
+            color: var(--golden);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--golden);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .form-group input:hover,
+        .form-group select:hover {
+            border-color: #bbb;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            background: white;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .checkbox-group label:hover {
+            border-color: var(--golden);
+            background: var(--golden-light);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--golden);
+        }
+
+        /* Specific styling for vehicle section only */
+.form-section:has(#vehicles-container) {
+    grid-column: 1 / -1; /* Make it span full width */
+}
+
+#vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    #vehicle-grid {
+        grid-template-columns: 1fr; /* 1 column on mobile */
+    }
+}
+
+        /* Vehicle Input Fields */
+        .vehicle-fields {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .vehicle-fields .form-group {
+            margin-bottom: 15px;
+        }
+
+        .vehicle-fields .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .vehicle-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .vehicle-actions .btn {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            min-width: auto;
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .file-upload:hover {
+            border-color: var(--golden);
+            background: var(--golden-light);
+        }
+
+        .file-upload i {
+            font-size: 2.5rem;
+            color: var(--golden);
+            margin-bottom: 15px;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 25px;
+            border-top: 2px solid var(--golden-light);
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 1rem;
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--golden), var(--golden-dark));
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--dark-bg);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2c3e50;
+            transform: translateY(-3px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-3px);
+        }
+
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            min-width: auto;
+        }
+
+        /* Vehicle Grid Layout */
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .vehicle-grid-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .vehicle-grid-item:hover {
+            border-color: var(--golden);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.1);
+        }
+
+        .vehicle-grid-item .form-group {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+                padding: 15px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .logo, .user-profile, .nav-buttons {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .nav-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-btn {
+                flex: 1;
+                min-width: 150px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .vehicle-actions {
+                flex-direction: column;
+            }
+            
+            .vehicle-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Error/Success Messages */
+        .alert {
+            padding: 15px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: var(--danger);
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: var(--success);
+        }
+
+        .alert i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== SIDEBAR ========== -->
+<div class="sidebar">
+    <div class="logo">
+        <h1><i class="fas fa-bus"></i> TransportPro</h1>
+        <p>Transport Provider Dashboard</p>
+    </div>
+    
+    <div class="user-profile">
+        <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=FFD700&color=000&bold=true' %>" alt="Profile">
+        <h3><%= user.name %></h3>
+        <p><i class="fas fa-truck"></i> Transport Provider</p>
+    </div>
+    
+    <div class="nav-buttons">
+        <a href="/transport" class="nav-btn">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/transport/add" class="nav-btn active">
+            <i class="fas fa-plus-circle"></i>
+            <span><%= isEdit ? 'Edit Service' : 'Add New Service' %></span>
+        </a>
+        <a href="#" class="nav-btn" id="viewBookingsBtn">
+            <i class="fas fa-calendar-check"></i>
+            <span>View Bookings</span>
+        </a>
+        <a href="#" class="nav-btn" id="reportsBtn">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reports & Analytics</span>
+        </a>
+        <a href="/logout" class="nav-btn danger">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="main-content">
+    <!-- Header -->
+    <div class="header">
+        <h1><i class="fas <%= isEdit ? 'fa-edit' : 'fa-plus-circle' %>"></i> <%= isEdit ? 'Edit' : 'Add' %> Transport Service</h1>
+        <div class="header-info">
+            <div>
+                <h3>Welcome back, <%= user.name %>!</h3>
+                <p><%= isEdit ? 'Update your transport service details below' : 'Fill in the details below to create your transport service' %></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-header">
+            <i class="fas fa-truck"></i>
+            <h2>Transport Service <%= isEdit ? 'Update' : 'Registration' %> Form</h2>
+        </div>
+
+        <!-- Error/Success Messages -->
+        <% if (error) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <%= error %>
+            </div>
+        <% } %>
+        <% if (success) { %>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <%= success %>
+            </div>
+        <% } %>
+
+        <form action="<%= isEdit ? '/transport/' + provider.id + '?_method=PUT' : '/transport/add' %>" method="POST" enctype="multipart/form-data">
+            <div class="form-grid">
+                <!-- Basic Information Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">Company/Service Name <span style="color: var(--danger);">*</span></label>
+                        <input type="text" id="name" name="name" value="<%= provider ? provider.name : '' %>" placeholder="Enter your transport service name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span style="color: var(--danger);">*</span></label>
+                        <input type="email" id="email" name="email" value="<%= provider ? provider.email : '' %>" placeholder="transport@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telephone">Telephone Number <span style="color: var(--danger);">*</span></label>
+                        <input type="text" id="telephone" name="telephone" value="<%= provider ? provider.telephone : '' %>" placeholder="+94 XX XXX XXXX" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience_years">Years of Experience <span style="color: var(--danger);">*</span></label>
+                        <input type="number" id="experience_years" name="experience_years" value="<%= provider ? provider.experience_years : '' %>" min="0" max="50" placeholder="Enter years of experience" required>
+                    </div>
+                </div>
+
+                <!-- Address Information Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Address Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="address_line1">Address Line 1 <span style="color: var(--danger);">*</span></label>
+                        <input type="text" id="address_line1" name="address_line1" value="<%= provider ? provider.address_line1 : '' %>" placeholder="Street address, P.O. Box" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address_line2">Address Line 2</label>
+                        <input type="text" id="address_line2" name="address_line2" value="<%= provider ? provider.address_line2 : '' %>" placeholder="Suite, unit, building, floor, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" value="<%= provider ? provider.city : '' %>" placeholder="Enter your city">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="district">District <span style="color: var(--danger);">*</span></label>
+                        <select id="district" name="district" required>
+                            <option value="">Select District</option>
+                            <% const districts = ["Colombo", "Gampaha", "Kalutara", "Kandy", "Matale", "Nuwara Eliya", "Galle", "Matara", "Hambantota", "Jaffna", "Kilinochchi", "Mannar", "Mullaitivu", "Vavuniya", "Trincomalee", "Batticaloa", "Ampara", "Kurunegala", "Puttalam", "Anuradhapura", "Polonnaruwa", "Badulla", "Monaragala", "Ratnapura", "Kegalle"]; %>
+                            <% districts.forEach(district => { %>
+                                <option value="<%= district %>" <%= provider && provider.district === district ? 'selected' : '' %>>
+                                    <%= district %>
+                                </option>
+                            <% }); %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="province">Province</label>
+                        <input type="text" id="province" name="province" value="<%= provider ? provider.province : '' %>" placeholder="Enter your province">
+                    </div>
+                </div>
+
+                <!-- Pricing & Payment Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-money-bill-wave"></i> Pricing & Payment</h3>
+                    
+                    <div class="form-group">
+                        <label for="offers">Special Offers/Discount (%)</label>
+                        <input type="number" id="offers" name="offers" value="<%= provider ? provider.offers : '0' %>" min="0" max="100" placeholder="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Payment Methods Accepted <span style="color: var(--danger);">*</span></label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="payment_methods[]" value="Cash" <%= provider && provider.payment_methods_array && provider.payment_methods_array.includes('Cash') ? 'checked' : 'checked' %>> Cash</label>
+                            <label><input type="checkbox" name="payment_methods[]" value="Credit Card" <%= provider && provider.payment_methods_array && provider.payment_methods_array.includes('Credit Card') ? 'checked' : '' %>> Credit Card</label>
+                            <label><input type="checkbox" name="payment_methods[]" value="Debit Card" <%= provider && provider.payment_methods_array && provider.payment_methods_array.includes('Debit Card') ? 'checked' : '' %>> Debit Card</label>
+                            <label><input type="checkbox" name="payment_methods[]" value="Bank Transfer" <%= provider && provider.payment_methods_array && provider.payment_methods_array.includes('Bank Transfer') ? 'checked' : '' %>> Bank Transfer</label>
+                            <label><input type="checkbox" name="payment_methods[]" value="PayPal" <%= provider && provider.payment_methods_array && provider.payment_methods_array.includes('PayPal') ? 'checked' : '' %>> PayPal</label>
+                            <label><input type="checkbox" name="payment_methods[]" value="Digital Wallet" <%= provider && provider.payment_methods_array && provider.payment_methods_array.includes('Digital Wallet') ? 'checked' : '' %>> Digital Wallet</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photos Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-images"></i> Service Photos</h3>
+                    
+                    <div class="form-group">
+                        <label>Upload Transport Service Images</label>
+                        <div class="file-upload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p style="font-weight: 500; margin-bottom: 10px;">Drag & drop or click to upload</p>
+                            <p style="font-size: 0.9rem; color: #666;">Upload photos of your vehicles and service (Max 10 files)</p>
+                            <input type="file" id="photos" name="photos" multiple accept="image/*">
+                        </div>
+                        <p style="font-size: 0.85rem; color: #666; margin-top: 8px;">Supported formats: JPG, PNG, WebP</p>
+                        
+                        <% if (isEdit && provider.photos) { 
+                            const photos = provider.photos.split(','); 
+                            if (photos.length > 0) { %>
+                                <p style="margin-top: 15px; font-weight: 500;">Current Photos:</p>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                                    <% photos.forEach(photo => { %>
+                                        <% if (photo && photo.trim() !== '') { %>
+                                            <div style="position: relative;">
+                                                <img src="/uploads/<%= photo %>" alt="Transport Photo" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm);">
+                                                <span style="position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer;" onclick="removePhoto('<%= photo %>')">×</span>
+                                            </div>
+                                        <% } %>
+                                    <% }); %>
+                                </div>
+                        <% } } %>
+                    </div>
+                </div>
+                <!-- Vehicles Information Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-car-side"></i> Vehicle Information</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Add your vehicle fleet with individual pricing</p>
+                    
+                    <div id="vehicles-container">
+                        <% if (isEdit && provider.vehicles && provider.vehicles.length > 0) { %>
+                            <div class="vehicle-grid" id="vehicle-grid">
+                                <% provider.vehicles.forEach((vehicle, index) => { %>
+                                    <div class="vehicle-grid-item" data-vehicle-index="<%= index %>">
+                                        <input type="hidden" name="vehicles[<%= index %>][id]" value="<%= vehicle.id %>">
+                                        <div class="form-group">
+                                            <label>Vehicle Type <span style="color: var(--danger);">*</span></label>
+                                            <input type="text" name="vehicles[<%= index %>][vehicle_type]" value="<%= vehicle.vehicle_type || vehicle.type %>" placeholder="e.g., Car, Van, Bus, SUV" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max Passengers <span style="color: var(--danger);">*</span></label>
+                                            <input type="number" name="vehicles[<%= index %>][max_passengers]" value="<%= vehicle.max_passengers %>" min="1" max="100" placeholder="Max capacity" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Price per KM (LKR) <span style="color: var(--danger);">*</span></label>
+                                            <input type="number" name="vehicles[<%= index %>][price_per_km]" value="<%= vehicle.price_per_km || '100' %>" min="0" step="0.01" placeholder="0.00" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="display: flex; align-items: center; gap: 8px;">
+                                                <input type="checkbox" name="vehicles[<%= index %>][availability]" value="1" <%= vehicle.availability == 1 ? 'checked' : 'checked' %>>
+                                                Available
+                                            </label>
+                                        </div>
+                                        <div class="vehicle-actions">
+                                            <button type="button" class="btn btn-sm btn-secondary remove-vehicle" style="background: var(--danger);">
+                                                <i class="fas fa-trash"></i> Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        <% } else { %>
+                            <!-- Default first vehicle -->
+                            <div class="vehicle-grid" id="vehicle-grid">
+                                <div class="vehicle-grid-item" data-vehicle-index="0">
+                                    <div class="form-group">
+                                        <label>Vehicle Type <span style="color: var(--danger);">*</span></label>
+                                        <input type="text" name="vehicles[0][vehicle_type]" placeholder="e.g., Car, Van, Bus, SUV" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Max Passengers <span style="color: var(--danger);">*</span></label>
+                                        <input type="number" name="vehicles[0][max_passengers]" min="1" max="100" placeholder="Max capacity" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price per KM (LKR) <span style="color: var(--danger);">*</span></label>
+                                        <input type="number" name="vehicles[0][price_per_km]" min="0" step="0.01" placeholder="0.00" value="100" required>
+                                    </div>
+                                   
+                                    <div class="form-group">
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="hidden" name="vehicles[0][availability]" value="0">
+                                            <input type="checkbox" name="vehicles[0][availability]" value="1">
+                                            Available
+                                        </label>
+                                    </div>
+                                    <div class="vehicle-actions">
+                                        <button type="button" class="btn btn-sm btn-secondary remove-vehicle" style="background: var(--danger);">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <button type="button" class="btn btn-success btn-sm" id="add-vehicle">
+                        <i class="fas fa-plus"></i> Add Another Vehicle
+                    </button>
+                </div>
+            </div>
+            
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> <%= isEdit ? 'Update Service' : 'Create Service' %>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Form validation and enhancements
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add required asterisk dynamically
+        const requiredFields = document.querySelectorAll('input[required], select[required]');
+        requiredFields.forEach(field => {
+            const label = field.previousElementSibling;
+            if (label && label.tagName === 'LABEL') {
+                label.innerHTML = label.innerHTML.replace('*', '') + ' <span style="color: var(--danger);">*</span>';
+            }
+        });
+
+        // Preview selected file names
+        const fileInput = document.getElementById('photos');
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                const fileUploadDiv = fileInput.closest('.file-upload');
+                
+                if (files.length > 0) {
+                    const fileNameDiv = document.createElement('div');
+                    fileNameDiv.className = 'selected-files';
+                    fileNameDiv.style.marginTop = '15px';
+                    fileNameDiv.style.padding = '10px';
+                    fileNameDiv.style.background = 'var(--golden-light)';
+                    fileNameDiv.style.borderRadius = 'var(--radius-sm)';
+                    fileNameDiv.innerHTML = `<strong>${files.length} file(s) selected:</strong><br>`;
+                    
+                    Array.from(files).slice(0, 3).forEach(file => {
+                        fileNameDiv.innerHTML += `• ${file.name}<br>`;
+                    });
+                    
+                    if (files.length > 3) {
+                        fileNameDiv.innerHTML += `... and ${files.length - 3} more`;
+                    }
+                    
+                    // Remove existing preview if any
+                    const existingPreview = fileUploadDiv.querySelector('.selected-files');
+                    if (existingPreview) {
+                        existingPreview.remove();
+                    }
+                    
+                    fileUploadDiv.appendChild(fileNameDiv);
+                }
+            });
+        }
+
+        // Vehicle management
+        let vehicleCounter = <%= isEdit && provider.vehicles ? provider.vehicles.length : 1 %>;
+        const vehicleGrid = document.getElementById('vehicle-grid') || vehiclesContainer;
+        
+        const addVehicleBtn = document.getElementById('add-vehicle');
+
+        // Add vehicle button handler
+        addVehicleBtn.addEventListener('click', function() {
+            const vehicleIndex = vehicleCounter++;
+            const vehicleHTML = `
+                <div class="vehicle-grid-item" data-vehicle-index="${vehicleIndex}">
+                    <div class="form-group">
+                        <label>Vehicle Type <span style="color: var(--danger);">*</span></label>
+                        <input type="text" name="vehicles[${vehicleIndex}][vehicle_type]" placeholder="e.g., Car, Van, Bus, SUV" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Max Passengers <span style="color: var(--danger);">*</span></label>
+                        <input type="number" name="vehicles[${vehicleIndex}][max_passengers]" min="1" max="100" placeholder="Max capacity" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price per KM (LKR) <span style="color: var(--danger);">*</span></label>
+                        <input type="number" name="vehicles[${vehicleIndex}][price_per_km]" min="0" step="0.01" placeholder="0.00" value="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="hidden" name="vehicles[${vehicleIndex}][availability]" value="0">
+                            <input type="checkbox" name="vehicles[${vehicleIndex}][availability]" value="1" checked>
+                            Available
+                        </label>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button type="button" class="btn btn-sm btn-secondary remove-vehicle" style="background: var(--danger);">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            if (vehicleGrid.classList.contains('vehicle-grid')) {
+                vehicleGrid.insertAdjacentHTML('beforeend', vehicleHTML);
+            } else {
+                // Fallback for old structure
+                const wrapper = document.createElement('div');
+                wrapper.className = 'vehicle-grid';
+                wrapper.id = 'vehicle-grid';
+                vehicleGrid.parentNode.insertBefore(wrapper, vehicleGrid.nextSibling);
+                wrapper.insertAdjacentHTML('beforeend', vehicleHTML);
+            }
+            
+            attachRemoveListeners();
+        });
+
+        // Remove vehicle handler
+        function attachRemoveListeners() {
+            document.querySelectorAll('.remove-vehicle').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const vehicleItem = this.closest('.vehicle-grid-item');
+                    const allVehicles = document.querySelectorAll('.vehicle-grid-item');
+                    
+                    if (allVehicles.length > 1) {
+                        vehicleItem.remove();
+                        // Re-index remaining vehicles
+                        document.querySelectorAll('.vehicle-grid-item').forEach((item, index) => {
+                            item.dataset.vehicleIndex = index;
+                            item.querySelectorAll('input, select').forEach(input => {
+                                const name = input.name.replace(/vehicles\[\d+\]/g, `vehicles[${index}]`);
+                                input.name = name;
+                            });
+                        });
+                        vehicleCounter = allVehicles.length - 1;
+                    } else {
+                        alert('At least one vehicle is required.');
+                    }
+                });
+            });
+        }
+
+        // Attach initial remove listeners
+        attachRemoveListeners();
+
+        // Auto-fill province based on district
+        const districtSelect = document.getElementById('district');
+        const provinceInput = document.getElementById('province');
+        
+        const districtProvinceMap = {
+            "Colombo": "Western", "Gampaha": "Western", "Kalutara": "Western",
+            "Kandy": "Central", "Matale": "Central", "Nuwara Eliya": "Central",
+            "Galle": "Southern", "Matara": "Southern", "Hambantota": "Southern",
+            "Jaffna": "Northern", "Kilinochchi": "Northern", "Mannar": "Northern", "Mullaitivu": "Northern", "Vavuniya": "Northern",
+            "Trincomalee": "Eastern", "Batticaloa": "Eastern", "Ampara": "Eastern",
+            "Kurunegala": "North Western", "Puttalam": "North Western",
+            "Anuradhapura": "North Central", "Polonnaruwa": "North Central",
+            "Badulla": "Uva", "Monaragala": "Uva",
+            "Ratnapura": "Sabaragamuwa", "Kegalle": "Sabaragamuwa"
+        };
+
+        if (districtSelect && provinceInput) {
+            districtSelect.addEventListener('change', function() {
+                const selectedDistrict = this.value;
+                if (districtProvinceMap[selectedDistrict]) {
+                    provinceInput.value = districtProvinceMap[selectedDistrict];
+                } else {
+                    provinceInput.value = '';
+                }
+            });
+        }
+
+        // Form submission feedback
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            // Validate at least one payment method is selected
+            const paymentCheckboxes = document.querySelectorAll('input[name="payment_methods[]"]:checked');
+            if (paymentCheckboxes.length === 0) {
+                e.preventDefault();
+                alert('Please select at least one payment method.');
+                return;
+            }
+
+            // Validate at least one vehicle has availability checked
+            const vehicleItems = document.querySelectorAll('.vehicle-grid-item');
+            let hasAvailableVehicle = false;
+            vehicleItems.forEach(item => {
+                const availabilityCheckbox = item.querySelector('input[type="checkbox"][name*="availability"]');
+                if (availabilityCheckbox && availabilityCheckbox.checked) {
+                    hasAvailableVehicle = true;
+                }
+            });
+
+            if (!hasAvailableVehicle) {
+                e.preventDefault();
+                alert('At least one vehicle must be marked as available.');
+                return;
+            }
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <%= isEdit ? "Updating..." : "Creating..." %>';
+            submitBtn.disabled = true;
+            
+            // In production, this would be handled by the form submission
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Sidebar navigation buttons
+        document.getElementById('viewBookingsBtn')?.addEventListener('click', function() {
+            alert('View bookings functionality would open here.');
+        });
+
+        document.getElementById('reportsBtn')?.addEventListener('click', function() {
+            alert('Reports & analytics functionality would open here.');
+        });
+
+        // Initialize province if district is selected on edit mode
+        <% if (isEdit && provider && provider.district) { %>
+            const currentDistrict = "<%= provider.district %>";
+            if (districtProvinceMap[currentDistrict] && provinceInput) {
+                provinceInput.value = districtProvinceMap[currentDistrict];
+            }
+        <% } %>
+    });
+
+    function removePhoto(photoName) {
+        if (confirm('Are you sure you want to remove this photo?')) {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'removed_photos[]';
+            hiddenInput.value = photoName;
+            document.querySelector('form').appendChild(hiddenInput);
+            
+            const photoElement = event.target.closest('div');
+            photoElement.style.display = 'none';
+            
+            alert('Photo marked for removal. It will be deleted when you update the service.');
+        }
+    }
+</script>
+
+</body>
+</html>

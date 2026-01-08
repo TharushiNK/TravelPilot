@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Bookings Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --golden: #FFD700;
+            --golden-dark: #DAA520;
+            --golden-light: #FFF8DC;
+            --dark-bg: #1a1a2e;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --border-color: #e0e0e0;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-dark);
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 250px;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--golden);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--golden);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .user-profile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+        }
+
+        .user-profile img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--golden);
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .user-profile h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .user-profile p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: transparent;
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            text-decoration: none;
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+            color: var(--golden);
+            width: 24px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--golden);
+            transform: translateX(5px);
+        }
+
+        .nav-btn.danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .nav-btn.danger:hover {
+            background: rgba(220, 53, 69, 0.2);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--golden);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn {
+            background: var(--golden-light);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .notification-btn:hover {
+            background: var(--golden);
+            transform: scale(1.05);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-icon.confirmed {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.total {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+        }
+
+        .stat-icon.revenue {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--golden-dark);
+        }
+
+        .stat-info h3 {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Bookings Container */
+        .bookings-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            flex-grow: 1;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header h2 i {
+            color: var(--golden);
+        }
+
+        .provider-info {
+            background: var(--golden-light);
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin-bottom: 25px;
+            border-left: 4px solid var(--golden);
+        }
+
+        .provider-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .provider-info p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--golden);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .filter-select {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--radius-md);
+            background: white;
+            font-size: 0.95rem;
+            min-width: 150px;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--golden);
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid #f0f0f0;
+        }
+
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        .bookings-table thead {
+            background: var(--dark-bg);
+            color: white;
+        }
+
+        .bookings-table th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bookings-table tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.3s;
+        }
+
+        .bookings-table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .bookings-table td {
+            padding: 16px 20px;
+            vertical-align: middle;
+        }
+
+        .booking-id {
+            font-weight: 600;
+            color: var(--dark-bg);
+            font-family: 'Courier New', monospace;
+        }
+
+        .guest-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .guest-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .guest-contact {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .guest-contact i {
+            margin-right: 5px;
+            color: var(--golden);
+        }
+
+        .vehicle-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .vehicle-type {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .vehicle-model {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .pickup-location {
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .destination-location {
+            color: #666;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .date-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .date-range {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .days-count {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .days-count i {
+            margin-right: 5px;
+            color: var(--golden);
+        }
+
+        .amount-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .total-amount {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+        }
+
+        .rate-info {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .rate-info i {
+            margin-right: 3px;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            width: fit-content;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .status-confirmed {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .status-cancelled {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-accept {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .btn-accept:hover {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-reject {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .btn-reject:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-view {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+        }
+
+        .btn-view:hover {
+            background: var(--info);
+            color: white;
+        }
+
+        /* Created at info */
+        .created-at {
+            color: #999;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .created-at i {
+            font-size: 0.7rem;
+        }
+
+        /* Notes Section */
+        .booking-notes {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+                padding: 15px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .logo, .user-profile, .nav-buttons {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .nav-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-btn {
+                flex: 1;
+                min-width: 150px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .bookings-table {
+                font-size: 0.85rem;
+            }
+            
+            .bookings-table th,
+            .bookings-table td {
+                padding: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== SIDEBAR ========== -->
+<div class="sidebar">
+    <div class="logo">
+        <h1><i class="fas fa-bus"></i> TransportPro</h1>
+        <p>Bookings Management</p>
+    </div>
+    
+    <div class="user-profile">
+        <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=FFD700&color=000&bold=true' %>" alt="Profile">
+        <h3><%= user.name %></h3>
+        <p><i class="fas fa-truck"></i> Transport Provider</p>
+    </div>
+    
+    <div class="nav-buttons">
+        <a href="/transport" class="nav-btn">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/transport-provider/bookings/<%= providerId %>" class="nav-btn active">
+            <i class="fas fa-calendar-check"></i>
+            <span>View Bookings</span>
+        </a>
+        <a href="/transport/add" class="nav-btn">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Transport Service</span>
+        </a>
+        <a href="#" class="nav-btn" id="reportsBtn">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reports</span>
+        </a>
+        <a href="/logout" class="nav-btn danger">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="main-content">
+    <!-- Header -->
+    <div class="header">
+        <h1>Transport Bookings Management</h1>
+        <div class="header-info">
+            <div class="notification-btn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">2</span>
+            </div>
+            <div>
+                <h3>Welcome back, <%= user.name %>!</h3>
+                <p>Last login: Today at <%= new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-icon pending">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Pending Bookings</h3>
+                <div class="stat-number">
+                    <%= stats.pending %>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon confirmed">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Confirmed</h3>
+                <div class="stat-number">
+                    <%= stats.confirmed %>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon total">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Total Bookings</h3>
+                <div class="stat-number">
+                    <%= stats.total %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings Container -->
+    <div class="bookings-container">
+        <div class="section-header">
+            <h2><i class="fas fa-list-alt"></i> Transport Bookings</h2>
+            <div class="controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search bookings...">
+                </div>
+                <select class="filter-select" id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="0">Pending</option>
+                    <option value="1">Confirmed</option>
+                    <option value="2">Cancelled</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="provider-info">
+            <h3><i class="fas fa-truck-moving"></i> <%= provider.name %></h3>
+            <p>Manage bookings for your transport service. Click accept or reject to update booking status.</p>
+        </div>
+
+        <div class="table-responsive">
+            <% if (bookings.length > 0) { %>
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Guest Info</th>
+                        <th>Vehicle Details</th>
+                        <th>Location</th>
+                        <th>Dates</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                        <th>Booked On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% bookings.forEach(booking => { %>
+                    <tr data-status="<%= booking.booking_status %>">
+                        <td>
+                            <span class="booking-id">#<%= booking.id %></span>
+                        </td>
+                        <td>
+                            <div class="guest-info">
+                                <span class="guest-name"><%= booking.guest_name %></span>
+                                <span class="guest-contact">
+                                    <i class="fas fa-envelope"></i> <%= booking.guest_email %>
+                                </span>
+                                <% if (booking.guest_contact) { %>
+                                <span class="guest-contact">
+                                    <i class="fas fa-phone"></i> <%= booking.guest_contact %>
+                                </span>
+                                <% } %>
+                                <% if (booking.notes) { %>
+                                <div class="booking-notes">
+                                    <strong>Notes:</strong> <%= booking.notes %>
+                                </div>
+                                <% } %>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="vehicle-info">
+                                <span class="vehicle-type"><%= booking.vehicle_type %></span>
+                                <span class="vehicle-model">Vehicle ID: <%= booking.vehicle_id %></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="location-info">
+                                <span class="pickup-location">
+                                    <i class="fas fa-map-marker-alt"></i> 
+                                    <%= booking.pickup_location %>
+                                </span>
+                                <span class="destination-location">
+                                    <i class="fas fa-flag-checkered"></i>
+                                    <%= booking.destinations %>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="date-info">
+                                <span class="date-range">
+                                    <%= booking.start_formatted %> - <%= booking.end_formatted %>
+                                </span>
+                                <span class="days-count">
+                                    <i class="fas fa-calendar-day"></i> <%= booking.days %> day(s)
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge <%= booking.status_info.class %>">
+                                <% if (booking.booking_status === 0) { %>
+                                    <i class="fas fa-clock"></i>
+                                <% } else if (booking.booking_status === 1) { %>
+                                    <i class="fas fa-check-circle"></i>
+                                <% } else { %>
+                                    <i class="fas fa-times-circle"></i>
+                                <% } %>
+                                <%= booking.status_info.text %>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <% if (booking.booking_status === 0) { %>
+                                <button class="btn-icon btn-accept" data-booking-id="<%= booking.id %>" title="Accept Booking">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn-icon btn-reject" data-booking-id="<%= booking.id %>" title="Reject Booking">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <% } else if (booking.booking_status === 1) { %>
+                                <button class="btn-icon btn-view" title="View Details" onclick="viewBooking(<%= booking.id %>)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <% } else { %>
+                                <span class="guest-contact" style="font-size: 0.85rem; color: #999;">No actions</span>
+                                <% } %>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="created-at">
+                                <i class="far fa-calendar"></i> <%= booking.created_formatted %>
+                            </span>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+            <% } else { %>
+            <div class="empty-state">
+                <i class="fas fa-car"></i>
+                <h3>No Transport Bookings Yet</h3>
+                <p>You haven't received any transport bookings yet.</p>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+    // DOM Elements
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const bookingsTable = document.querySelector('.bookings-table tbody');
+    const rows = bookingsTable ? Array.from(bookingsTable.querySelectorAll('tr')) : [];
+
+    // Search functionality
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const isVisible = text.includes(searchTerm);
+                row.style.display = isVisible ? '' : 'none';
+            });
+        });
+    }
+
+    // Status filter functionality
+    if (statusFilter) {
+        statusFilter.addEventListener('change', function() {
+            const selectedStatus = this.value;
+            
+            rows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
+                const isVisible = selectedStatus === 'all' || rowStatus === selectedStatus;
+                row.style.display = isVisible ? '' : 'none';
+            });
+        });
+    }
+
+    // Accept booking functionality
+    document.querySelectorAll('.btn-accept').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            if (confirm('Are you sure you want to accept this transport booking?')) {
+                updateBookingStatus(bookingId, 1); // 1 = confirmed
+            }
+        });
+    });
+
+    // Reject booking functionality
+    document.querySelectorAll('.btn-reject').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            if (confirm('Are you sure you want to reject this transport booking?')) {
+                updateBookingStatus(bookingId, 2); // 2 = cancelled/rejected
+            }
+        });
+    });
+
+    // Function to update booking status - FIXED URL
+    function updateBookingStatus(bookingId, status) {
+        fetch(`/api/transport-bookings/${bookingId}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: status })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload(); // Reload page to reflect changes
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+
+    // Function to view booking details
+    function viewBooking(bookingId) {
+        alert(`View details for booking #${bookingId}`);
+        // window.location.href = `/transport-booking/${bookingId}`;
+    }
+
+    // Notification button
+    document.querySelector('.notification-btn')?.addEventListener('click', function() {
+        alert('You have 2 new notifications:\n1. New transport booking received\n2. Vehicle maintenance due');
+    });
+</script>
+
+</body>
+</html>
