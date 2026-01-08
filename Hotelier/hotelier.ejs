@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --golden: #FFD700;
+            --golden-dark: #DAA520;
+            --golden-light: #FFF8DC;
+            --dark-bg: #1a1a2e;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --border-color: #e0e0e0;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-dark);
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 250px;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--golden);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--golden);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .user-profile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+        }
+
+        .user-profile img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--golden);
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .user-profile h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .user-profile p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: transparent;
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            text-decoration: none;
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+            color: var(--golden);
+            width: 24px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--golden);
+            transform: translateX(5px);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--golden), var(--golden-dark));
+            color: #000;
+            font-weight: 600;
+            justify-content: center;
+            margin-top: auto;
+        }
+
+        .nav-btn.primary:hover {
+            background: linear-gradient(135deg, var(--golden-dark), var(--golden));
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        }
+
+        .nav-btn.danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .nav-btn.danger:hover {
+            background: rgba(220, 53, 69, 0.2);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--golden);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn {
+            background: var(--golden-light);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .notification-btn:hover {
+            background: var(--golden);
+            transform: scale(1.05);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hotel List Horizontal */
+        .hotel-list-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .hotel-list-container h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hotel-list-container h2 i {
+            color: var(--golden);
+        }
+
+        .hotel-list {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+        }
+
+        .hotel-list::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .hotel-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .hotel-list::-webkit-scrollbar-thumb {
+            background: var(--golden);
+            border-radius: 10px;
+        }
+
+        .hotel-card {
+            min-width: 200px;
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--golden);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.15);
+        }
+
+        .hotel-card.active {
+            border-color: var(--golden);
+            background: var(--golden-light);
+            transform: translateY(-3px);
+        }
+
+        .hotel-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hotel-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hotel-card p i {
+            color: var(--golden);
+            width: 16px;
+        }
+
+        .hotel-type {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--golden-dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        /* Hotel Details Section */
+        .hotel-details-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            flex-grow: 1;
+            display: none; /* Hidden until hotel is selected */
+        }
+
+        .hotel-details-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .details-header h2 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .details-header h2 i {
+            color: var(--golden);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--golden), var(--golden-dark));
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--dark-bg);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2c3e50;
+            transform: translateY(-3px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-3px);
+        }
+
+        /* Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .detail-section {
+            background: #f9f9f9;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border-left: 4px solid var(--golden);
+        }
+
+        .detail-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-section h3 i {
+            color: var(--golden);
+        }
+
+        .detail-item {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            min-width: 150px;
+        }
+
+        .detail-value {
+            color: var(--text-dark);
+            text-align: right;
+            flex: 1;
+        }
+
+        .detail-value.highlight {
+            color: var(--golden-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .room-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .room-badge {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--golden-dark);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .payment-badge {
+            background: rgba(40, 167, 69, 0.15);
+            color: var(--success);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+       .room-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+    align-items: stretch;
+}
+
+.room-grid-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+    box-sizing: border-box;
+    width: 100%;
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 15px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.room-grid-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+    border-color: var(--golden);
+}
+
+.room-grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.room-type-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.room-price {
+    background: rgba(255, 215, 0, 0.15);
+    color: var(--golden-dark);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.room-details-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.room-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.room-detail-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.room-detail-value {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.room-availability {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--success);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+    .room-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .room-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+        /* Photos Section */
+        .photos-section {
+            margin-top: 30px;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .photo-item {
+            height: 120px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-count {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 8px;
+            font-size: 0.8rem;
+            border-radius: var(--radius-sm) 0 0 0;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+                padding: 15px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .logo, .user-profile, .nav-buttons {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .nav-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-btn {
+                flex: 1;
+                min-width: 150px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .details-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .detail-label, .detail-value {
+                text-align: left;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== SIDEBAR ========== -->
+<div class="sidebar">
+    <div class="logo">
+        <h1><i class="fas fa-hotel"></i> HotelPro</h1>
+        <p>Management Dashboard</p>
+    </div>
+    
+    <div class="user-profile">
+        <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=FFD700&color=000&bold=true' %>" alt="Profile">
+        <h3><%= user.name %></h3>
+        <p><i class="fas fa-user-tie"></i> Hotel Manager</p>
+    </div>
+    
+    <div class="nav-buttons">
+        <a href="#" class="nav-btn active">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/hotelier/hotels/add" class="nav-btn" id="addHotelBtn">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add New Hotel</span>
+        </a>
+        <a href="#" class="nav-btn" id="viewBookingsBtn">
+            <i class="fas fa-calendar-check"></i>
+            <span>View Bookings</span>
+        </a>
+
+        <a href="#" class="nav-btn" id="reportsBtn">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reports & Analytics</span>
+        </a>
+        <a href="/logout" class="nav-btn danger">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="main-content">
+    <!-- Header -->
+    <div class="header">
+        <h1>Hotel Management Dashboard</h1>
+        <div class="header-info">
+            <div class="notification-btn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </div>
+            <div>
+                <h3>Welcome back, <%= user.name %>!</h3>
+                <p>Last login: Today at <%= new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hotel List Horizontal -->
+    <div class="hotel-list-container">
+        <h2><i class="fas fa-building"></i> Your Hotels</h2>
+        <div class="hotel-list" id="hotelList">
+            <!-- We'll load hotels dynamically via JavaScript -->
+            <div class="hotel-card active" id="defaultHotelCard">
+                <h3>Loading Hotels...</h3>
+                <p><i class="fas fa-spinner fa-spin"></i> Please wait</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hotel Details Section -->
+    <div class="hotel-details-container" id="hotelDetails">
+        <div class="empty-state">
+            <i class="fas fa-building"></i>
+            <h3>No Hotel Selected</h3>
+            <p>Select a hotel from the list above to view details</p>
+            <button class="btn btn-primary" href="/hotelier/hotels/add" style="margin-top: 20px;" id="addHotelEmptyBtn">
+                <i class="fas fa-plus"></i> Add Your First Hotel
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // DOM Elements
+    const hotelList = document.getElementById('hotelList');
+    const hotelDetailsContainer = document.getElementById('hotelDetails');
+    const addHotelBtn = document.getElementById('addHotelBtn') || document.getElementById('addHotelEmptyBtn');
+    const viewBookingsBtn = document.getElementById('viewBookingsBtn');
+    const reportsBtn = document.getElementById('reportsBtn');
+
+    const sampleHotels = <%- JSON.stringify(hotels || []) %>;
+    
+    console.log("Hotels loaded:", sampleHotels);
+
+    // Function to display hotel list
+    function displayHotelList(hotels) {
+        hotelList.innerHTML = '';
+        
+        if (hotels && hotels.length > 0) {
+            hotels.forEach((hotel, index) => {
+                const hotelCard = document.createElement('div');
+                hotelCard.className = `hotel-card ${index === 0 ? 'active' : ''}`;
+                hotelCard.setAttribute('data-hotel-id', hotel.id);
+                
+                // Calculate total available rooms from room_details
+                let totalAvailableRooms = 0;
+                if (hotel.room_details && hotel.room_details.length > 0) {
+                    totalAvailableRooms = hotel.room_details.reduce((sum, room) => sum + (room.available_rooms || 0), 0);
+                }
+                
+                hotelCard.innerHTML = `
+                    <h3>${hotel.name}</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> ${hotel.city || 'Location not set'}</p>
+                    <p><i class="fas fa-bed"></i> ${totalAvailableRooms} Available Rooms</p>
+                    <span class="hotel-type">${hotel.property_type || 'Hotel'}</span>
+                `;
+                
+                hotelCard.addEventListener('click', function() {
+                    // Remove active class from all cards
+                    document.querySelectorAll('.hotel-card').forEach(c => c.classList.remove('active'));
+                    // Add active class to clicked card
+                    this.classList.add('active');
+                    // Display hotel details
+                    displayHotelDetails(hotel);
+                });
+                
+                hotelList.appendChild(hotelCard);
+            });
+            
+            // Display first hotel details by default
+            if (hotels.length > 0) {
+                displayHotelDetails(hotels[0]);
+            }
+        } else {
+            hotelList.innerHTML = `
+                <div class="hotel-card active">
+                    <h3>No Hotels Found</h3>
+                    <p>Add your first hotel to get started</p>
+                    <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" id="addFirstHotelBtn">
+                        <i class="fas fa-plus"></i> Add Hotel
+                    </button>
+                </div>
+            `;
+            
+            // Add event listener to the button
+            const addFirstHotelBtn = document.getElementById('addFirstHotelBtn');
+            if (addFirstHotelBtn) {
+                addFirstHotelBtn.addEventListener('click', function() {
+                    window.location.href = '/hotelier/hotels/add';
+                });
+            }
+        }
+    }
+
+    // Function to display hotel details
+    function displayHotelDetails(hotel) {
+        if (!hotel) return;
+        
+        // Note: Now hotel.room_details is an array of objects from hotel_room_types table
+        const roomDetails = hotel.room_details || [];
+        const paymentMethods = hotel.payment_methods ? hotel.payment_methods.split(',').map(method => method.trim()) : [];
+        const photos = hotel.photos ? hotel.photos.split(',') : [];
+        
+        // Format full address
+        const addressParts = [];
+        if (hotel.address_line1) addressParts.push(hotel.address_line1);
+        if (hotel.address_line2) addressParts.push(hotel.address_line2);
+        if (hotel.district) addressParts.push(hotel.district);
+        if (hotel.province) addressParts.push(hotel.province);
+        const fullAddress = addressParts.join(', ');
+        
+        // Format offers/discount
+        const formattedOffers = hotel.offers ? 
+            `${hotel.offers}% discount` : 'No offers available';
+        
+        // Calculate total available rooms from room_details
+        let totalAvailableRooms = 0;
+        if (roomDetails.length > 0) {
+            totalAvailableRooms = roomDetails.reduce((sum, room) => sum + (room.available_rooms || 0), 0);
+        }
+        
+        hotelDetailsContainer.innerHTML = `
+            <div class="details-header">
+                <h2><i class="fas fa-info-circle"></i> ${hotel.name} - Details</h2>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="updateHotelBtn">
+                        <i class="fas fa-edit"></i> Update Hotel Details
+                    </button>
+                    <button class="btn btn-success" id="viewBookingsDetailsBtn">
+                        <i class="fas fa-eye"></i> View Bookings
+                    </button>
+                </div>
+            </div>
+            
+            <div class="details-grid">
+                <div class="detail-section">
+                    <h3><i class="fas fa-building"></i> Hotel Information</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Hotel Name</span>
+                        <span class="detail-value">${hotel.name}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Property Type</span>
+                        <span class="detail-value">${hotel.property_type || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Total Rooms</span>
+                        <span class="detail-value">${hotel.total_rooms || 0}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Available Rooms</span>
+                        <span class="detail-value highlight">${totalAvailableRooms}</span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Address Details</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Address Line 1</span>
+                        <span class="detail-value">${hotel.address_line1 || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Address Line 2</span>
+                        <span class="detail-value">${hotel.address_line2 || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">City</span>
+                        <span class="detail-value">${hotel.city || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">District</span>
+                        <span class="detail-value">${hotel.district || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Province</span>
+                        <span class="detail-value">${hotel.province || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Full Address</span>
+                        <span class="detail-value">${fullAddress}</span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3><i class="fas fa-address-book"></i> Contact Information</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Telephone</span>
+                        <span class="detail-value">${hotel.telephone || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Email</span>
+                        <span class="detail-value">${hotel.email || 'Not specified'}</span>
+                    </div>
+                </div>
+                
+                <!-- PRICING CARD (moved to where room info was) -->
+                <div class="detail-section">
+                    <h3><i class="fas fa-money-bill-wave"></i> Pricing & Payment</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Offers/Discount</span>
+                        <span class="detail-value">${formattedOffers}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Payment Methods</span>
+                        <div class="detail-value">
+                            <div class="payment-methods">
+                                ${paymentMethods.map(method => `<span class="payment-badge">${method}</span>`).join('')}
+                                ${paymentMethods.length === 0 ? '<span class="payment-badge">Not specified</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ROOM INFO CARD (moved to where pricing was, now with grid layout) -->
+                <div class="detail-section">
+                    <h3><i class="fas fa-bed"></i> Room Information</h3>
+                    <div class="detail-item">
+                        <div class="detail-label">Room Types & Availability</div>
+                        <div class="detail-value">
+                            ${
+                                roomDetails.length > 0
+                                ? `
+                                <div class="room-grid">
+                                    ${roomDetails.map(room => `
+                                        <div class="room-grid-card">
+                                            <div class="room-grid-header">
+                                                <span class="room-type-name">${room.room_type || 'No type'}</span>
+                                                <span class="room-price">LKR ${room.price_per_night || 0}</span>
+                                            </div>
+                                            <div class="room-details-grid">
+                                                <div class="room-detail-row">
+                                                    <span class="room-detail-label">Available:</span>
+                                                    <span class="room-detail-value">${room.available_rooms || 0} rooms</span>
+                                                </div>
+                                                <div class="room-detail-row">
+                                                    <span class="room-detail-label">Max Adults:</span>
+                                                    <span class="room-detail-value">${room.max_adults || 2}</span>
+                                                </div>
+                                                <div class="room-detail-row">
+                                                    <span class="room-detail-label">Max Children:</span>
+                                                    <span class="room-detail-value">${room.max_children || 0}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                `
+                                : '<p style="color: #666; font-style: italic;">No room types defined</p>'
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photos-section">
+                <h3><i class="fas fa-images"></i> Hotel Photos</h3>
+                <div class="photos-grid">       
+                    ${
+                        photos.length > 0 && photos[0] !== ''
+                        ? photos.map(photo => `
+                            <div class="photo-item">
+                                <img src="/uploads/${photo}" alt="Hotel Photo">
+                            </div>
+                        `).join('')
+                        : `<p style="color: #666; font-style: italic;">No photos uploaded</p>`
+                    }
+                </div>
+            </div>
+        `;
+        
+        // Add event listeners to buttons
+        const updateHotelBtn = document.getElementById('updateHotelBtn');
+        const viewBookingsDetailsBtn = document.getElementById('viewBookingsDetailsBtn');
+        
+        if (updateHotelBtn) {
+            updateHotelBtn.addEventListener('click', function() {
+                window.location.href = `/hotelier/hotels/edit/${hotel.id}`;
+            });
+        }
+        
+        if (viewBookingsDetailsBtn) {
+            viewBookingsDetailsBtn.addEventListener('click', function() {
+                // Get the currently active hotel
+        const activeHotel = document.querySelector('.hotel-card.active');
+        if (activeHotel) {
+            const hotelId = activeHotel.dataset.hotelId; // <-- this comes from your hotel list
+            window.location.href = `/hotelier/bookings/${hotelId}`;
+        } else {
+            alert('Please select a hotel first.');
+        }
+            });
+        }
+        
+        // Show the details container
+        hotelDetailsContainer.classList.add('active');
+    }
+
+    if (viewBookingsBtn) {
+    viewBookingsBtn.addEventListener('click', function() {
+        // Get the currently active hotel
+        const activeHotel = document.querySelector('.hotel-card.active');
+        if (activeHotel) {
+            const hotelId = activeHotel.dataset.hotelId; // <-- this comes from your hotel list
+            window.location.href = `/hotelier/bookings/${hotelId}`;
+        } else {
+            alert('Please select a hotel first.');
+        }
+    });
+}
+
+    if (reportsBtn) {
+        reportsBtn.addEventListener('click', function() {
+            alert('Reports & Analytics page would open here.');
+            // window.location.href = '/hotelier/reports';
+        });
+    }
+
+    // Notification button
+    document.querySelector('.notification-btn')?.addEventListener('click', function() {
+        alert('You have 3 new notifications:\n1. New booking received\n2. Payment received\n3. Review submitted');
+    });
+
+    // Initialize with sample data
+    displayHotelList(sampleHotels);
+
+    // Smooth scroll for hotel list
+    if (hotelList) {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        hotelList.addEventListener('mousedown', (e) => {
+            isDown = true;
+            hotelList.classList.add('active');
+            startX = e.pageX - hotelList.offsetLeft;
+            scrollLeft = hotelList.scrollLeft;
+        });
+
+        hotelList.addEventListener('mouseleave', () => {
+            isDown = false;
+            hotelList.classList.remove('active');
+        });
+
+        hotelList.addEventListener('mouseup', () => {
+            isDown = false;
+            hotelList.classList.remove('active');
+        });
+
+        hotelList.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - hotelList.offsetLeft;
+            const walk = (x - startX) * 2;
+            hotelList.scrollLeft = scrollLeft - walk;
+        });
+    }
+</script>
+
+</body>
+</html>

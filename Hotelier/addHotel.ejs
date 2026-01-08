@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof isEdit !== 'undefined' && isEdit ? 'Edit Hotel' : 'Add New Hotel' %> | Hotel Management Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --golden: #FFD700;
+            --golden-dark: #DAA520;
+            --golden-light: #FFF8DC;
+            --dark-bg: #1a1a2e;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --border-color: #e0e0e0;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-dark);
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 250px;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--golden);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--golden);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .user-profile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+        }
+
+        .user-profile img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--golden);
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .user-profile h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .user-profile p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: transparent;
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            text-decoration: none;
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+            color: var(--golden);
+            width: 24px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--golden);
+            transform: translateX(5px);
+        }
+
+        .nav-btn.danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            margin-top: auto;
+        }
+
+        .nav-btn.danger:hover {
+            background: rgba(220, 53, 69, 0.2);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--golden);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header h1 i {
+            color: var(--golden);
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            flex-grow: 1;
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--golden-light);
+        }
+
+        .form-header h2 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+        }
+
+        .form-header i {
+            color: var(--golden);
+            font-size: 1.8rem;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: #f9f9f9;
+            border-radius: var(--radius-md);
+            padding: 25px;
+            border-left: 4px solid var(--golden);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section h3 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section h3 i {
+            color: var(--golden);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--golden);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .form-group input:hover,
+        .form-group select:hover {
+            border-color: #bbb;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            background: white;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .checkbox-group label:hover {
+            border-color: var(--golden);
+            background: var(--golden-light);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--golden);
+        }
+
+        /* Room Input Fields - UPDATED to match transport design */
+        .room-fields {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .room-fields .form-group {
+            margin-bottom: 15px;
+        }
+
+        .room-fields .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .room-fields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .room-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .room-actions .btn {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            min-width: auto;
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .file-upload:hover {
+            border-color: var(--golden);
+            background: var(--golden-light);
+        }
+
+        .file-upload i {
+            font-size: 2.5rem;
+            color: var(--golden);
+            margin-bottom: 15px;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Existing Photos */
+        .existing-photos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .photo-preview {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border-color);
+        }
+
+        .remove-photo-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 25px;
+            border-top: 2px solid var(--golden-light);
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 1rem;
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--golden), var(--golden-dark));
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--dark-bg);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2c3e50;
+            transform: translateY(-3px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-3px);
+        }
+
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            min-width: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+                padding: 15px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .logo, .user-profile, .nav-buttons {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .nav-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-btn {
+                flex: 1;
+                min-width: 150px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .room-fields-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .room-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Error/Success Messages */
+        .alert {
+            padding: 15px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: var(--danger);
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: var(--success);
+        }
+
+        .alert i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== SIDEBAR ========== -->
+<div class="sidebar">
+    <div class="logo">
+        <h1><i class="fas fa-hotel"></i> HotelPro</h1>
+        <p>Management Dashboard</p>
+    </div>
+    
+    <div class="user-profile">
+        <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=FFD700&color=000&bold=true' %>" alt="Profile">
+        <h3><%= user.name %></h3>
+        <p><i class="fas fa-user-tie"></i> Hotel Manager</p>
+    </div>
+    
+    <div class="nav-buttons">
+        <a href="/hotelier" class="nav-btn">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/hotelier/hotels/add" class="nav-btn active">
+            <i class="fas fa-plus-circle"></i>
+            <span><%= typeof isEdit !== 'undefined' && isEdit ? 'Edit Hotel' : 'Add New Hotel' %></span>
+        </a>
+    
+        <a href="#" class="nav-btn" id="reportsBtn">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reports & Analytics</span>
+        </a>
+        <a href="/logout" class="nav-btn danger">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="main-content">
+    <!-- Header -->
+    <div class="header">
+        <h1><i class="fas fa-hotel"></i> <%= typeof isEdit !== 'undefined' && isEdit ? 'Edit Hotel' : 'Add New Hotel' %></h1>
+        <div class="header-info">
+            <div>
+                <h3>Welcome back, <%= user.name %>!</h3>
+                <p><%= typeof isEdit !== 'undefined' && isEdit ? 'Update your hotel details below' : 'Fill in the details below to add a new hotel' %></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-header">
+            <i class="fas fa-hotel"></i>
+            <h2>Hotel <%= typeof isEdit !== 'undefined' && isEdit ? 'Update' : 'Registration' %> Form</h2>
+        </div>
+
+        <% 
+        // Define variables safely
+        const editMode = typeof isEdit !== 'undefined' ? isEdit : false;
+        const hotelData = hotel || {};
+        const roomDetails = hotelData.room_details || [];
+        const paymentMethods = hotelData.payment_methods ? (Array.isArray(hotelData.payment_methods) ? hotelData.payment_methods : hotelData.payment_methods.split(',')) : [];
+        %>
+        
+        <!-- Error/Success Messages -->
+        <% if (error) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <%= error %>
+            </div>
+        <% } %>
+        <% if (success) { %>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <%= success %>
+            </div>
+        <% } %>
+
+        <form action="<%= editMode ? '/hotelier/hotels/' + hotelData.id + '?_method=PUT' : '/hotelier/hotels/add' %>" method="POST" enctype="multipart/form-data">
+
+            <div class="form-grid">
+                <!-- Basic Information Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">Hotel Name <span style="color: var(--danger);">*</span></label>
+                        <input type="text" id="name" name="name" value="<%= hotelData.name || '' %>" placeholder="Enter hotel name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="property_type">Property Type <span style="color: var(--danger);">*</span></label>
+                        <select id="property_type" name="property_type" required>
+                            <option value="">Select Property Type</option>
+                            <option value="Hotel" <%= hotelData.property_type === 'Hotel' ? 'selected' : '' %>>Hotel</option>
+                            <option value="Resort" <%= hotelData.property_type === 'Resort' ? 'selected' : '' %>>Resort</option>
+                            <option value="Guest House" <%= hotelData.property_type === 'Guest House' ? 'selected' : '' %>>Guest House</option>
+                            <option value="Boutique Hotel" <%= hotelData.property_type === 'Boutique Hotel' ? 'selected' : '' %>>Boutique Hotel</option>
+                            <option value="Villa" <%= hotelData.property_type === 'Villa' ? 'selected' : '' %>>Villa</option>
+                            <option value="Apartment" <%= hotelData.property_type === 'Apartment' ? 'selected' : '' %>>Apartment</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="total_rooms">Total Rooms <span style="color: var(--danger);">*</span></label>
+                        <input type="number" id="total_rooms" name="total_rooms" value="<%= hotelData.total_rooms || '' %>" min="1" max="1000" placeholder="Enter number of rooms" required>
+                    </div>
+                </div>
+
+                <!-- Address Information Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Address Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="address_line1">Address Line 1 <span style="color: var(--danger);">*</span></label>
+                        <input type="text" id="address_line1" name="address_line1" value="<%= hotelData.address_line1 || '' %>" placeholder="Street address, P.O. Box" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address_line2">Address Line 2</label>
+                        <input type="text" id="address_line2" name="address_line2" value="<%= hotelData.address_line2 || '' %>" placeholder="Suite, unit, building, floor, etc.">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" value="<%= hotelData.city || '' %>" placeholder="Enter city">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="province">Province <span style="color: var(--danger);">*</span></label>
+                        <select id="province" name="province" required>
+                            <option value="">Select Province</option>
+                            <option value="Western" <%= hotelData.province === 'Western' ? 'selected' : '' %>>Western Province</option>
+                            <option value="Central" <%= hotelData.province === 'Central' ? 'selected' : '' %>>Central Province</option>
+                            <option value="Southern" <%= hotelData.province === 'Southern' ? 'selected' : '' %>>Southern Province</option>
+                            <option value="Northern" <%= hotelData.province === 'Northern' ? 'selected' : '' %>>Northern Province</option>
+                            <option value="Eastern" <%= hotelData.province === 'Eastern' ? 'selected' : '' %>>Eastern Province</option>
+                            <option value="North Western" <%= hotelData.province === 'North Western' ? 'selected' : '' %>>North Western Province</option>
+                            <option value="North Central" <%= hotelData.province === 'North Central' ? 'selected' : '' %>>North Central Province</option>
+                            <option value="Uva" <%= hotelData.province === 'Uva' ? 'selected' : '' %>>Uva Province</option>
+                            <option value="Sabaragamuwa" <%= hotelData.province === 'Sabaragamuwa' ? 'selected' : '' %>>Sabaragamuwa Province</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="district">District <span style="color: var(--danger);">*</span></label>
+                        <select id="district" name="district" required>
+                            <option value="">Select District</option>
+                            <% if (hotelData.district) { %>
+                                <option value="<%= hotelData.district %>" selected><%= hotelData.district %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-address-book"></i> Contact Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="telephone">Telephone <span style="color: var(--danger);">*</span></label>
+                        <input type="text" id="telephone" name="telephone" value="<%= hotelData.telephone || '' %>" placeholder="+94 XX XXX XXXX" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Hotel Email <span style="color: var(--danger);">*</span></label>
+                        <input type="email" id="email" name="email" value="<%= hotelData.email || '' %>" placeholder="hotel@example.com" required>
+                    </div>
+                </div>
+
+                <!-- Room Types Section - UPDATED -->
+                <div class="form-section">
+                    <h3><i class="fas fa-bed"></i> Room Types</h3>
+                    
+                    <div id="rooms-container">
+                        <% if (roomDetails.length > 0) { %>
+                            <% roomDetails.forEach((room, index) => { %>
+                                <div class="room-fields" data-room-index="<%= index %>">
+                                    <div class="room-fields-grid">
+                                        <div class="form-group">
+                                            <label>Room Type <span style="color: var(--danger);">*</span></label>
+                                            <input type="text" name="room_type[]" value="<%= room.room_type || '' %>" placeholder="e.g., Standard, Deluxe, Suite" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Price per Night (LKR) <span style="color: var(--danger);">*</span></label>
+                                            <input type="number" name="room_price[]" value="<%= room.price_per_night || '' %>" min="0" step="0.01" placeholder="0.00" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max Adults</label>
+                                            <input type="number" name="room_max_adults[]" value="<%= room.max_adults || 2 %>" min="1" max="10">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max Children</label>
+                                            <input type="number" name="room_max_children[]" value="<%= room.max_children || 0 %>" min="0" max="10">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Available Rooms <span style="color: var(--danger);">*</span></label>
+                                            <input type="number" name="room_available[]" value="<%= room.available_rooms || 0 %>" min="0" max="1000" required>
+                                        </div>
+                                    </div>
+                                    <div class="room-actions">
+                                        <button type="button" class="btn btn-sm btn-secondary remove-room" style="background: var(--danger);">
+                                            <i class="fas fa-trash"></i> Remove Room Type
+                                        </button>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <!-- Default first room -->
+                            <div class="room-fields" data-room-index="0">
+                                <div class="room-fields-grid">
+                                    <div class="form-group">
+                                        <label>Room Type <span style="color: var(--danger);">*</span></label>
+                                        <input type="text" name="room_type[]" placeholder="e.g., Standard, Deluxe, Suite" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price per Night (LKR) <span style="color: var(--danger);">*</span></label>
+                                        <input type="number" name="room_price[]" min="0" step="0.01" placeholder="0.00" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Max Adults</label>
+                                        <input type="number" name="room_max_adults[]" value="2" min="1" max="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Max Children</label>
+                                        <input type="number" name="room_max_children[]" value="0" min="0" max="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Available Rooms <span style="color: var(--danger);">*</span></label>
+                                        <input type="number" name="room_available[]" min="0" max="1000" required>
+                                    </div>
+                                </div>
+                                <div class="room-actions">
+                                    <button type="button" class="btn btn-sm btn-secondary remove-room" style="background: var(--danger);">
+                                        <i class="fas fa-trash"></i> Remove Room Type
+                                    </button>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <button type="button" class="btn btn-success btn-sm" id="add-room">
+                        <i class="fas fa-plus"></i> Add Another Room Type
+                    </button>
+                </div>
+
+                <!-- Pricing & Payment Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-money-bill-wave"></i> Pricing & Payment</h3>
+                    
+                    <div class="form-group">
+                        <label for="offers">Offers/Discount (%)</label>
+                        <input type="number" id="offers" name="offers" value="<%= hotelData.offers || 0 %>" min="0" max="100" placeholder="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Payment Methods</label>
+                        <div class="checkbox-group">
+                            <% 
+                            const paymentOptions = ['Visa', 'MasterCard', 'American Express', 'PayPal', 'Cash', 'Bank Transfer'];
+                            %>
+                            <% paymentOptions.forEach(method => { %>
+                                <label>
+                                    <input type="checkbox" name="payment_methods[]" value="<%= method %>" 
+                                        <%= paymentMethods.includes(method) ? 'checked' : '' %>>
+                                    <%= method %>
+                                </label>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photos Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-images"></i> Hotel Photos</h3>
+                    
+                    <div class="form-group">
+                        <label>Upload Hotel Images</label>
+                        <div class="file-upload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p style="font-weight: 500; margin-bottom: 10px;">Drag & drop or click to upload</p>
+                            <p style="font-size: 0.9rem; color: #666;">Upload high-quality images of your hotel (Max 10 files)</p>
+                            <input type="file" id="photos" name="photos" multiple accept="image/*">
+                        </div>
+                        <p style="font-size: 0.85rem; color: #666; margin-top: 8px;">Supported formats: JPG, PNG, WebP</p>
+                        
+                        <!-- Existing Photos -->
+                        <% if (editMode && hotelData.photos) { 
+                            const photos = hotelData.photos.split(','); 
+                            if (photos.length > 0 && photos[0] !== '') { %>
+                                <p style="margin-top: 15px; font-weight: 500;">Current Photos:</p>
+                                <div class="existing-photos">
+                                    <% photos.forEach(photo => { %>
+                                        <div class="photo-preview">
+                                            <img src="/uploads/<%= photo %>" alt="Hotel Photo">
+                                            <div class="remove-photo-btn" onclick="markPhotoForRemoval('<%= photo %>', this)">
+                                                <i class="fas fa-times"></i>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                        <% } } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> <%= editMode ? 'Update Hotel' : 'Add Hotel' %>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // DOM Ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Province-District Mapping
+        const provinceDistricts = {
+            "Western": ["Colombo", "Gampaha", "Kalutara"],
+            "Central": ["Kandy", "Matale", "Nuwara Eliya"],
+            "Southern": ["Galle", "Matara", "Hambantota"],
+            "Northern": ["Jaffna", "Kilinochchi", "Mannar", "Mullaitivu", "Vavuniya"],
+            "Eastern": ["Trincomalee", "Batticaloa", "Ampara"],
+            "North Western": ["Kurunegala", "Puttalam"],
+            "North Central": ["Anuradhapura", "Polonnaruwa"],
+            "Uva": ["Badulla", "Monaragala"],
+            "Sabaragamuwa": ["Ratnapura", "Kegalle"]
+        };
+
+        const provinceSelect = document.getElementById("province");
+        const districtSelect = document.getElementById("district");
+
+        // Update district dropdown based on province selection
+        provinceSelect.addEventListener("change", function() {
+            const selectedProvince = this.value;
+            
+            // Reset district dropdown
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+            
+            if (provinceDistricts[selectedProvince]) {
+                provinceDistricts[selectedProvince].forEach(district => {
+                    const option = document.createElement("option");
+                    option.value = district;
+                    option.textContent = district;
+                    
+                    // Select if it matches the existing district
+                    if (district === "<%= hotelData.district || '' %>") {
+                        option.selected = true;
+                    }
+                    
+                    districtSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Initialize district dropdown if province is already selected
+        if (provinceSelect.value && provinceDistricts[provinceSelect.value]) {
+            provinceSelect.dispatchEvent(new Event('change'));
+        }
+
+        // Room Type Management - UPDATED to match transport design
+        let roomCounter = <%= roomDetails.length || 1 %>;
+        const roomsContainer = document.getElementById('rooms-container');
+        const addRoomBtn = document.getElementById('add-room');
+
+        // Add room button handler
+        addRoomBtn.addEventListener('click', function() {
+            const roomIndex = roomCounter++;
+            const roomHTML = `
+                <div class="room-fields" data-room-index="${roomIndex}">
+                    <div class="room-fields-grid">
+                        <div class="form-group">
+                            <label>Room Type <span style="color: var(--danger);">*</span></label>
+                            <input type="text" name="room_type[]" placeholder="e.g., Standard, Deluxe, Suite" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Price per Night (LKR) <span style="color: var(--danger);">*</span></label>
+                            <input type="number" name="room_price[]" min="0" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Max Adults</label>
+                            <input type="number" name="room_max_adults[]" value="2" min="1" max="10">
+                        </div>
+                        <div class="form-group">
+                            <label>Max Children</label>
+                            <input type="number" name="room_max_children[]" value="0" min="0" max="10">
+                        </div>
+                        <div class="form-group">
+                            <label>Available Rooms <span style="color: var(--danger);">*</span></label>
+                            <input type="number" name="room_available[]" min="0" max="1000" required>
+                        </div>
+                    </div>
+                    <div class="room-actions">
+                        <button type="button" class="btn btn-sm btn-secondary remove-room" style="background: var(--danger);">
+                            <i class="fas fa-trash"></i> Remove Room Type
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            roomsContainer.insertAdjacentHTML('beforeend', roomHTML);
+            attachRemoveListeners();
+        });
+
+        // Remove room handler
+        function attachRemoveListeners() {
+            document.querySelectorAll('.remove-room').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const roomFields = this.closest('.room-fields');
+                    if (roomsContainer.children.length > 1) {
+                        roomFields.remove();
+                    } else {
+                        alert('At least one room type is required.');
+                    }
+                });
+            });
+        }
+
+        // Attach initial remove listeners
+        attachRemoveListeners();
+
+        // File upload preview
+        const fileInput = document.getElementById('photos');
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                const fileUploadDiv = fileInput.closest('.file-upload');
+                
+                if (files.length > 0) {
+                    const fileNameDiv = document.createElement('div');
+                    fileNameDiv.className = 'selected-files';
+                    fileNameDiv.style.marginTop = '15px';
+                    fileNameDiv.style.padding = '10px';
+                    fileNameDiv.style.background = 'var(--golden-light)';
+                    fileNameDiv.style.borderRadius = 'var(--radius-sm)';
+                    fileNameDiv.innerHTML = `<strong>${files.length} file(s) selected:</strong><br>`;
+                    
+                    Array.from(files).slice(0, 3).forEach(file => {
+                        fileNameDiv.innerHTML += `• ${file.name}<br>`;
+                    });
+                    
+                    if (files.length > 3) {
+                        fileNameDiv.innerHTML += `... and ${files.length - 3} more`;
+                    }
+                    
+                    // Remove existing preview if any
+                    const existingPreview = fileUploadDiv.querySelector('.selected-files');
+                    if (existingPreview) {
+                        existingPreview.remove();
+                    }
+                    
+                    fileUploadDiv.appendChild(fileNameDiv);
+                }
+            });
+        }
+
+        // Form validation
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            let valid = true;
+            
+            // Check required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    valid = false;
+                    field.style.borderColor = 'var(--danger)';
+                } else {
+                    field.style.borderColor = '';
+                }
+            });
+            
+            // Check at least one room type exists
+            const roomTypes = form.querySelectorAll('input[name="room_type[]"]');
+            if (roomTypes.length === 0) {
+                valid = false;
+                alert('Please add at least one room type');
+            }
+            
+            if (!valid) {
+                e.preventDefault();
+                alert('Please fill in all required fields');
+            } else {
+                // Show loading state
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <%= editMode ? "Updating Hotel..." : "Adding Hotel..." %>';
+                submitBtn.disabled = true;
+            }
+        });
+
+        // Add smooth animations
+        const formSections = document.querySelectorAll('.form-section');
+        formSections.forEach((section, index) => {
+            section.style.animationDelay = `${index * 0.1}s`;
+        });
+    });
+
+    // Mark photo for removal
+    function markPhotoForRemoval(photoName, button) {
+        if (confirm('Are you sure you want to remove this photo?')) {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'removed_photos[]';
+            hiddenInput.value = photoName;
+            document.querySelector('form').appendChild(hiddenInput);
+            
+            const photoElement = button.closest('.photo-preview');
+            photoElement.style.opacity = '0.5';
+            photoElement.style.pointerEvents = 'none';
+            
+            button.innerHTML = '<i class="fas fa-check"></i>';
+            button.style.background = 'var(--success)';
+        }
+    }
+
+    // Navigation
+    document.getElementById('viewBookingsBtn')?.addEventListener('click', function() {
+        window.location.href = '/hotelier/bookings';
+    });
+
+    document.getElementById('reportsBtn')?.addEventListener('click', function() {
+        window.location.href = '/hotelier/reports';
+    });
+</script>
+
+</body>
+</html>
