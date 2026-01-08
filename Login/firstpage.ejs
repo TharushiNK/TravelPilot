@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelPilot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e59902;
+            --secondary-color: #2c1a00;
+            --text-color-light: #fef1e8;
+            --text-color-dark: #333;
+            --bg-color-dark: #271a08;
+            --border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+.header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    overflow: hidden;
+}
+
+.header-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* maintains aspect ratio and fills the header */
+    filter: brightness(0.5); /* optional: darken video for readability */
+}
+
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            padding: 20px 50px;
+            z-index: 10;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 24px;
+        }
+        
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: var(--text-color-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-button {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--text-color-light);
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color-dark);
+        }
+        
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content h1 {
+            font-size: 80px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 5px;
+        }
+        
+        .hero-content p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        
+        .dots {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .dot {
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+        
+        .active-dot {
+            background-color: var(--primary-color);
+        }
+        
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            cursor: pointer;
+            color: var(--text-color-light);
+            transition: color 0.3s;
+            z-index: 5;
+        }
+        
+        .arrow:hover {
+            color: var(--primary-color);
+        }
+        
+        .arrow.left {
+            left: 20px;
+        }
+        
+        .arrow.right {
+            right: 20px;
+        }
+
+        h2 {
+            font-size: 40px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: '';
+            display: block;
+            width: 60%;
+            height: 2px;
+            background-color: var(--primary-color);
+            margin: 10px auto 0;
+        }
+        
+        .trip-dream {
+        background-image: url(public/image/sadakadapahana.jpeg);
+        background-size: cover;
+        background-attachment: fixed;
+        padding: 100px 0;
+        position: relative;
+        z-index: 1;
+        }
+        .trip-dream::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: rgba(20, 10, 0, 0.6);
+        z-index: -1;
+        }
+        .trip-dream-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        }
+        .trip-text {
+        flex: 1;
+        padding-right: 40px;
+        text-align: left;
+        }
+        .trip-text h3 { color: var(--primary-color); font-size: 32px; margin-bottom: 20px; }
+        .trip-text ul { list-style: none; padding: 0; }
+        .trip-text ul li {
+        margin-bottom: 15px;
+        padding-left: 28px;
+        position: relative;
+        }
+        .trip-text ul li::before {
+        content: '\f058';
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        color: var(--primary-color);
+        position: absolute; left: 0;
+        }
+        .trip-text a {
+        display: inline-block;
+        margin-top: 20px;
+        background: linear-gradient(135deg, #e59902, #ffb84d);
+        color: var(--bg-color-dark);
+        padding: 12px 28px;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: transform 0.3s ease;
+        }
+        .trip-text a:hover { transform: scale(1.05); }
+
+        /* Image stack */
+        .trip-image-stack {
+        flex: 1;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 420px;
+        }
+        .trip-stack {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        transition: all 0.8s ease-in-out;
+        opacity: 0.6;
+        transform: scale(0.9);
+        }
+        .trip-stack.active {
+        z-index: 3;
+        opacity: 1;
+        transform: scale(1) translateX(0);
+        }
+        .trip-stack.next {
+        z-index: 2;
+        transform: scale(0.9) translateX(80px) rotate(5deg);
+        }
+        .trip-stack.prev {
+        z-index: 1;
+        transform: scale(0.9) translateX(-80px) rotate(-5deg);
+        }
+        @media (max-width: 768px) {
+        .trip-dream-content { flex-direction: column; }
+        .trip-text { padding: 0; margin-bottom: 30px; text-align: center; }
+        .trip-image-stack { height: 250px; }
+        }
+.about-us {
+  position: relative;
+  padding: 80px 20px;
+  color: var(--text-color-light);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.about-bg {
+  position: absolute;
+  inset: 0;
+  background: url("public/image/sunset.jpg") center center / cover no-repeat;
+  filter: brightness(0.4);
+  z-index: 0;
+}
+
+/* Section title */
+.about-us h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 2;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+.about-us h2::after {
+  content: '';
+  display: block;
+  width: 60%;
+  height: 2px;
+  background-color: var(--primary-color);
+  margin: 10px auto 0;
+}
+
+/* Content Wrapper */
+.about-cover {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 500px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 2;
+}
+
+/* Left image */
+.about-image {
+  flex: 1.2;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px 0 0 15px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  display: block;
+}
+
+.about-image:hover img {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+/* Right card */
+.about-card {
+  flex: 1;
+  background: rgba(39, 26, 8, 0.95);
+  color: var(--text-color-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  border-radius: 0 15px 15px 0;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+.about-card h3 {
+  font-size: 32px;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.about-card p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  color: var(--text-color-light);
+}
+
+.about-card a {
+  display: inline-block;
+  background: linear-gradient(135deg, #e59902, #ffb84d);
+  color: #2c1a00;
+  padding: 12px 28px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: fit-content;
+  box-shadow: 0 4px 15px rgba(229, 153, 2, 0.3);
+}
+
+.about-card a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(229, 153, 2, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .about-cover {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .about-image,
+  .about-card {
+    width: 100%;
+    height: auto;
+  }
+
+  .about-image img {
+    border-radius: 15px 15px 0 0;
+    height: 300px;
+  }
+
+  .about-card {
+    border-radius: 0 0 15px 15px;
+    text-align: center;
+    padding: 30px 20px;
+  }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .about-cover {
+    flex-direction: column;
+    height: auto;
+    border-radius: 15px;
+  }
+  
+  .about-image,
+  .about-card {
+    width: 100%;
+    height: auto;
+  }
+  
+  .about-image img {
+    border-radius: 15px 15px 0 0;
+    height: 300px;
+  }
+  
+  .about-card {
+    border-radius: 0 0 15px 15px;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  
+  .about-card a {
+    align-self: center;
+  }
+} 
+ :root {
+    --primary-color: #D2A860; /* Light gold/amber */
+    --secondary-color: #8C5F1C; /* Dark gold */
+    --text-color-light: #FFFFFF; /* White for headings */
+    --text-color-gray: #D3D3D3; /* Light gray for body text */
+    --background-dark: #1E1911; /* Deep dark brown/black */
+}
+
+body {
+    background-color: var(--background-dark);
+    color: var(--text-color-gray);
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+/* Reasons Section */
+.reason-section {
+    padding: 80px 0;
+    position: relative;
+    background: url("public/image/Yapahuwa Rock Fortress.jpeg") center/cover no-repeat fixed;
+}
+
+.reason-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* dark overlay */
+    z-index: 0;
+}
+
+.reason-section h2 {
+    text-align: center;
+    color: rgb(255, 255, 255);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 50px;
+}
+
+.reasons-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.reason-item {
+  flex-basis: 30%;
+  text-align: center;
+  margin-bottom: 40px;
+  background: rgba(255, 255, 255, 0.05); /* optional: subtle bg to define card */
+  padding: 20px;
+  border-radius: 15px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Hover popup effect */
+.reason-item:hover {
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  z-index: 5;
+}
+
+.reason-item i {
+    font-size: 50px;
+    color: var(--primary-color);
+    background-color: rgba(140, 95, 28, 0.2); /* dark gold overlay */
+    padding: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.reason-item h4 {
+    font-size: 20px;
+    color: var(--primary-color);
+    margin: 15px 0 5px;
+}
+
+.reason-item p {
+    color: var(--text-color-gray);
+}
+
+/* Popular Tours Section */
+.popular-tours {
+    padding: 5px 0;
+    position: relative;
+    background: url("public/image/Yapahuwa Rock Fortress.jpeg") center/cover no-repeat fixed;
+}
+
+.popular-tours::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 0;
+}
+
+.popular-tours h2 {
+    text-align: center;
+    color: rgb(255, 255, 255);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 50px;
+}
+
+.tour-grid-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.tour-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+}
+
+.tour-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.tour-card {
+    min-width: 300px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+}
+.tour-card {
+  min-width: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease; /* smooth animation */
+}
+
+/* Hover effect */
+.tour-card:hover {
+  transform: translateY(-15px) scale(1.05); /* elevate + enlarge */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);  /* deeper shadow */
+  z-index: 5; /* bring above other elements */
+}
+
+.tour-card img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    display: block;
+}
+
+.tour-info {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    padding: 20px;
+    color: var(--text-color-light);
+}
+
+.tour-info h4 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.tour-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.tour-nav-btn.prev { left: 10px; }
+.tour-nav-btn.next { right: 10px; }
+  
+.reviews-section {
+    background: url("public/image/TravelPilot_Reviews.jpg") center/cover no-repeat fixed;
+    padding: 80px 0;
+    position: relative;
+    color: #FFFFFF;
+}
+
+.reviews-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.72);
+    z-index: 0;
+}
+
+.reviews-section h2 {
+    text-align: center;
+    color: #FFFFFF;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 2px;
+}
+
+/* Carousel Wrapper */
+.review-carousel {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 10px;
+    z-index: 3;
+}
+
+.review-cards-wrapper {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+}
+
+.review-cards-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* Review Card */
+.review-card {
+  display: flex;
+  background-color: #8C5F1C; /* Dark gold */
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  min-width: 400px;
+  max-width: 400px;
+  flex-shrink: 0;
+  padding: 15px;
+  gap: 15px;
+  align-items: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease; /* smooth animation */
+}
+
+/* Hover effect */
+.review-card:hover {
+  transform: translateY(-15px) scale(1.05); /* pop out */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6); /* deeper shadow */
+  z-index: 5; /* above neighbors */
+}
+
+
+.reviewer-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px; /* Slightly rounded rectangle */
+    object-fit: cover;
+    border: 3px solid #D2A860; /* Light gold border */
+}
+
+.review-text {
+    flex: 1;
+}
+
+.review-text h5 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    color: #D2A860; /* Light gold */
+}
+
+.review-text p {
+    color: #D3D3D3; /* Light gray */
+    font-style: italic;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Carousel Buttons */
+.review-nav {
+    background: rgba(0,0,0,0.5);
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10;
+    transition: background 0.3s;
+}
+
+.review-nav:hover {
+    background: rgba(0,0,0,0.8);
+}
+
+.review-nav.prev { margin-right: 10px; }
+.review-nav.next { margin-left: 10px; }
+
+/* Dots */
+.review-dots {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.review-dots .dot {
+    height: 12px;
+    width: 12px;
+    margin: 0 5px;
+    background-color: #D3D3D3;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.review-dots .dot.active {
+    background-color: #D2A860;
+}
+
+/* Contact Form */
+.contact-form {
+    max-width: 600px;
+    margin: 50px auto 0;
+    position: relative;
+    z-index: 1;
+}
+
+.contact-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #D3D3D3;
+    padding: 10px;
+    color: #FFFFFF;
+    font-size: 16px;
+    resize: none;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: #D3D3D3;
+}
+
+.contact-form button {
+    background: linear-gradient(135deg, #e59902, #ffb84d);
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.contact-form button:hover {
+    background-color: #D2A860;
+}
+
+footer {
+    position: relative; /* Needed for the overlay */
+    background-color: #000000; /* Dark brown almost black */
+    background-image: url("TravelPilot_Contacts.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 60px 20px;
+    color: #FFFFFF;
+    font-family: 'Segoe UI', sans-serif;
+    z-index: 1;
+}
+
+/* Dark overlay */
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.86); /* Adjust opacity for darkness */
+    z-index: -30; /* Put it behind the content */
+}
+
+/* Make all footer content appear above the overlay */
+.footer-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+    max-width: 1200px;
+    margin: auto;
+    
+}
+
+/* Left Column */
+.footer-logo h3 {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 32px;
+    margin: 0 0 10px;
+
+}
+
+.footer-logo h3 span {
+    color: #D2A860; /* Light gold accent */
+}
+
+.footer-slogan {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.nav-button {
+    display: inline-block;
+    padding: 12px 25px;
+    font-weight: bold;
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #e59902, #ffb84d);
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+    filter: brightness(1.2);
+}
+
+/* Mid Columns: Links */
+.footer-links h4 {
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #D3D3D3;
+    padding-bottom: 5px;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links ul li {
+    margin: 8px 0;
+}
+
+.footer-links ul li a {
+    color: #D3D3D3;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links ul li a:hover {
+    color: #D2A860;
+}
+
+/* Right Column: Contacts & Socials */
+.footer-contacts h4 {
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #D3D3D3;
+    padding-bottom: 5px;
+}
+
+.footer-contacts ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-contacts ul li {
+    margin: 6px 0;
+    color: #D3D3D3;
+}
+
+.social-icons {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.social-icons a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+    background-color: #D2A860;
+    color: #0F0C08;
+}
+
+/* Floating Phone Icon */
+.phone-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #34C659;
+    color: #FFFFFF;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.phone-icon:hover {
+    transform: scale(1.1);
+}
+
+        
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 20px;
+                position: static;
+            }
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+            }
+            nav ul li {
+                margin: 10px 0;
+            }
+            .hero-content h1 {
+                font-size: 40px;
+            }
+            .trip-dream-content, .about-us-content, .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .trip-text, .about-text, .about-image {
+                padding: 0;
+                margin-top: 30px;
+            }
+            .reason-item, .tour-card {
+                flex-basis: 100%;
+                margin: 15px 0;
+            }
+            .review-carousel {
+                flex-direction: column;
+            }
+            .review-card {
+                width: 100%;
+            }
+            .contact-form form {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Phone Icon -->
+    <a href="tel:+94714666372" class="phone-icon"><i class="fas fa-phone"></i></a>
+
+    <!-- Header Section -->
+<header class="header">
+    <video autoplay muted loop playsinline class="header-video">
+        <source src="public/video/header.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <nav>
+        <div class="logo"><b>Travel</b><span><b>Pilot</b></span></div>
+        <ul>
+            <li><a href="#"><b>Home</b></a></li>
+            <li><a href="#"><b>Destinations</b></a></li>
+            <li><a href="#"><b>Plan Your Trip</b></a></li>
+            <li><a href="#"><b>Services</b></a></li>
+            <li><a href="/contactUs"><b>Contact us</b></a></li>
+            <li><a href="/login" class="nav-button"><b>Login</b></a></li>
+        </ul>
+    </nav>
+
+    <div class="hero-content">
+        <h1>TRAVEL</h1>
+        <p>CREATE YOUR JOURNEY WITH US</p>
+    </div>
+</header>
+
+    <!-- Trip of Your Dream Section -->
+    <section class="section trip-dream">
+    <h2 style="margin-bottom: 50px;">Reasons why you should visit Sri Lanka</h2>
+    <div class="container trip-dream-content">
+        <!-- Text Side -->
+        <div class="trip-text">
+        <h3>TRIP OF YOUR DREAM</h3>
+        <ul>
+            <li>5 days and 4 nights in a charming hotel with a relaxing atmosphere.</li>
+            <li>Scenic hot air balloon ride at sunrise • Cultural photoshoot • Exciting ATV adventure.</li>
+            <li>Explore 3 beautiful cities: Colombo, Kandy, Galle.</li>
+            <li>Includes round-trip tickets and hotel transfers.</li>
+            <li>Just LKR 110000 for two.</li>
+        </ul>
+        <a href="#">Explore Now</a>
+        </div>
+
+        <!-- Image Carousel Side -->
+        <div class="trip-image-stack">
+        <img src="public/image/TravelPilot_Dream_Trip.jpeg" alt="Elephant With Girl" class="trip-stack active">
+        <img src="public/image/Meemure, Sri Lanka.jpg" alt="Meemure Sri Lanka" class="trip-stack next">
+        <img src="public/image/Turtle hatchery rescue centre - Hikkaduwa, SriLanka.jpeg" alt="Turtle hatchery rescue centre - Hikkaduwa, SriLanka" class="trip-stack prev">
+        <img src="public/image/Coconut Tree Hill - Mirissa , SriLanka.jpeg"Elephant With Girl" class="trip-stack active">
+        <img src="public/image/Yapahuwa Rock Fortress.jpeg" alt="Yapahuwa Sri Lanka" class="trip-stack next">   
+         <img src="public/image/Dalawella Beach 🏄_♀️🏖️🏝️.jpeg" alt="Dalwalla beach Sri Lanka" class="trip-stack next">  
+    
+    </div>
+    </div>
+    </section>
+
+<!-- About Us Section -->
+<section class="section about-us">
+  <!-- Background overlay image -->
+  <div class="about-bg"></div>
+
+  <!-- Section Title -->
+  <h2>ABOUT US</h2>
+
+  <!-- Content Wrapper -->
+  <div class="about-cover">
+    <!-- Left Image -->
+    <div class="about-image">
+      <img src="public/image/TravelPilot_Swings.PNG" alt="About Us Image">
+    </div>
+
+    <!-- Right Card -->
+    <div class="about-card">
+      <h3>Get to know us</h3>
+      <p>
+        We are software engineering undergraduates from The Open University of Sri Lanka, 
+        building a modern tourism app to transform travel experiences. 
+        Our platform helps travelers explore hidden gems, plan itineraries, book hotels and transport, 
+        and stay updated in real time — while also supporting local businesses.
+      </p>
+      <a href="#">Read More</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Reasons Section -->
+<section class="section reason-section">
+    <h2>Reasons for choosing us</h2>
+    <div class="container reasons-grid">
+        <div class="reason-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <h4>Personalized Itineraries</h4>
+            <p>Trips designed just for you</p>
+        </div>
+        <div class="reason-item">
+            <i class="fas fa-cloud-sun-rain"></i>
+            <h4>Real-Time Updates</h4>
+            <p>Stay informed with live weather, traffic, and alerts</p>
+        </div>
+        <div class="reason-item">
+            <i class="fas fa-shopping-cart"></i>
+            <h4>One-Stop Travel Partner</h4>
+            <p>All your travel needs in one place</p>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Tours Section -->
+<section class="section popular-tours">
+    <h2>Popular Tours</h2>
+    <div class="tour-grid-container container">
+        <div class="tour-grid">
+            <div class="tour-card">
+                <img src="public/image/Dalawella Beach, Unawatuna, Sri Lanka.jpeg" alt="Unawatuna">
+                <div class="tour-info">
+                    <h4>Dalawella Beach</h4>
+                </div>
+            </div>
+            <div class="tour-card">
+                <img src="public/image/Kandy.jpg" alt="Kandy">
+                <div class="tour-info">
+                    <h4>Arugam Bay</h4>
+                </div>
+            </div>
+            <div class="tour-card">
+                <img src="public/image/Nine arch bridge, SriLanka.jpeg" alt="Ella">
+                <div class="tour-info">
+                    <h4>Ella</h4>
+                </div>
+            </div>
+            <div class="tour-card">
+                <img src="public/image/colombo.jpg" alt="Colombo">
+                <div class="tour-info">
+                    <h4>Colombo</h4>
+                </div>
+            </div>
+            <div class="tour-card">
+                <img src="public/image/Coconut Tree Hill - Mirissa , SriLanka.jpeg" alt="Mirissa">
+                <div class="tour-info">
+                    <h4>Sigiriya</h4>
+                </div>
+            </div>
+                <div class="tour-card">
+                <img src="public/image/Sigiriya,Sri Lanka.jpeg" alt="Sigiriya">
+                <div class="tour-info">
+                    <h4>Sigiriya</h4>
+                </div>
+            </div>
+        </div>
+        <button class="tour-nav-btn prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="tour-nav-btn next"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</section>
+<section class="section reviews-section">
+    <h2>REVIEWS</h2>
+
+    <div class="container review-carousel">
+        <!-- Left Arrow -->
+        <button class="review-nav prev"><i class="fas fa-chevron-left"></i></button>
+
+        <!-- Carousel Cards Wrapper -->
+        <div class="review-cards-wrapper">
+            <div class="review-card">
+                <img src="public/image/reviewer1.jpg" alt="Rose" class="reviewer-img">
+                <div class="review-text">
+                    <h5>Rose</h5>
+                    <p>"Amazing experience! The tour was perfectly organized and stress-free."</p>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <img src="public/image/reviewer2.jpg" alt="John" class="reviewer-img">
+                <div class="review-text">
+                    <h5>John</h5>
+                    <p>"TravelPilot made our trip unforgettable. Highly recommended!"</p>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <img src="public/image/reviewer3.jpg" alt="Maya" class="reviewer-img">
+                <div class="review-text">
+                    <h5>Maya</h5>
+                    <p>"Excellent service and personalized itineraries that matched our preferences."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="review-nav next"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <!-- Carousel Dots -->
+    <div class="review-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+
+    <h2>SEND US A MESSAGE</h2>
+    <div class="container contact-form">
+        <form>
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <textarea name="message" placeholder="Message" required></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</section>
+
+
+
+ <!-- Footer -->
+<footer><b>
+    <div class="container footer-content">
+        <!-- Left Column: Logo, Slogan, Button -->
+        <div class="footer-logo">
+            <h3>Travel<span>Pilot</span></h3>
+            <p class="footer-slogan">Discover Sri Lanka, Your Way</p>
+            <a href="#" class="nav-button">Book Now</a>
+        </div>
+
+        <!-- Mid Columns: Links -->
+        <div class="footer-links">
+            <h4>About</h4>
+            <ul>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Customize tour</a></li>
+            </ul>
+        </div>
+        <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Destinations</a></li>
+                <li><a href="#">Plan Your Trip</a></li>
+                <li><a href="#">Bookings</a></li>
+                <li><a href="#">Live Updates</a></li>
+            </ul>
+        </div>
+
+        <!-- Right Column: Contacts & Socials -->
+        <div class="footer-contacts">
+            <h4>Contacts</h4>
+            <ul>
+                <li>rashnishadini@gmail.com</li>
+                <li>jukiss@gmail.com</li>
+                <li>+94714666372</li>
+            </ul>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-google"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Phone Icon -->
+    <a href="tel:+94714666372" class="phone-icon">
+        <i class="fas fa-phone"></i>
+    </a>
+    </b>
+</footer>
+
+            <script>
+        // Trip Dream carousel logic
+        const tripImages = document.querySelectorAll('.trip-stack');
+        let current = 0;
+
+        function updateTripCarousel() {
+        tripImages.forEach((img, i) => {
+            img.classList.remove('active','next','prev');
+            if(i === current) img.classList.add('active');
+            else if(i === (current+1)%tripImages.length) img.classList.add('next');
+            else if(i === (current-1+tripImages.length)%tripImages.length) img.classList.add('prev');
+        });
+        }
+
+        // Auto rotate
+        setInterval(() => {
+        current = (current + 1) % tripImages.length;
+        updateTripCarousel();
+        }, 4000);
+
+        updateTripCarousel();
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const tourGrid = document.querySelector('.tour-grid');
+    const prevBtn = document.querySelector('.tour-nav-btn.prev');
+    const nextBtn = document.querySelector('.tour-nav-btn.next');
+
+    const scrollAmount = 320; // width of one card + margin (adjust as needed)
+
+    nextBtn.addEventListener('click', () => {
+        tourGrid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+        tourGrid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+});
+const reviewWrapper = document.querySelector('.review-cards-wrapper');
+const prevBtn = document.querySelector('.review-nav.prev');
+const nextBtn = document.querySelector('.review-nav.next');
+const dots = document.querySelectorAll('.review-dots .dot');
+
+let currentIndex = 0;
+const cards = document.querySelectorAll('.review-card');
+const cardWidth = cards[0].offsetWidth + 20; // card width + gap
+
+function updateDots() {
+    dots.forEach((dot,i) => dot.classList.toggle('active', i === currentIndex));
+}
+
+nextBtn.addEventListener('click', () => {
+    if(currentIndex < cards.length - 1) currentIndex++;
+    reviewWrapper.scrollTo({ left: currentIndex*cardWidth, behavior: 'smooth' });
+    updateDots();
+});
+
+prevBtn.addEventListener('click', () => {
+    if(currentIndex > 0) currentIndex--;
+    reviewWrapper.scrollTo({ left: currentIndex*cardWidth, behavior: 'smooth' });
+    updateDots();
+});
+
+dots.forEach((dot,i) => {
+    dot.addEventListener('click', () => {
+        currentIndex = i;
+        reviewWrapper.scrollTo({ left: currentIndex*cardWidth, behavior: 'smooth' });
+        updateDots();
+    });
+});
+// Header Background Images
+const header = document.querySelector('.header');
+
+let currentHeaderIndex = 0;
+
+function updateHeaderBackground() {
+    header.style.backgroundImage = `url("${headerImages[currentHeaderIndex]}")`;
+}
+
+// Left arrow click
+document.querySelector('.arrow.left').addEventListener('click', () => {
+    currentHeaderIndex = (currentHeaderIndex - 1 + headerImages.length) % headerImages.length;
+    updateHeaderBackground();
+});
+
+// Right arrow click
+document.querySelector('.arrow.right').addEventListener('click', () => {
+    currentHeaderIndex = (currentHeaderIndex + 1) % headerImages.length;
+    updateHeaderBackground();
+});
+
+// Initialize first background
+updateHeaderBackground();
+
+            </script>
+
+</body>
+</html>

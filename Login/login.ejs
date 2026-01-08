@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Adventure Starts Here</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-light: #ffffff;
+            --input-bg: rgba(255, 255, 255, 0.3);
+            --button-bg: #4b5e7d;
+            --ash-card: rgba(128, 128, 128, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                url('public/image/photorealistic-scene-wild-elephants.jpg') center center/cover no-repeat;
+            background-attachment: fixed;
+        }
+
+        .left-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .left-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            animation: slideUp 1s ease-out;
+        }
+
+        .left-section p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            line-height: 1.5;
+            animation: slideUp 1s ease-out 0.2s backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .right-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 380px;
+            background: var(--ash-card);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+        }
+
+        .login-box label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 10px;
+            background: var(--input-bg);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .login-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            color: #fff;
+            font-size: 14px;
+            text-decoration: none;
+            margin-bottom: 25px;
+        }
+
+        .sign-in-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--button-bg);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .sign-in-btn:hover {
+            transform: scale(1.05);
+            background: #3a4b63;
+        }
+
+        .or-separator {
+            text-align: center;
+            margin: 15px 0;
+            color: #fff;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .or-separator::before,
+        .or-separator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .or-separator::before {
+            left: 0;
+        }
+
+        .or-separator::after {
+            right: 0;
+        }
+
+        .google-sign-in-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background-color: #fff;
+            color: #000;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .google-sign-in-btn img {
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .google-sign-in-btn:hover {
+            transform: scale(1.05);
+            background: #f1f1f1;
+        }
+
+        .new-user {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .new-user a {
+            color: #fff;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message {
+            color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        .return-home {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .home-link {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            opacity: 0.85;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .home-link:hover {
+            opacity: 1;
+            transform: translateX(-4px);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .left-section {
+                height: 40vh;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 30px;
+            }
+
+            .left-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .left-section p {
+                font-size: 1rem;
+            }
+
+            .right-section {
+                height: auto;
+                padding: 20px;
+            }
+
+            .login-box {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="left-section">
+        <h1>Your Adventure Starts Here</h1>
+        <p>Book your journey today and explore the world with ease.</p>
+    </div>
+
+    <div class="right-section">
+        <div class="login-box">
+            <% if (locals.error) { %>
+                <div class="error-message" style="display: block;"><%= error %></div>
+            <% } %>
+            
+            <% if (locals.success) { %>
+                <div class="success-message" style="display: block;"><%= success %></div>
+            <% } %>
+
+            <form id="login-form" action="/login" method="POST">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email here" required
+                    value="<%= locals.email || '' %>">
+                
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    <button type="button" class="show-password" onclick="togglePassword()">Show</button>
+                </div>
+                
+                <a href="#" class="forgot-password">Forgot Password?</a>
+                
+                <button type="submit" class="sign-in-btn">SIGN IN</button>
+                
+                <div class="or-separator">or</div>
+                
+                <button type="button" class="google-sign-in-btn">
+                    <img src="https://www.google.com/favicon.ico" alt="Google logo">
+                    Sign in with Google
+                </button>
+            </form>
+            
+            <div class="new-user">
+                Are You New? <a href="/signup">Create an account</a>
+            </div>
+            <div class="return-home">
+                <a href="/" class="home-link">← Return to Main Page</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            const btn = document.querySelector('.sign-in-btn');
+            btn.style.transform = 'scale(1.05)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 300);
+            // Form will submit normally with POST request
+        });
+
+        document.querySelectorAll('.sign-in-btn, .google-sign-in-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                if (this.classList.contains('sign-in-btn')) {
+                    // Let form submit normally
+                    return;
+                }
+                e.preventDefault();
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => this.style.transform = 'scale(1)', 300);
+                // Google sign-in logic can be added here
+            });
+        });
+
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const showPasswordBtn = document.querySelector('.show-password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                showPasswordBtn.textContent = 'Hide';
+            } else {
+                passwordField.type = 'password';
+                showPasswordBtn.textContent = 'Show';
+            }
+        }
+
+        // Auto-hide messages after 5 seconds
+        setTimeout(() => {
+            const errorMessage = document.querySelector('.error-message');
+            const successMessage = document.querySelector('.success-message');
+            
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+            if (successMessage) {
+                successMessage.style.display = 'none';
+            }
+        }, 5000);
+    </script>
+    <% if (success) { %>
+  <div id="success-popup" class="popup success-popup">
+    <p><%= success %></p>
+  </div>
+<% } %>
+
+<% if (error) { %>
+  <div id="error-popup" class="popup error-popup">
+    <p><%= error %></p>
+  </div>
+<% } %>
+
+<style>
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4caf50;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.error-popup {
+    background: #f44336;
+}
+
+.popup.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    const successPopup = document.getElementById('success-popup');
+    const errorPopup = document.getElementById('error-popup');
+
+    if (successPopup) {
+        successPopup.classList.add('show');
+
+        // Auto redirect after 2.5s
+        setTimeout(() => {
+            successPopup.classList.remove('show');
+            window.location.href = '/login'; // optional, already on login
+        }, 2500);
+    }
+
+    if (errorPopup) {
+        errorPopup.classList.add('show');
+        setTimeout(() => {
+            errorPopup.classList.remove('show');
+        }, 2500);
+    }
+});
+</script>
+
+</body>
+
+</html>
