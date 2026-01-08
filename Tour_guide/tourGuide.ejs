@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Guide Management Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --golden: #FFD700;
+            --golden-dark: #DAA520;
+            --golden-light: #FFF8DC;
+            --dark-bg: #1a1a2e;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --border-color: #e0e0e0;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-dark);
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 250px;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--golden);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--golden);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .user-profile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+        }
+
+        .user-profile img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--golden);
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .user-profile h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .user-profile p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: transparent;
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            text-decoration: none;
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+            color: var(--golden);
+            width: 24px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--golden);
+            transform: translateX(5px);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--golden), var(--golden-dark));
+            color: #000;
+            font-weight: 600;
+            justify-content: center;
+            margin-top: auto;
+        }
+
+        .nav-btn.primary:hover {
+            background: linear-gradient(135deg, var(--golden-dark), var(--golden));
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        }
+
+        .nav-btn.danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .nav-btn.danger:hover {
+            background: rgba(220, 53, 69, 0.2);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--golden);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn {
+            background: var(--golden-light);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .notification-btn:hover {
+            background: var(--golden);
+            transform: scale(1.05);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Guide List Horizontal */
+        .guide-list-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .guide-list-container h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .guide-list-container h2 i {
+            color: var(--golden);
+        }
+
+        .guide-list {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+        }
+
+        .guide-list::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .guide-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .guide-list::-webkit-scrollbar-thumb {
+            background: var(--golden);
+            border-radius: 10px;
+        }
+
+        .guide-card {
+            min-width: 200px;
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--golden);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.15);
+        }
+
+        .guide-card.active {
+            border-color: var(--golden);
+            background: var(--golden-light);
+            transform: translateY(-3px);
+        }
+
+        .guide-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .guide-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .guide-card p i {
+            color: var(--golden);
+            width: 16px;
+        }
+
+        .guide-rating {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--golden-dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        /* Guide Details Section */
+        .guide-details-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            flex-grow: 1;
+            display: none; /* Hidden until guide is selected */
+        }
+
+        .guide-details-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .details-header h2 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .details-header h2 i {
+            color: var(--golden);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--golden), var(--golden-dark));
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--dark-bg);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2c3e50;
+            transform: translateY(-3px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-3px);
+        }
+
+        /* Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .detail-section {
+            background: #f9f9f9;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border-left: 4px solid var(--golden);
+        }
+
+        .detail-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-section h3 i {
+            color: var(--golden);
+        }
+
+        .detail-item {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            min-width: 150px;
+        }
+
+        .detail-value {
+            color: var(--text-dark);
+            text-align: right;
+            flex: 1;
+        }
+
+        .detail-value.highlight {
+            color: var(--golden-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .languages-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .language-badge {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--golden-dark);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .payment-badge {
+            background: rgba(40, 167, 69, 0.15);
+            color: var(--success);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-available {
+            background: rgba(40, 167, 69, 0.15);
+            color: var(--success);
+        }
+
+        .status-unavailable {
+            background: rgba(220, 53, 69, 0.15);
+            color: var(--danger);
+        }
+
+        /* Photos Section */
+        .photos-section {
+            margin-top: 30px;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .photo-item {
+            height: 120px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+                padding: 15px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .logo, .user-profile, .nav-buttons {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .nav-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-btn {
+                flex: 1;
+                min-width: 150px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .details-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .detail-label, .detail-value {
+                text-align: left;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== SIDEBAR ========== -->
+<div class="sidebar">
+    <div class="logo">
+        <h1><i class="fas fa-map-signs"></i> GuidePro</h1>
+        <p>Tour Guide Dashboard</p>
+    </div>
+    
+    <div class="user-profile">
+        <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=FFD700&color=000&bold=true' %>" alt="Profile">
+        <h3><%= user.name %></h3>
+        <p><i class="fas fa-user-tie"></i> Tour Guide</p>
+    </div>
+    
+    <div class="nav-buttons">
+        <a href="#" class="nav-btn active">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/tour-guide/add" class="nav-btn" id="addGuideBtn">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add New Profile</span>
+        </a>
+        <a href="#" class="nav-btn" id="viewBookingsBtn">
+            <i class="fas fa-calendar-check"></i>
+            <span>View Bookings</span>
+        </a>
+        <a href="#" class="nav-btn" id="reportsBtn">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reports & Analytics</span>
+        </a>
+        <a href="/logout" class="nav-btn danger">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="main-content">
+    <!-- Header -->
+    <div class="header">
+        <h1>Tour Guide Management Dashboard</h1>
+        <div class="header-info">
+            <div class="notification-btn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">2</span>
+            </div>
+            <div>
+                <h3>Welcome back, <%= user.name %>!</h3>
+                <p>Last login: Today at <%= new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guide List Horizontal -->
+    <div class="guide-list-container">
+        <h2><i class="fas fa-user-tie"></i> Your Tour Guide Profiles</h2>
+        <div class="guide-list" id="guideList">
+            <!-- We'll load guides dynamically -->
+            <% if (guides && guides.length > 0) { %>
+                <% guides.forEach((guide, index) => { %>
+                    <div class="guide-card <%= index === 0 ? 'active' : '' %>" data-guide-id="<%= guide.id %>" data-guide-index="<%= index %>">
+                        <h3><%= guide.name %></h3>
+                        <p><i class="fas fa-map-marker-alt"></i> <%= guide.city || 'Location not set' %></p>
+                        <p><i class="fas fa-star"></i> <%= guide.experience_years || 0 %> Years Experience</p>
+                        <p><i class="fas fa-money-bill-wave"></i> LKR <%= guide.price_per_day || '0.00' %>/day</p>
+                        <span class="guide-rating">
+                            <%= guide.availability == 1 ? 'Available' : 'Not Available' %>
+                        </span>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="guide-card active">
+                    <h3>No Guide Profiles Found</h3>
+                    <p>Add your first guide profile to get started</p>
+                    <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" id="addFirstGuideBtn">
+                        <i class="fas fa-plus"></i> Add Guide Profile
+                    </button>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Guide Details Section -->
+    <div class="guide-details-container <%= (guides && guides.length > 0) ? 'active' : '' %>" id="guideDetails">
+        <% if (guides && guides.length > 0) { 
+            // We'll initialize with first guide, but JavaScript will handle updates
+        %>
+            <div id="guideDetailsContent">
+                <!-- Content will be loaded dynamically by JavaScript -->
+            </div>
+        <% } else { %>
+            <div class="empty-state">
+                <i class="fas fa-user-tie"></i>
+                <h3>No Guide Profile Selected</h3>
+                <p>Add your first guide profile to get started</p>
+                <a href="/tour-guide/add" class="btn btn-primary" style="margin-top: 20px;">
+                    <i class="fas fa-plus"></i> Add Your First Guide Profile
+                </a>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    // Store guides data for JavaScript access
+    const guidesData = <%- JSON.stringify(guides || []) %>;
+    
+    // DOM Elements
+    const guideList = document.getElementById('guideList');
+    const guideDetailsContainer = document.getElementById('guideDetails');
+    const guideDetailsContent = document.getElementById('guideDetailsContent');
+
+    function updateViewBookingsLink(guideId) {
+    const viewBookingsBtn = document.getElementById('viewBookingsBtn');
+    if (viewBookingsBtn) {
+        viewBookingsBtn.href = `/tour-guide/bookings/${guideId}`;
+    }
+}
+    
+    // Function to display guide details
+    function displayGuideDetails(guideId, guideIndex) {
+        // Find the guide data
+        let guide;
+        if (guideIndex !== undefined) {
+            guide = guidesData[guideIndex];
+        } else {
+            guide = guidesData.find(g => g.id == guideId);
+        }
+        
+        if (!guide) {
+            console.error('Guide not found:', guideId);
+            return;
+        }
+        updateViewBookingsLink(guide.id);
+
+        // Parse data
+        const languages = guide.languages ? guide.languages.split(',') : [];
+        const paymentMethods = guide.payment_methods ? guide.payment_methods.split(',') : [];
+        const photos = guide.photos ? guide.photos.split(',') : [];
+        
+        // Format full address
+        const addressParts = [];
+        if (guide.address_line1) addressParts.push(guide.address_line1);
+        if (guide.address_line2) addressParts.push(guide.address_line2);
+        if (guide.district) addressParts.push(guide.district);
+        if (guide.province) addressParts.push(guide.province);
+        const fullAddress = addressParts.join(', ');
+        
+        // Build the HTML
+        const html = `
+            <div class="details-header">
+                <h2><i class="fas fa-info-circle"></i> ${guide.name} - Details</h2>
+                <div class="action-buttons">
+                    <a href="/tour-guide/edit/${guide.id}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Update Guide Details
+                    </a>
+                    <button class="btn btn-success" onclick="document.getElementById('viewBookingsBtn').click()">
+                        <i class="fas fa-eye"></i> View Bookings
+                    </button>
+                </div>
+            </div>
+            
+            <div class="details-grid">
+                <div class="detail-section">
+                    <h3><i class="fas fa-user-tie"></i> Guide Information</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Guide Name</span>
+                        <span class="detail-value">${guide.name}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Experience</span>
+                        <span class="detail-value">${guide.experience_years || 0} years</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value">
+                            <span class="status-badge ${guide.availability == 1 ? 'status-available' : 'status-unavailable'}">
+                                ${guide.availability == 1 ? 'Available' : 'Not Available'}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Address Details</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Address Line 1</span>
+                        <span class="detail-value">${guide.address_line1 || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Address Line 2</span>
+                        <span class="detail-value">${guide.address_line2 || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">City</span>
+                        <span class="detail-value">${guide.city || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">District</span>
+                        <span class="detail-value">${guide.district || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Province</span>
+                        <span class="detail-value">${guide.province || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Full Address</span>
+                        <span class="detail-value">${fullAddress || 'Not specified'}</span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3><i class="fas fa-address-book"></i> Contact Information</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Telephone</span>
+                        <span class="detail-value">${guide.telephone || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Email</span>
+                        <span class="detail-value">${guide.email || 'Not specified'}</span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3><i class="fas fa-language"></i> Languages Spoken</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Languages</span>
+                        <div class="detail-value">
+                            <div class="languages-list">
+                                ${languages.length > 0 
+                                    ? languages.map(language => `
+                                        <span class="language-badge">${language}</span>
+                                    `).join('')
+                                    : '<span class="language-badge">Not specified</span>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3><i class="fas fa-money-bill-wave"></i> Pricing & Payment</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Price per Day</span>
+                        <span class="detail-value highlight">LKR ${parseFloat(guide.price_per_day || 0).toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Offers/Discount</span>
+                        <span class="detail-value">${guide.offers ? guide.offers + '% discount' : 'No offers available'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Payment Methods</span>
+                        <div class="detail-value">
+                            <div class="payment-methods">
+                                ${paymentMethods.length > 0 
+                                    ? paymentMethods.map(method => `
+                                        <span class="payment-badge">${method}</span>
+                                    `).join('')
+                                    : '<span class="payment-badge">Not specified</span>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            ${photos.length > 0 ? `
+                <div class="photos-section">
+                    <h3><i class="fas fa-images"></i> Photos</h3>
+                    <div class="photos-grid">
+                        ${photos.map(photo => `
+                            <div class="photo-item">
+                                <img src="/uploads/${photo}" alt="Guide Photo">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+        `;
+        
+        // Update the content
+        guideDetailsContent.innerHTML = html;
+        
+        // Show the details container
+        guideDetailsContainer.classList.add('active');
+    }
+    
+    // Add event listeners to guide cards
+    document.addEventListener('DOMContentLoaded', function() {
+        const guideCards = document.querySelectorAll('.guide-card[data-guide-id]');
+        
+        guideCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const guideId = this.dataset.guideId;
+                const guideIndex = this.dataset.guideIndex;
+                
+                // Remove active class from all cards
+                document.querySelectorAll('.guide-card').forEach(c => c.classList.remove('active'));
+                // Add active class to clicked card
+                this.classList.add('active');
+                
+                // Display guide details
+                displayGuideDetails(guideId, guideIndex);
+            });
+        });
+        
+        // Initialize with first guide
+        if (guidesData && guidesData.length > 0) {
+            displayGuideDetails(guidesData[0].id, 0);
+        }
+    });
+    
+    // Event listeners for buttons
+    document.getElementById('addFirstGuideBtn')?.addEventListener('click', function() {
+        window.location.href = '/tour-guide/add';
+    });
+    
+    function viewBookingsForGuide(guideId) {
+        window.location.href = `/tour-guide/bookings?guide=${guideId}`;
+    }
+    
+    document.getElementById('reportsBtn')?.addEventListener('click', function() {
+        alert('Reports & Analytics page would open here.');
+    });
+    
+    // Notification button
+    document.querySelector('.notification-btn')?.addEventListener('click', function() {
+        alert('You have 2 new notifications:\n1. New booking request\n2. Tour inquiry received');
+    });
+    
+    // Smooth scroll for guide list
+    if (guideList) {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        
+        guideList.addEventListener('mousedown', (e) => {
+            isDown = true;
+            guideList.classList.add('active');
+            startX = e.pageX - guideList.offsetLeft;
+            scrollLeft = guideList.scrollLeft;
+        });
+        
+        guideList.addEventListener('mouseleave', () => {
+            isDown = false;
+            guideList.classList.remove('active');
+        });
+        
+        guideList.addEventListener('mouseup', () => {
+            isDown = false;
+            guideList.classList.remove('active');
+        });
+        
+        guideList.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - guideList.offsetLeft;
+            const walk = (x - startX) * 2;
+            guideList.scrollLeft = scrollLeft - walk;
+        });
+    }
+</script>
+
+</body>
+</html>
