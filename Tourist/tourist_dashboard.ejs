@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelPilot | Tourist Dashboard</title>
+    
+    <!-- CSS Links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Base Styles - Start with image, no white space */
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #f5f7fa;
+        }
+
+        /* Full-screen hero background */
+        .fullscreen-hero {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)),
+                        url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar over image with blur effect */
+        .hero-navbar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-brand i {
+            color: #FFD700;
+        }
+
+        /* User section in navbar */
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Weather widget in navbar */
+        .weather-navbar-widget {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .weather-current-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .weather-temp-nav {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .weather-city-nav {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .weather-icon-nav {
+            font-size: 1.5rem;
+        }
+
+        .weather-search-nav {
+            padding: 0.5rem 1rem;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            width: 150px;
+            background: white;
+        }
+
+        .weather-search-nav:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        /* History button */
+        .history-btn-nav {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .history-btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
+        }
+
+        /* User avatar */
+        .user-avatar-nav {
+                width: 65px;
+                height: 65px;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 2px solid white;
+        }
+
+        /* Hero content area */
+        .hero-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Main content layout */
+        .hero-main-layout {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        /* Welcome section */
+        .welcome-section {
+            flex: 1;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .greeting {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-name-display {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #FF69B4);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .user-quote {
+            font-size: 1.8rem;
+            opacity: 0.9;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        /* Right side panel with weather and circles */
+        .right-side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 100px;
+            margin-left: 50px;
+        }
+
+        /* 5-Day Forecast Section */
+        .forecast-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-left: 450px;
+            margin-right: 20px;
+            width: 380px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .forecast-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .forecast-header h3 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .forecast-location {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Compact Forecast Cards */
+        .forecast-cards {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .forecast-card-compact {
+            flex: 1;
+            min-width: 60px;
+            max-width: 70px;
+            text-align: center;
+            padding: 0.8rem 0.3rem;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .forecast-card-compact:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .forecast-day {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.2rem;
+        }
+
+        .forecast-date {
+            font-size: 0.65rem;
+            color: #7f8c8d;
+            margin-bottom: 0.4rem;
+        }
+
+        .forecast-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .forecast-temp {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .forecast-condition {
+            font-size: 0.6rem;
+            color: #7f8c8d;
+            margin-top: 0.1rem;
+            height: 24px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        /* Weather and Circles Wrapper */
+.weather-circles-wrapper {
+    display: flex;
+    align-items: flex-start;
+    margin-top: -230px;
+    gap: 1.5rem;
+}
+
+/* Action Circles - Vertical layout next to forecast */
+.action-circles-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 10px;
+}
+
+/* Adjust forecast section width to accommodate circles */
+.forecast-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: 320px; /* Slightly reduced to make room for circles */
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Adjust glass circles size for vertical layout */
+.action-circles-vertical .glass-circle {
+    width: 65px;
+    height: 65px;
+}
+
+.action-circles-vertical .glass-circle i {
+    font-size: 1.6rem;
+}
+
+/* Circle labels positioning for vertical layout */
+.action-circles-vertical .circle-label {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 12px);
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.action-circles-vertical .circle-label::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent rgba(0, 0, 0, 0.7) transparent transparent;
+}
+
+.action-circles-vertical .glass-circle:hover .circle-label {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(5px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .weather-circles-wrapper {
+        gap: 1rem;
+    }
+    
+    .forecast-section {
+        width: 300px;
+    }
+    
+    .action-circles-vertical .glass-circle {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 992px) {
+    .weather-circles-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-circles-vertical {
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 1.5rem;
+        gap: 1.5rem;
+    }
+    
+    .forecast-section {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .action-circles-vertical .glass-circle {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .action-circles-vertical .glass-circle i {
+        font-size: 1.4rem;
+    }
+}
+
+        /* Circular Action Icons with Glassmorphism */
+        .action-circles {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+        .glass-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-circle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1), 
+                rgba(255, 255, 255, 0.05));
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .glass-circle i {
+            font-size: 1.8rem;
+            z-index: 2;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        /* Calendar circle - Purple gradient */
+        .calendar-circle {
+            background: linear-gradient(135deg, 
+                rgba(155, 89, 182, 0.8), 
+                rgba(142, 68, 173, 0.9));
+        }
+
+        .calendar-circle i {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .calendar-circle:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 
+                0 12px 40px rgba(155, 89, 182, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Language circle - Blue gradient */
+        .language-circle {
+            background: linear-gradient(135deg, 
+                rgba(52, 152, 219, 0.8), 
+                rgba(41, 128, 185, 0.9));
+        }
+
+        .language-circle i {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .language-circle:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 
+                0 12px 40px rgba(52, 152, 219, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Map circle - Green gradient */
+        .map-circle {
+            background: linear-gradient(135deg, 
+                rgba(46, 204, 113, 0.8), 
+                rgba(39, 174, 96, 0.9));
+        }
+
+        .map-circle i {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .map-circle:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 
+                0 12px 40px rgba(46, 204, 113, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Circle labels */
+        .circle-label {
+            position: absolute;
+            top: 50%;
+            left: calc(100% + 15px);
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .circle-label::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent rgba(0, 0, 0, 0.7) transparent transparent;
+        }
+
+        .glass-circle:hover .circle-label {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(5px);
+        }
+
+        /* Popup styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: rgb(12, 1, 1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .popup-overlay.active .popup-content {
+            transform: translateY(0);
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .popup-header h3 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .close-popup {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #7f8c8d;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .close-popup:hover {
+            color: #e74c3c;
+        }
+
+        /* Calendar popup */
+        .calendar-month {
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-day {
+            text-align: center;
+            background: #f2f2f2;
+            color: rgb(0, 0, 0);
+            padding: 0.6rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+
+        .calendar-day:hover {
+            background: #b6bfda;
+            border-color: #3498db;
+        }
+
+        .calendar-day.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .calendar-day-header {
+            font-weight: 600;
+            color: #7f8c8d;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Language popup */
+        .language-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #f0f0f0;
+            background: white;
+        }
+
+        .language-option:hover {
+            background: #f8f9fa;
+            border-color: #3498db;
+            transform: translateX(5px);
+        }
+
+        .language-option.active {
+            background: #e3f2fd;
+            border-color: #3498db;
+        }
+
+        .language-flag {
+            font-size: 1.5rem;
+            min-width: 30px;
+        }
+
+        .language-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        /* Main content (below hero) */
+        .main-content {
+            background: #f5f7fa;
+            padding: 3rem 2rem;
+        }
+
+        /* Services Section */
+        .services-section {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title h2 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            border: 1px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            border-color: rgba(52, 152, 219, 0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: #3498db;
+        }
+
+        .service-card.hotel .service-icon { color: #e74c3c; }
+        .service-card.guide .service-icon { color: #2ecc71; }
+        .service-card.transport .service-icon { color: #f39c12; }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            color: #7f8c8d;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .service-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .service-card.hotel .service-btn { background: #e74c3c; }
+        .service-card.guide .service-btn { background: #2ecc71; }
+        .service-card.transport .service-btn { background: #f39c12; }
+
+        .service-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        /* Add to your existing CSS */
+.translation-info {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    text-align: center;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.translation-info i {
+    color: #3498db;
+    margin-right: 5px;
+}
+
+/* Language option with translation indicator */
+.language-option.translated::after {
+    content: '✓';
+    position: absolute;
+    right: 10px;
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+/* Loading animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fa-spin {
+    animation: spin 1s linear infinite;
+}
+
+        /* Discover Sri Lanka */
+        .discover-section {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid #3498db;
+            transition: all 0.3s;
+            border: 1px solid #f0f0f0;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left-color: #2980b9;
+        }
+
+        .event-card h4 {
+            margin: 0 0 0.5rem 0;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .event-date {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .event-description {
+            font-size: 0.9rem;
+            color: #5d6d7e;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .dashboard-footer {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+            border-top: 1px solid #ecf0f1;
+            background: white;
+        }
+
+        /* Scrollbar for forecast */
+        .forecast-cards::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .forecast-cards::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 2px;
+        }
+
+        .forecast-cards::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-content {
+                padding: 1.5rem;
+            }
+            
+            .right-side-panel {
+                margin-left: 20px;
+            }
+            
+            .forecast-section {
+                width: 350px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-main-layout {
+                flex-direction: column;
+            }
+            
+            .welcome-section {
+                max-width: 100%;
+            }
+            
+            .right-side-panel {
+                margin: 2rem 0 0 0;
+                align-items: center;
+            }
+            
+            .forecast-section {
+                width: 100%;
+                max-width: 500px;
+            }
+            
+            .action-circles {
+                flex-direction: row;
+                justify-content: center;
+                margin: 1.5rem 0;
+                gap: 2rem;
+            }
+            
+            .user-name-display {
+                font-size: 2.8rem;
+            }
+            
+            .user-quote {
+                font-size: 1.5rem;
+            }
+            
+            .weather-navbar-widget {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            
+            .weather-search-nav {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-navbar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-user-section {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            
+            .user-name-display {
+                font-size: 2.2rem;
+            }
+            
+            .user-quote {
+                font-size: 1.3rem;
+            }
+            
+            .forecast-section {
+                padding: 1rem;
+            }
+            
+            .forecast-card-compact {
+                min-width: 55px;
+                padding: 0.6rem 0.2rem;
+            }
+            
+            .glass-circle {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .glass-circle i {
+                font-size: 1.5rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-circles {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .user-name-display {
+                font-size: 1.8rem;
+            }
+            
+            .user-quote {
+                font-size: 1.1rem;
+            }
+            
+            .user-avatar-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .forecast-card-compact {
+                min-width: 50px;
+                font-size: 0.8rem;
+            }
+            
+            .forecast-icon {
+                font-size: 1.1rem;
+            }
+            
+            .glass-circle {
+                width: 55px;
+                height: 55px;
+            }
+            
+            .glass-circle i {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Full-screen hero with navbar -->
+    <div class="fullscreen-hero">
+        <!-- Navbar with blur effect over image -->
+        <nav class="hero-navbar">
+            <a href="/" class="nav-brand">
+                <i class="fas fa-plane"></i> TravelPilot
+            </a>
+            
+            <div class="nav-user-section">
+                <!-- Weather widget in navbar -->
+                <div class="weather-navbar-widget">
+                    <div class="weather-current-nav">
+                        <div class="weather-icon-nav" id="currentWeatherIcon">
+                            <%= weather.iconEmoji %>
+                        </div>
+                        <div>
+                            <div class="weather-temp-nav" id="currentTemp">
+                                <%= weather.temp %>°C
+                            </div>
+                            <div class="weather-city-nav" id="currentCity">
+                                <%= weather.city %>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="text" 
+                           class="weather-search-nav" 
+                           id="weatherCityInput" 
+                           placeholder="Change city..."
+                           list="sriLankaCities">
+                    
+                    <datalist id="sriLankaCities">
+                        <option value="Colombo">
+                        <option value="Kandy">
+                        <option value="Galle">
+                        <option value="Jaffna">
+                        <option value="Negombo">
+                        <option value="Batticaloa">
+                        <option value="Trincomalee">
+                        <option value="Anuradhapura">
+                        <option value="Polonnaruwa">
+                        <option value="Badulla">
+                        <option value="Ratnapura">
+                        <option value="Kurunegala">
+                        <option value="Matara">
+                        <option value="Hambantota">
+                        <option value="Nuwara Eliya">
+                    </datalist>
+                </div>
+                
+                <!-- User avatar -->
+                <div class="user-avatar-nav">
+                    <%= userInitial %>
+                </div>
+                <!-- History Button -->
+                    <a href="/bookings/history" class="history-btn-nav">
+                        <i class="fas fa-history"></i> History
+                    </a>
+            </div>
+        </nav>
+
+        <!-- Popups -->
+        <div class="popup-overlay" id="calendarPopup">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <h3><i class="far fa-calendar-alt"></i> Calendar</h3>
+                    <button class="close-popup" id="closeCalendar">&times;</button>
+                </div>
+                <div class="calendar-month" id="currentMonth"></div>
+                <div class="calendar-days" id="calendarGrid"></div>
+                <div style="text-align: center; font-size: 0.9rem; color: #7f8c8d; margin-top: 1rem;">
+                    Click on a date to select
+                </div>
+            </div>
+        </div>
+
+        <div class="popup-overlay" id="languagePopup">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <h3><i class="fas fa-language"></i> Select Language</h3>
+                    <button class="close-popup" id="closeLanguage">&times;</button>
+                </div>
+                <div class="language-options">
+                    <div class="language-option active" data-lang="en">
+                        <div class="language-flag">🇺🇸</div>
+                        <div class="language-name">English</div>
+                    </div>
+                    <div class="language-option" data-lang="si">
+                        <div class="language-flag">🇱🇰</div>
+                        <div class="language-name">සිංහල (Sinhala)</div>
+                    </div>
+                    <div class="language-option" data-lang="ta">
+                        <div class="language-flag">🇮🇳</div>
+                        <div class="language-name">தமிழ் (Tamil)</div>
+                    </div>
+                    <div class="language-option" data-lang="fr">
+                        <div class="language-flag">🇫🇷</div>
+                        <div class="language-name">Français (French)</div>
+                    </div>
+                    <div class="language-option" data-lang="de">
+                        <div class="language-flag">🇩🇪</div>
+                        <div class="language-name">Deutsch (German)</div>
+                    </div>
+                    <div class="language-option" data-lang="es">
+                        <div class="language-flag">🇪🇸</div>
+                        <div class="language-name">Español (Spanish)</div>
+                    </div>
+                    <div class="language-option" data-lang="zh">
+                        <div class="language-flag">🇨🇳</div>
+                        <div class="language-name">中文 (Chinese)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero content -->
+        <div class="hero-content">
+            <div class="hero-main-layout">
+                <!-- Left side: Welcome section -->
+                <div class="welcome-section">
+                    <div class="greeting">Welcome Back</div>
+                    <h1 class="user-name-display"><%= userName %></h1>
+                    <div class="user-quote">"Your Sri Lankan adventure begins here"</div>
+                </div>
+
+                <!-- Right side: Weather and circular icons -->
+                <div class="right-side-panel">
+                    <div class="weather-circles-wrapper">
+                        <!-- Weather Forecast Card -->
+                        <div class="forecast-section">
+                            <div class="forecast-header">
+                                <h3><i class="fas fa-calendar-alt"></i> 5-Day Forecast</h3>
+                                <div class="forecast-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span id="forecastCity"><%= weather.city %></span>
+                                </div>
+                            </div>
+                            
+                            <div class="forecast-cards" id="weatherForecast">
+                                <!-- Forecast will be loaded by JavaScript -->
+                                <div class="forecast-card-compact">
+                                    <div class="forecast-day">Loading...</div>
+                                    <div class="forecast-icon">⏳</div>
+                                    <div class="forecast-temp">--°C</div>
+                                    <div class="forecast-condition">--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Circular Action Icons (Vertically next to forecast) -->
+                        <div class="action-circles-vertical">
+                            <!-- Calendar Icon -->
+                            <div class="glass-circle calendar-circle" id="calendarIcon">
+                                <i class="far fa-calendar-alt"></i>
+                                <span class="circle-label">Calendar</span>
+                            </div>
+                            
+                            <!-- Language Icon -->
+                            <div class="glass-circle language-circle" id="languageIcon">
+                                <i class="fas fa-language"></i>
+                                <span class="circle-label">Language</span>
+                            </div>
+                            
+                            <!-- Map Icon -->
+                            <div class="glass-circle map-circle" id="mapIcon">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <span class="circle-label">Google Maps</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content below hero -->
+    <div class="main-content">
+        <!-- Services Section -->
+        <section class="services-section">
+            <div class="section-title">
+                <h2>Explore Sri Lanka With Ease</h2>
+                <p>Find everything you need for your perfect adventure</p>
+            </div>
+            
+            <div class="services-grid">
+                <!-- Hotels -->
+                <div class="service-card hotel">
+                    <div class="service-icon">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <h3>Hotels & Stays</h3>
+                    <p>Luxury resorts, boutique hotels, beach villas, and budget stays across Sri Lanka</p>
+                    <a href="/hotels" class="service-btn">Browse Hotels</a>
+                </div>
+                
+                <!-- Tour Guides -->
+                <div class="service-card guide">
+                    <div class="service-icon">
+                        <i class="fas fa-map-signs"></i>
+                    </div>
+                    <h3>Tour Guides</h3>
+                    <p>Local experts for cultural tours, wildlife safaris, hiking adventures, and food experiences</p>
+                    <a href="/guides" class="service-btn">Find Guides</a>
+                </div>
+                
+                <!-- Transport -->
+                <div class="service-card transport">
+                    <div class="service-icon">
+                        <i class="fas fa-shuttle-van"></i>
+                    </div>
+                    <h3>Transport Providers</h3>
+                    <p>Car rentals, private drivers, tuk-tuks, train tickets, and airport transfers</p>
+                    <a href="/transport-providers" class="service-btn">Book Transport</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Discover Sri Lanka -->
+        <section class="discover-section">
+            <div class="section-title">
+                <h2>Discover Sri Lanka</h2>
+                <p>Cultural events and must-visit destinations</p>
+            </div>
+            
+            <div class="events-grid">
+                <!-- Kandy Perahera -->
+                <div class="event-card">
+                    <h4>Kandy Esala Perahera</h4>
+                    <div class="event-date">
+                        <i class="far fa-calendar"></i>
+                        <span>July-August (Annual)</span>
+                    </div>
+                    <p class="event-description">The Grand Festival of the Tooth Relic with elephants, dancers, and drummers.</p>
+                </div>
+                
+                <!-- Adam's Peak -->
+                <div class="event-card">
+                    <h4>Adam's Peak Pilgrimage</h4>
+                    <div class="event-date">
+                        <i class="far fa-calendar"></i>
+                        <span>December - April</span>
+                    </div>
+                    <p class="event-description">Night hike to Sri Pada summit for sunrise views and spiritual experience.</p>
+                </div>
+                
+                <!-- Mirissa Whales -->
+                <div class="event-card">
+                    <h4>Mirissa Whale Watching</h4>
+                    <div class="event-date">
+                        <i class="far fa-calendar"></i>
+                        <span>November - April</span>
+                    </div>
+                    <p class="event-description">Boat tours to see blue whales and dolphins in their natural habitat.</p>
+                </div>
+                
+                <!-- Vesak Festival -->
+                <div class="event-card">
+                    <h4>Vesak Festival</h4>
+                    <div class="event-date">
+                        <i class="far fa-calendar"></i>
+                        <span>May (Full Moon Day)</span>
+                    </div>
+                    <p class="event-description">Buddhist festival of lights with lanterns, pandals, and free food stalls.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <p>© 2024 TravelPilot. All rights reserved.</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+            <i class="fas fa-heart" style="color: #e74c3c;"></i> Made for Sri Lankan Tourism
+        </p>
+    </footer>
+
+     <script>
+        // Weather emoji mapping
+        const weatherEmojis = {
+            Clear: "☀️", Clouds: "⛅", Rain: "🌧️", 
+            Drizzle: "🌦️", Thunderstorm: "⛈️", 
+            Snow: "❄️", Mist: "🌫️", Haze: "🌫️"
+        };
+
+        // Extended list of Sri Lankan cities and areas
+        const sriLankaAreas = [
+            "Colombo", "Kandy", "Galle", "Jaffna", "Negombo", "Batticaloa",
+            "Trincomalee", "Anuradhapura", "Polonnaruwa", "Badulla", 
+            "Ratnapura", "Kurunegala", "Matara", "Hambantota", "Nuwara Eliya",
+            "Dambulla", "Sigiriya", "Ella", "Mirissa", "Unawatuna", "Hikkaduwa",
+            "Bentota", "Kalutara", "Chilaw", "Puttalam", "Mannar", "Vavuniya",
+            "Kilinochchi", "Mullaitivu", "Ampara", "Monaragala", "Kegalle",
+            "Kalmunai", "Gampaha", "Dehiwala-Mount Lavinia", "Moratuwa",
+            "Kotte", "Sri Jayewardenepura Kotte", "Kotikawatta", "Mulleriyawa",
+            "Kolonnawa", "Kesbewa", "Maharagama", "Boralesgamuwa", "Kaduwela",
+            "Malabe", "Wattala", "Homagama", "Kadawatha", "Peliyagoda",
+            "Kelaniya", "Ragama", "Minuwangoda", "Gampola", "Nawalapitiya",
+            "Hatton", "Talawakelle", "Bandarawela", "Wellawaya", "Embilipitiya",
+            "Tangalle", "Ambalangoda", "Balapitiya", "Haputale", "Dickoya"
+        ];
+
+        
+        // Format date for display
+        function formatDate(date) {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            
+            if (date.getDate() === today.getDate() && 
+                date.getMonth() === today.getMonth() && 
+                date.getFullYear() === today.getFullYear()) {
+                return 'Today';
+            }
+            else if (date.getDate() === tomorrow.getDate() && 
+                     date.getMonth() === tomorrow.getMonth() && 
+                     date.getFullYear() === tomorrow.getFullYear()) {
+                return 'Tomorrow';
+            }
+            else {
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                return days[date.getDay()];
+            }
+        }
+
+        // Format date string (e.g., Jan 7)
+        function formatDateString(date) {
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Load 5-day forecast
+        async function loadForecast(city) {
+            try {
+                const forecastCity = city || document.getElementById('weatherCityInput').value || '<%= weather.city %>';
+                console.log('Loading forecast for:', forecastCity);
+                
+                const response = await fetch(`/api/weather/forecast?city=${encodeURIComponent(forecastCity)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Forecast API error: ${response.status}`);
+                }
+                
+                const forecastData = await response.json();
+                console.log('Forecast data received:', forecastData);
+                
+                const forecastContainer = document.getElementById('weatherForecast');
+                forecastContainer.innerHTML = '';
+                
+                const forecastEntries = Object.entries(forecastData);
+                
+                // Take first 5 entries
+                for (let i = 0; i < Math.min(5, forecastEntries.length); i++) {
+                    const [dateString, hourlyData] = forecastEntries[i];
+                    const forecastDate = new Date(dateString + 'T00:00:00');
+                    
+                    // Get midday forecast (12:00) or closest available
+                    const middayForecast = hourlyData.find(item => item.time.startsWith('12:00')) || 
+                                          hourlyData.find(item => {
+                                              const hour = parseInt(item.time.split(':')[0]);
+                                              return hour >= 11 && hour <= 14;
+                                          }) || hourlyData[Math.floor(hourlyData.length / 2)];
+                    
+                    const forecastCard = document.createElement('div');
+                    forecastCard.className = 'forecast-card-compact';
+                    
+                    forecastCard.innerHTML = `
+                        <div class="forecast-day">${formatDate(forecastDate)}</div>
+                        <div class="forecast-date">${formatDateString(forecastDate)}</div>
+                        <div class="forecast-icon">${weatherEmojis[middayForecast.condition] || '🌤️'}</div>
+                        <div class="forecast-temp">${middayForecast.temp}°C</div>
+                        <div class="forecast-condition">${middayForecast.condition}</div>
+                    `;
+                    
+                    forecastContainer.appendChild(forecastCard);
+                }
+                
+            } catch (error) {
+                console.error('Forecast load error:', error);
+                showMockForecast(city);
+            }
+        }
+
+        // Show mock forecast if API fails
+        function showMockForecast(city) {
+            const forecastContainer = document.getElementById('weatherForecast');
+            const today = new Date();
+            
+            forecastContainer.innerHTML = '';
+            
+            for (let i = 0; i < 5; i++) {
+                const forecastDate = new Date(today);
+                forecastDate.setDate(today.getDate() + i);
+                
+                // Use random temperature for mock forecast
+                const temp = i === 0 ? Math.floor(Math.random() * 5) + 25 : Math.floor(Math.random() * 3) + 26;
+                
+                const forecastCard = document.createElement('div');
+                forecastCard.className = 'forecast-card-compact';
+                
+                forecastCard.innerHTML = `
+                    <div class="forecast-day">${formatDate(forecastDate)}</div>
+                    <div class="forecast-date">${formatDateString(forecastDate)}</div>
+                    <div class="forecast-icon">☀️</div>
+                    <div class="forecast-temp">${temp}°C</div>
+                    <div class="forecast-condition">Sunny</div>
+                `;
+                forecastContainer.appendChild(forecastCard);
+            }
+            
+            // Update forecast city to show what was requested
+            document.getElementById('forecastCity').textContent = city || '<%= weather.city %>';
+        }
+
+        // Update current weather by fetching the HTML page and extracting data
+    async function updateCurrentWeather(city) {
+    const response = await fetch(
+        `/api/weather/current?city=${encodeURIComponent(city)}`
+    );
+
+    if (!response.ok) throw new Error("Weather fetch failed");
+
+    const data = await response.json();
+
+    document.getElementById('currentTemp').textContent = `${data.temp}°C`;
+    document.getElementById('currentCity').textContent = data.city;
+    document.getElementById('currentWeatherIcon').textContent = data.iconEmoji;
+    document.getElementById('forecastCity').textContent = data.city;
+    document.getElementById('weatherCityInput').value = data.city;
+
+    await loadForecast(data.city);
+}
+
+        // Search city weather
+        async function searchCityWeather() {
+            const cityInput = document.getElementById('weatherCityInput');
+            const city = cityInput.value.trim();
+            
+            if (!city) {
+                alert('Please enter a city name');
+                return;
+            }
+            
+            // Show loading state for forecast
+            const forecastContainer = document.getElementById('weatherForecast');
+            forecastContainer.innerHTML = `
+                <div class="forecast-card-compact" style="flex: none; width: 100%; text-align: center;">
+                    <div class="forecast-day">Loading</div>
+                    <div class="forecast-icon" style="font-size: 1.5rem;">⏳</div>
+                    <div class="forecast-temp">--°C</div>
+                    <div class="forecast-condition">Searching for ${city}</div>
+                </div>
+            `;
+            
+            // Show loading in navbar
+            const currentTemp = document.getElementById('currentTemp');
+            const currentCity = document.getElementById('currentCity');
+            const currentIcon = document.getElementById('currentWeatherIcon');
+            
+            const originalTemp = currentTemp.textContent;
+            const originalCity = currentCity.textContent;
+            const originalIcon = currentIcon.textContent;
+            
+            currentTemp.textContent = '...°C';
+            currentCity.textContent = 'Loading...';
+            
+            try {
+                await updateCurrentWeather(city);
+                
+            } catch (error) {
+                console.error('City search error:', error);
+                
+                // Show error but keep user's input
+                const errorMessage = `Could not load weather for "${city}". Showing mock data instead.`;
+                console.log(errorMessage);
+                
+                // Reset to mock data but keep the city name
+                currentTemp.textContent = '--°C';
+                currentCity.textContent = city;
+                currentIcon.textContent = '☀️';
+                
+                // Keep the user's input in the search box
+                cityInput.value = city;
+                document.getElementById('forecastCity').textContent = city;
+                
+                // Show mock forecast
+                showMockForecast(city);
+                
+                // Show gentle error message
+                const errorDiv = document.createElement('div');
+                errorDiv.textContent = errorMessage;
+                errorDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #ff6b6b;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    z-index: 3000;
+                    animation: fadeInOut 3s ease;
+                `;
+                
+                // Add CSS for animation
+                if (!document.querySelector('#error-animation')) {
+                    const style = document.createElement('style');
+                    style.id = 'error-animation';
+                    style.textContent = `
+                        @keyframes fadeInOut {
+                            0% { opacity: 0; transform: translateY(-20px); }
+                            10% { opacity: 1; transform: translateY(0); }
+                            90% { opacity: 1; transform: translateY(0); }
+                            100% { opacity: 0; transform: translateY(-20px); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
+                document.body.appendChild(errorDiv);
+                setTimeout(() => errorDiv.remove(), 3000);
+            }
+        }
+
+
+        // Language mapping for MyMemory API
+        const languageCodes = {
+            'en': 'en',      // English
+            'si': 'si',      // Sinhala
+            'ta': 'ta',      // Tamil
+            'fr': 'fr',      // French
+            'de': 'de',      // German
+            'es': 'es',      // Spanish
+            'zh': 'zh-CN'    // Chinese Simplified
+        };
+
+        // Add these languages if you want more:
+        const additionalLanguages = {
+            'ja': 'Japanese',    // 🇯🇵
+            'ko': 'Korean',      // 🇰🇷
+            'ar': 'Arabic',      // 🇸🇦
+            'ru': 'Russian',     // 🇷🇺
+            'it': 'Italian',     // 🇮🇹
+            'pt': 'Portuguese',  // 🇵🇹
+            'nl': 'Dutch',       // 🇳🇱
+            'hi': 'Hindi'        // 🇮🇳
+        };
+
+        // Simple translation using MyMemory API
+        async function translateText(text, targetLang) {
+            try {
+                // If already English or same language, return original
+                if (targetLang === 'en') return text;
+                
+                // Get language code for API
+                const langCode = languageCodes[targetLang] || targetLang;
+                
+                // Make API call to MyMemory
+                const response = await fetch(
+                    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${langCode}`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Return translated text or original if translation fails
+                return data.responseData?.translatedText || text;
+                
+            } catch (error) {
+                console.error('Translation error:', error);
+                return text; // Return original text on error
+            }
+        }
+
+        // Fallback translation using Google Translate website
+        function translateWithGoogle(text, targetLang) {
+            const langCode = languageCodes[targetLang] || targetLang;
+            const url = `https://translate.google.com/?sl=auto&tl=${langCode}&text=${encodeURIComponent(text)}&op=translate`;
+            window.open(url, '_blank');
+        }
+                // Auto-complete functionality for city search
+        function setupCityAutocomplete() {
+            const cityInput = document.getElementById('weatherCityInput');
+            const datalist = document.getElementById('sriLankaCities');
+            
+            // Clear existing options
+            datalist.innerHTML = '';
+            
+            // Add all Sri Lankan areas to datalist
+            sriLankaAreas.forEach(area => {
+                const option = document.createElement('option');
+                option.value = area;
+                datalist.appendChild(option);
+            });
+            
+            // Create a dropdown for suggestions
+            let dropdown = document.getElementById('citySuggestionsDropdown');
+            if (!dropdown) {
+                dropdown = document.createElement('div');
+                dropdown.id = 'citySuggestionsDropdown';
+                dropdown.style.cssText = `
+                    position: absolute;
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    display: none;
+                    z-index: 1000;
+                    width: ${cityInput.offsetWidth}px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                `;
+                cityInput.parentNode.appendChild(dropdown);
+            }
+            
+            // Show suggestions on input
+            cityInput.addEventListener('input', function() {
+                const value = this.value.toLowerCase();
+                dropdown.innerHTML = '';
+                
+                if (value.length < 2) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+                
+                // Filter matching cities
+                const matches = sriLankaAreas.filter(area => 
+                    area.toLowerCase().includes(value)
+                ).slice(0, 10); // Show max 10 suggestions
+                
+                if (matches.length > 0) {
+                    matches.forEach(city => {
+                        const item = document.createElement('div');
+                        item.textContent = city;
+                        item.style.cssText = `
+                            padding: 8px 12px;
+                            cursor: pointer;
+                            border-bottom: 1px solid #f0f0f0;
+                            transition: background 0.2s;
+                        `;
+                        item.addEventListener('mouseenter', () => {
+                            item.style.background = '#f5f5f5';
+                        });
+                        item.addEventListener('mouseleave', () => {
+                            item.style.background = 'white';
+                        });
+                        item.addEventListener('click', () => {
+                            cityInput.value = city;
+                            dropdown.style.display = 'none';
+                            searchCityWeather();
+                        });
+                        dropdown.appendChild(item);
+                    });
+                    
+                    // Position dropdown below input
+                    const rect = cityInput.getBoundingClientRect();
+                    dropdown.style.top = (rect.bottom + window.scrollY) + 'px';
+                    dropdown.style.left = (rect.left + window.scrollX) + 'px';
+                    dropdown.style.width = rect.width + 'px';
+                    dropdown.style.display = 'block';
+                } else {
+                    dropdown.style.display = 'none';
+                }
+            });
+            
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!cityInput.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+            
+            // Auto-search when user selects from datalist (pressing down arrow and enter)
+            cityInput.addEventListener('change', function() {
+                if (this.value.trim()) {
+                    searchCityWeather();
+                }
+            });
+        }
+
+        // Calendar functionality
+        function generateCalendar() {
+            const now = new Date();
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            
+            document.getElementById('currentMonth').textContent = 
+                `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+            
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            
+            let calendarHTML = '';
+            
+            // Day headers
+            const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+            dayNames.forEach(day => {
+                calendarHTML += `<div class="calendar-day-header">${day}</div>`;
+            });
+            
+            // Empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                calendarHTML += `<div class="calendar-day"></div>`;
+            }
+            
+            // Days of the month
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const isToday = day === now.getDate();
+                calendarHTML += `
+                    <div class="calendar-day ${isToday ? 'active' : ''}" data-day="${day}">
+                        ${day}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('calendarGrid').innerHTML = calendarHTML;
+            
+            // Add click events to days
+            document.querySelectorAll('.calendar-day[data-day]').forEach(day => {
+                day.addEventListener('click', function() {
+                    const selectedDay = this.getAttribute('data-day');
+                    alert(`Selected date: ${now.getMonth() + 1}/${selectedDay}/${now.getFullYear()}`);
+                    document.getElementById('calendarPopup').classList.remove('active');
+                });
+            });
+        }
+
+        // Language selection WITH translation
+        function setupLanguageSelection() {
+            const languageOptions = document.querySelectorAll('.language-option');
+            
+            languageOptions.forEach(option => {
+                option.addEventListener('click', async function() {
+                    const lang = this.getAttribute('data-lang');
+                    const langName = this.querySelector('.language-name').textContent;
+                    
+                    // Remove active class from all options
+                    languageOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to selected option
+                    this.classList.add('active');
+                    
+                    // Translate page content
+                    await translatePageContent(lang);
+                    
+                    // Show confirmation
+                    alert(`Language changed to: ${langName}\n\nNote: Some translations may be approximate.`);
+                    
+                    // Close popup after delay
+                    setTimeout(() => {
+                        document.getElementById('languagePopup').classList.remove('active');
+                    }, 1000);
+                });
+            });
+        }
+        
+        // Translate key page elements
+        async function translatePageContent(targetLang) {
+            // Don't translate if English
+            if (targetLang === 'en') {
+                // Reset to English if needed
+                resetToEnglish();
+                return;
+            }
+            
+            // Show loading state
+            showTranslationLoading();
+            
+            // Elements to translate with their English originals
+            const elementsToTranslate = {
+                // Welcome section
+                '.greeting': 'Welcome Back',
+                '.user-quote': 'Your Sri Lankan adventure begins here',
+                
+                // Weather section
+                '.forecast-header h3': '5-Day Forecast',
+                '.forecast-location': 'Current Location',
+                
+                // Services section
+                '.section-title h2': 'Explore Sri Lanka With Ease',
+                '.section-title p': 'Find everything you need for your perfect adventure',
+                
+                // Service cards
+                '.service-card.hotel h3': 'Hotels & Stays',
+                '.service-card.hotel p': 'Luxury resorts, boutique hotels, beach villas, and budget stays across Sri Lanka',
+                
+                '.service-card.guide h3': 'Tour Guides',
+                '.service-card.guide p': 'Local experts for cultural tours, wildlife safaris, hiking adventures, and food experiences',
+                
+                '.service-card.transport h3': 'Transport Providers',
+                '.service-card.transport p': 'Car rentals, private drivers, tuk-tuks, train tickets, and airport transfers',
+                
+                // Discover section
+                '.discover-section .section-title h2': 'Discover Sri Lanka',
+                '.discover-section .section-title p': 'Cultural events and must-visit destinations',
+                
+                // Events
+                '.event-card:nth-child(1) h4': 'Kandy Esala Perahera',
+                '.event-card:nth-child(1) .event-description': 'The Grand Festival of the Tooth Relic with elephants, dancers, and drummers.',
+                
+                '.event-card:nth-child(2) h4': 'Adam\'s Peak Pilgrimage',
+                '.event-card:nth-child(2) .event-description': 'Night hike to Sri Pada summit for sunrise views and spiritual experience.',
+                
+                '.event-card:nth-child(3) h4': 'Mirissa Whale Watching',
+                '.event-card:nth-child(3) .event-description': 'Boat tours to see blue whales and dolphins in their natural habitat.',
+                
+                '.event-card:nth-child(4) h4': 'Vesak Festival',
+                '.event-card:nth-child(4) .event-description': 'Buddhist festival of lights with lanterns, pandals, and free food stalls.',
+                
+                // Buttons
+                '.service-btn': 'Browse Hotels',
+                '.history-btn-nav': 'History'
+            };
+            
+            // Translate each element
+            for (const [selector, englishText] of Object.entries(elementsToTranslate)) {
+                const elements = document.querySelectorAll(selector);
+                
+                for (const element of elements) {
+                    // Store original text if not already stored
+                    if (!element.hasAttribute('data-original')) {
+                        element.setAttribute('data-original', element.textContent);
+                    }
+                    
+                    // Translate the text
+                    const translatedText = await translateText(englishText, targetLang);
+                    
+                    // Update element text
+                    if (translatedText !== englishText) {
+                        element.textContent = translatedText;
+                    }
+                    
+                    // Add small delay to avoid API rate limits
+                    await delay(100);
+                }
+            }
+            
+            // Hide loading state
+            hideTranslationLoading();
+            
+            // Store current language in localStorage
+            localStorage.setItem('selectedLanguage', targetLang);
+        }
+
+        // Helper function for delays
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Show loading state
+        function showTranslationLoading() {
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'translationLoading';
+            loadingOverlay.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 20px 30px;
+                    border-radius: 10px;
+                    z-index: 3000;
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                ">
+                    <i class="fas fa-sync-alt fa-spin"></i>
+                    <span>Translating content...</span>
+                </div>
+            `;
+            document.body.appendChild(loadingOverlay);
+        }
+
+        // Hide loading state
+        function hideTranslationLoading() {
+            const loadingOverlay = document.getElementById('translationLoading');
+            if (loadingOverlay) {
+                loadingOverlay.remove();
+            }
+        }
+
+        // Reset to English
+        function resetToEnglish() {
+            document.querySelectorAll('[data-original]').forEach(element => {
+                const originalText = element.getAttribute('data-original');
+                if (originalText) {
+                    element.textContent = originalText;
+                }
+            });
+            localStorage.setItem('selectedLanguage', 'en');
+        }
+        // Open Google Maps
+        function openGoogleMaps() {
+            const city = document.getElementById('currentCity').textContent || 'Colombo';
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(city + ', Sri Lanka')}`;
+            window.open(mapsUrl, '_blank');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up city autocomplete
+            setupCityAutocomplete();
+            
+            // Load initial forecast
+            loadForecast('<%= weather.city %>');
+            
+            // City search on Enter key
+            const cityInput = document.getElementById('weatherCityInput');
+            cityInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchCityWeather();
+                    e.preventDefault();
+                }
+            });
+            
+            // City search on blur (with delay to allow click on dropdown)
+            cityInput.addEventListener('blur', function() {
+                setTimeout(() => {
+                    const currentCity = '<%= weather.city %>';
+                    const newCity = this.value.trim();
+                    if (newCity && newCity !== currentCity) {
+                        searchCityWeather();
+                    }
+                }, 200);
+            });
+            
+            // Initialize with current city
+            const initialCity = '<%= weather.city %>';
+            if (initialCity) {
+                cityInput.value = initialCity;
+            }
+            document.getElementById('forecastCity').textContent = initialCity;
+            
+            // Calendar icon click
+            document.getElementById('calendarIcon').addEventListener('click', function() {
+                generateCalendar();
+                document.getElementById('calendarPopup').classList.add('active');
+            });
+            
+            // Language icon click
+            document.getElementById('languageIcon').addEventListener('click', function() {
+                setupLanguageSelection();
+                document.getElementById('languagePopup').classList.add('active');
+            });
+            
+            // Map icon click
+            document.getElementById('mapIcon').addEventListener('click', openGoogleMaps);
+            
+            // Close popups
+            document.getElementById('closeCalendar').addEventListener('click', function() {
+                document.getElementById('calendarPopup').classList.remove('active');
+            });
+            
+            document.getElementById('closeLanguage').addEventListener('click', function() {
+                document.getElementById('languagePopup').classList.remove('active');
+            });
+            
+            // Close popups when clicking outside
+            document.querySelectorAll('.popup-overlay').forEach(popup => {
+                popup.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Add keyboard support for closing popups
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.popup-overlay.active').forEach(popup => {
+                        popup.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
