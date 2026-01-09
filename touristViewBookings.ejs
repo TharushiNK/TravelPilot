@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | TravelPilot</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #7209b7;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --border-radius: 16px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: var(--dark-color);
+            min-height: 100vh;
+        }
+
+
+        /* Navbar - Updated to match dashboard */
+        .hero-navbar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-brand i {
+            color: #FFD700;
+        }
+
+        /* Navbar user section */
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* User avatar in navbar */
+        .user-avatar-nav {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 2px solid white;
+        }
+
+        /* Navbar buttons */
+        .nav-btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        .nav-btn-primary {
+            background: linear-gradient(45deg, #a971aa, #3a0ca3);
+            color: white;
+            border: none;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .nav-btn-outline {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            background: transparent;
+        }
+
+        .nav-btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            margin-top: 100px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dashboard-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-title h1 {
+            color: var(--dark-color);
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-title h1 i {
+            margin-right: 15px;
+        }
+
+        .date-display {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .lead-text {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .stat-card:nth-child(2) {
+            background: linear-gradient(135deg, var(--success-color), #3a86ff);
+        }
+
+        .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, var(--accent-color), #ff006e);
+        }
+
+        .stat-card:nth-child(4) {
+            background: linear-gradient(135deg, #ff9e00, #ff5400);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        /* Quick Actions - REMOVED the 4th card */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 992px) {
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .action-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: rgba(67, 97, 238, 0.3);
+        }
+
+        .action-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+        }
+
+        .action-card:nth-child(2) .action-icon {
+            background: linear-gradient(135deg, var(--success-color), #3a86ff);
+        }
+
+        .action-card:nth-child(3) .action-icon {
+            background: linear-gradient(135deg, var(--accent-color), #ff006e);
+        }
+
+        .action-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .action-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .action-badge {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+        }
+
+        .action-card:hover .action-btn {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Gemini AI Chat Interface */
+        .ai-chat-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .ai-chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ai-chat-header h2 {
+            color: white;
+            font-size: 1.8rem;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ai-chat-header h2 i {
+            color: #FFD700;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Message Styles */
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.user {
+            align-items: flex-end;
+        }
+
+        .message.ai {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #4cc9f0, #3a86ff);
+            color: white;
+            border-top-right-radius: 5px;
+        }
+
+        .message.ai .message-content {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--dark-color);
+            border-top-left-radius: 5px;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .message-header i {
+            font-size: 0.9rem;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 15px 20px;
+            padding-right: 100px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--dark-color);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            resize: none;
+            max-height: 120px;
+            min-height: 60px;
+            line-height: 1.5;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .chat-input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .input-actions {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .input-action-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-action-btn:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--success-color), #3a86ff);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 201, 240, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Quick Prompts */
+        .quick-prompts {
+            margin-top: 20px;
+        }
+
+        .quick-prompts-title {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .prompt-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-align: left;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prompt-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .prompt-btn i {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Loading Animation */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 15px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Booking Data Summary */
+        .booking-summary {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .summary-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-toggle {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .summary-content {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        /* Tabs Navigation */
+        .tabs-navigation {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tabs-custom {
+            border: none;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tabs-custom .nav-link {
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: 500;
+            color: var(--dark-color);
+            background: rgba(67, 97, 238, 0.1);
+            transition: var(--transition);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-tabs-custom .nav-link.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            color: white;
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .nav-tabs-custom .nav-link:hover:not(.active) {
+            background: rgba(67, 97, 238, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Rest of your existing styles... */
+        /* Booking Cards, Empty State, Modals, etc. */
+        /* ... keep all your existing styles below ... */
+
+        /* Booking Cards */
+        .booking-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .section-header h2 {
+            color: var(--dark-color);
+            font-size: 1.8rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid rgba(67, 97, 238, 0.2);
+            background: white;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        .filter-btn:hover:not(.active) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Bookings Grid */
+        .bookings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: var(--transition);
+            border: 1px solid #f0f0f0;
+            position: relative;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .booking-header {
+            padding: 25px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(45deg, rgba(67, 97, 238, 0.05), rgba(76, 201, 240, 0.05));
+        }
+
+        .booking-type {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .type-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .type-hotel .type-icon {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+
+        .type-tour_guide .type-icon {
+            background: linear-gradient(45deg, #1dd1a1, #10ac84);
+        }
+
+        .type-transport .type-icon {
+            background: linear-gradient(45deg, #54a0ff, #2e86de);
+        }
+
+        .booking-status {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-pending {
+            background: linear-gradient(45deg, #fff3cd, #ffeaa7);
+            color: #856404;
+        }
+
+        .status-confirmed {
+            background: linear-gradient(45deg, #d4edda, #a8e6cf);
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: linear-gradient(45deg, #f8d7da, #ffafb0);
+            color: #721c24;
+        }
+
+        .booking-body {
+            padding: 25px;
+        }
+
+        .booking-info {
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        .booking-dates {
+            background: linear-gradient(45deg, rgba(67, 97, 238, 0.05), rgba(76, 201, 240, 0.05));
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .date-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .date-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .booking-footer {
+            padding: 20px 25px;
+            background: linear-gradient(45deg, rgba(67, 97, 238, 0.05), rgba(76, 201, 240, 0.05));
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .booking-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn-small {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-view {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #f8f9fa;
+            color: var(--warning-color);
+            border: 1px solid #dee2e6;
+        }
+
+        .btn-share {
+            background: linear-gradient(45deg, var(--accent-color), #ff006e);
+            color: white;
+        }
+
+        .action-btn-small:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-cancel:hover {
+            background: var(--warning-color);
+            color: white;
+            border-color: var(--warning-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            color: rgba(67, 97, 238, 0.2);
+            margin-bottom: 25px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .empty-state p {
+            max-width: 400px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px;
+            border-bottom: none;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+        }
+
+        .modal-header .btn-close:hover {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .bookings-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-user-section {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .dashboard-title {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .date-display {
+                width: 100%;
+            }
+            
+            .chat-input-container {
+                flex-direction: column;
+            }
+            
+            .send-btn {
+                align-self: flex-end;
+                width: 45px;
+                height: 45px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-tabs-custom {
+                flex-direction: column;
+            }
+            
+            .nav-tabs-custom .nav-link {
+                justify-content: center;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+            }
+            
+            .prompts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Floating Animation */
+        @keyframes floatUpDown {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .floating {
+            animation: floatUpDown 3s ease-in-out infinite;
+        }
+
+        /* Progress Bar */
+        .progress-bar-custom {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--success-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+
+        /* Rating Stars */
+        .rating-stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(67, 97, 238, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Updated Navbar to match dashboard -->
+    <nav class="hero-navbar">
+        <a href="/" class="nav-brand">
+            <i class="fas fa-plane"></i> TravelPilot
+        </a>
+        
+        <div class="nav-user-section">
+            <!-- User avatar -->
+            <div class="user-avatar-nav">
+                <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+            </div>
+            
+            <!-- Welcome text -->
+            <div style="color: white; text-align: right;">
+                <div style="font-weight: 600; font-size: 1.1rem;">Welcome back, <%= user.name || 'Traveler' %>!</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">Your adventure hub is ready</div>
+            </div>
+            
+            <!-- Navigation buttons -->
+            <a href="/tourist" class="nav-btn nav-btn-primary">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="/logout" class="nav-btn nav-btn-outline">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h1><i class="fas fa-history floating"></i> My Booking History</h1>
+                <div class="date-display">
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+            
+            <p class="lead-text">Track your adventures, manage upcoming trips, and chat with AI for personalized itinerary suggestions based on your booking history.</p>
+            
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card" onclick="filterBookings('all')">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-number"><%= stats.total || 0 %></div>
+                    <div class="stat-label">Total Bookings</div>
+                </div>
+                
+                <div class="stat-card" onclick="filterBookings('ongoing')">
+                    <div class="stat-icon">
+                        <i class="fas fa-spinner"></i>
+                    </div>
+                    <div class="stat-number"><%= stats.ongoing || 0 %></div>
+                    <div class="stat-label">Ongoing Trips</div>
+                </div>
+                
+                <div class="stat-card" onclick="filterBookings('upcoming')">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-number"><%= stats.upcoming || 0 %></div>
+                    <div class="stat-label">Upcoming</div>
+                </div>
+                
+                <div class="stat-card" onclick="filterBookings('completed')">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number"><%= stats.completed || 0 %></div>
+                    <div class="stat-label">Completed</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions (Removed the 4th card) -->
+        <div class="quick-actions">
+            <div class="action-card" onclick="showBookings('hotel')">
+                <div class="action-icon pulse">
+                    <i class="fas fa-hotel"></i>
+                </div>
+                <h3>Hotel Bookings</h3>
+                <p>Manage your accommodations and stays</p>
+                <div class="action-badge"><%= stats.hotels || 0 %> bookings</div>
+                <button class="action-btn">
+                    <i class="fas fa-arrow-right"></i> Explore
+                </button>
+            </div>
+            
+            <div class="action-card" onclick="showBookings('tour-guide')">
+                <div class="action-icon pulse">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h3>Tour Guide Bookings</h3>
+                <p>Your guided tours and experiences</p>
+                <div class="action-badge"><%= stats.guides || 0 %> bookings</div>
+                <button class="action-btn">
+                    <i class="fas fa-arrow-right"></i> Explore
+                </button>
+            </div>
+            
+            <div class="action-card" onclick="showBookings('transport')">
+                <div class="action-icon pulse">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h3>Transport Bookings</h3>
+                <p>Vehicle rentals and transfers</p>
+                <div class="action-badge"><%= stats.transport || 0 %> bookings</div>
+                <button class="action-btn">
+                    <i class="fas fa-arrow-right"></i> Explore
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs-navigation">
+            <ul class="nav nav-tabs-custom" id="bookingsTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">
+                        <i class="fas fa-th-list"></i> All Bookings
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="ongoing-tab" data-bs-toggle="tab" data-bs-target="#ongoing" type="button" role="tab">
+                        <i class="fas fa-spinner"></i> Ongoing Trips
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming" type="button" role="tab">
+                        <i class="fas fa-calendar-day"></i> Upcoming
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab">
+                        <i class="fas fa-history"></i> History
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Tab Content (Keep all your existing tab content as is) -->
+        <div class="tab-content" id="bookingsTabContent">
+            <!-- All Bookings Tab -->
+            <div class="tab-pane fade show active" id="all" role="tabpanel">
+                <!-- ... keep your existing booking content ... -->
+                <div class="booking-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-th-list"></i> All Bookings</h2>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" onclick="filterAllBookings('all')">All Types</button>
+                            <button class="filter-btn" onclick="filterAllBookings('hotel')">Hotels</button>
+                            <button class="filter-btn" onclick="filterAllBookings('tour_guide')">Tour Guides</button>
+                            <button class="filter-btn" onclick="filterAllBookings('transport')">Transport</button>
+                        </div>
+                    </div>
+                    
+                    <% if (bookings && bookings.length > 0) { %>
+                        <div class="bookings-grid" id="allBookingsGrid">
+                            <% bookings.forEach(booking => { %>
+                                <div class="booking-card type-<%= booking.type %>" data-type="<%= booking.type %>">
+                                    <div class="booking-header">
+                                        <div class="booking-type">
+                                            <div class="type-icon">
+                                                <% if (booking.type === 'hotel') { %>
+                                                    <i class="fas fa-hotel"></i>
+                                                <% } else if (booking.type === 'tour_guide') { %>
+                                                    <i class="fas fa-map-marked-alt"></i>
+                                                <% } else { %>
+                                                    <i class="fas fa-car-alt"></i>
+                                                <% } %>
+                                            </div>
+                                            <div>
+                                                <h4 class="mb-1"><%= booking.service_name || 'N/A' %></h4>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-map-marker-alt"></i> <%= booking.location || 'Location not specified' %>
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <span class="booking-status <%= booking.status_class %>">
+                                            <i class="fas fa-circle"></i> <%= booking.status_text %>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="booking-body">
+                                        <div class="booking-info">
+                                            <div class="info-row">
+                                                <span class="info-label">Booking ID:</span>
+                                                <span class="info-value">#<%= booking.id %></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">Booked On:</span>
+                                                <span class="info-value"><i class="far fa-calendar"></i> <%= booking.created_formatted %></span>
+                                            </div>
+                                            <% if (booking.owner_name) { %>
+                                            <div class="info-row">
+                                                <span class="info-label">Provider:</span>
+                                                <span class="info-value"><i class="fas fa-user-tie"></i> <%= booking.owner_name %></span>
+                                            </div>
+                                            <% } %>
+                                        </div>
+                                        
+                                        <div class="booking-dates">
+                                            <div class="date-item">
+                                                <span>Start Date:</span>
+                                                <strong><i class="far fa-calendar-check"></i> <%= booking.start_formatted %></strong>
+                                            </div>
+                                            <div class="date-item">
+                                                <span>End Date:</span>
+                                                <strong><i class="far fa-calendar-times"></i> <%= booking.end_formatted %></strong>
+                                            </div>
+                                            <div class="date-item">
+                                                <span>Duration:</span>
+                                                <strong><i class="far fa-clock"></i> <%= booking.duration %> <%= booking.type === 'tour_guide' ? 'days' : 'nights' %></strong>
+                                            </div>
+                                        </div>
+                                        
+                                        <% if (booking.specialization) { %>
+                                            <div class="info-row mt-3">
+                                                <span class="info-label">Languages:</span>
+                                                <span class="info-value"><i class="fas fa-language"></i> <%= booking.specialization %></span>
+                                            </div>
+                                        <% } %>
+                                        
+                                        <% if (booking.vehicle_details) { %>
+                                            <div class="info-row mt-3">
+                                                <span class="info-label">Vehicle Details:</span>
+                                                <span class="info-value"><i class="fas fa-car"></i> <%= booking.vehicle_details %></span>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    
+                                    <div class="booking-footer">
+                                        <div class="booking-amount">
+                                            <i class="fas fa-rupee-sign"></i> <%= booking.total_amount ? parseFloat(booking.total_amount).toFixed(2) : '0.00' %>
+                                        </div>
+                                        <div class="booking-actions">
+                                            
+                                            <% if (booking.booking_status == 0) { %>
+                                            <button class="action-btn-small btn-cancel" onclick="cancelBooking(<%= booking.id %>, '<%= booking.type %>')">
+                                                <i class="fas fa-times"></i> Cancel
+                                            </button>
+                                            <% } %>
+                                            <button class="action-btn-small btn-share" onclick="shareBooking(<%= booking.id %>, '<%= booking.type %>')">
+                                                <i class="fas fa-share-alt"></i> Share
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-calendar-times"></i>
+                            </div>
+                            <h3>No Bookings Found</h3>
+                            <p>Start your adventure! Book hotels, tour guides, or transport to create your first trip.</p>
+                            <a href="/tourist" class="action-btn" style="text-decoration: none;">
+                                <i class="fas fa-search"></i> Explore Services
+                            </a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            
+            <!-- ... keep the rest of your existing tab content (ongoing, upcoming, history) ... -->
+        </div>
+
+        <!-- Modals -->
+        <!-- Booking Details Modal -->
+        <div class="modal fade" id="bookingDetailsModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Booking Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="bookingDetailsContent">
+                        <!-- Details will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Modal -->
+        <div class="modal fade" id="shareModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Share Booking</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="share-options">
+                            <button class="action-btn-small w-100 mb-2" onclick="shareViaEmail()">
+                                <i class="fas fa-envelope"></i> Share via Email
+                            </button>
+                            <button class="action-btn-small w-100 mb-2" style="background: linear-gradient(45deg, #25D366, #128C7E);" onclick="shareViaWhatsApp()">
+                                <i class="fab fa-whatsapp"></i> Share via WhatsApp
+                            </button>
+                            <button class="action-btn-small w-100 mb-2" style="background: linear-gradient(45deg, #1877F2, #3B5998);" onclick="shareViaFacebook()">
+                                <i class="fab fa-facebook"></i> Share on Facebook
+                            </button>
+                            <div class="input-group mt-4">
+                                <input type="text" class="form-control" id="shareLink" readonly style="border-radius: 8px 0 0 8px;">
+                                <button class="btn-view" style="border-radius: 0 8px 8px 0;" onclick="copyShareLink()">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 20}s`;
+                particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Initialize particles on load
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Initialize Bootstrap tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Auto-resize textarea
+            const chatInput = document.getElementById('chatInput');
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+        });
+
+        // Gemini AI Chat Functions
+        let chatHistory = [];
+        
+        // Toggle booking summary
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summaryContent');
+            const toggleBtn = document.querySelector('.summary-toggle i');
+            if (summaryContent.style.display === 'none') {
+                summaryContent.style.display = 'block';
+                toggleBtn.className = 'fas fa-chevron-up';
+                document.querySelector('.summary-toggle span').textContent = 'Hide Details';
+            } else {
+                summaryContent.style.display = 'none';
+                toggleBtn.className = 'fas fa-chevron-down';
+                document.querySelector('.summary-toggle span').textContent = 'Show Details';
+            }
+        }
+        
+        // Send message function
+        async function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessageToChat('user', message);
+            
+            // Clear input
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            
+            // Disable send button
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            try {
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Get booking data to send to Gemini
+                const bookingData = {
+                    user: {
+                        name: '<%= user.name || "Traveler" %>',
+                        totalBookings: <%= stats.total || 0 %>,
+                        hotels: <%= stats.hotels || 0 %>,
+                        guides: <%= stats.guides || 0 %>,
+                        transport: <%= stats.transport || 0 %>,
+                        ongoing: <%= stats.ongoing || 0 %>,
+                        upcoming: <%= stats.upcoming || 0 %>,
+                        completed: <%= stats.completed || 0 %>
+                    },
+                    message: message
+                };
+                
+                // Prepare conversation context
+                const conversationContext = chatHistory.slice(-5).map(msg => ({
+                    role: msg.sender === 'user' ? 'user' : 'model',
+                    parts: [{ text: msg.text }]
+                }));
+                
+                // Add current message to context
+                conversationContext.push({
+                    role: 'user',
+                    parts: [{ text: `User context: ${JSON.stringify(bookingData)}. User question: ${message}` }]
+                });
+                
+                // Call your backend API (you'll need to create this)
+                const response = await fetch('/api/gemini/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        context: conversationContext,
+                        bookingData: bookingData
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Remove typing indicator
+                    removeTypingIndicator();
+                    
+                    // Add AI response to chat
+                    addMessageToChat('ai', data.response);
+                    
+                    // Add to history
+                    chatHistory.push(
+                        { sender: 'user', text: message },
+                        { sender: 'ai', text: data.response }
+                    );
+                    
+                } else {
+                    throw new Error('Failed to get response');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                
+                // Remove typing indicator
+                removeTypingIndicator();
+                
+                // Show error message
+                addMessageToChat('ai', "I'm having trouble connecting right now. Please try again in a moment, or you can ask me about:\n\n• Sri Lanka travel itineraries\n• Best time to visit different regions\n• Cultural experiences\n• Adventure activities\n• Food recommendations");
+            } finally {
+                // Re-enable send button
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+            }
+        }
+        
+        // Send quick prompt
+        function sendQuickPrompt(button) {
+            const prompt = button.textContent.trim();
+            document.getElementById('chatInput').value = prompt;
+            sendMessage();
+        }
+        
+        // Add message to chat UI
+        function addMessageToChat(sender, text) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            let senderName = sender === 'user' ? 'You' : 'Travel Assistant';
+            let senderIcon = sender === 'user' ? 'fas fa-user' : 'fas fa-robot';
+            
+            // Format text with line breaks
+            const formattedText = text.replace(/\n/g, '<br>');
+            
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <i class="${senderIcon}"></i>
+                    <strong>${senderName}</strong>
+                </div>
+                <div class="message-content">${formattedText}</div>
+                <div class="message-time">${time}</div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Show typing indicator
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai';
+            typingDiv.id = 'typingIndicator';
+            
+            typingDiv.innerHTML = `
+                <div class="message-header">
+                    <i class="fas fa-robot"></i>
+                    <strong>Travel Assistant</strong>
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+        
+        // Attach file (placeholder)
+        function attachFile() {
+            alert('File attachment feature coming soon!');
+        }
+        
+        // Clear chat
+        function clearChat() {
+            if (confirm('Clear chat history? This will remove all messages.')) {
+                const chatContainer = document.getElementById('chatContainer');
+                const welcomeMessage = chatContainer.children[0];
+                chatContainer.innerHTML = '';
+                chatContainer.appendChild(welcomeMessage);
+                chatHistory = [];
+            }
+        }
+        
+        // Rest of your existing JavaScript functions...
+        // Switch tab programmatically
+        function switchTab(tabName) {
+            const tab = new bootstrap.Tab(document.getElementById(`${tabName}-tab`));
+            tab.show();
+        }
+
+        // Filter functions
+        function filterAllBookings(type) {
+            const buttons = document.querySelectorAll('#all .filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const cards = document.querySelectorAll('#allBookingsGrid .booking-card');
+            cards.forEach(card => {
+                card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
+            });
+        }
+
+        function filterOngoingBookings(type) {
+            const buttons = document.querySelectorAll('#ongoing .filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const cards = document.querySelectorAll('#ongoingBookingsGrid .booking-card');
+            cards.forEach(card => {
+                card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
+            });
+        }
+
+        function filterUpcomingBookings(type) {
+            const buttons = document.querySelectorAll('#upcoming .filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const cards = document.querySelectorAll('#upcomingBookingsGrid .booking-card');
+            cards.forEach(card => {
+                card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
+            });
+        }
+
+        function filterHistoryBookings(type) {
+            const buttons = document.querySelectorAll('#history .filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const cards = document.querySelectorAll('#historyBookingsGrid .booking-card');
+            cards.forEach(card => {
+                card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
+            });
+        }
+
+        function filterBookings(status) {
+            switchTab(status);
+        }
+
+        // Show specific booking type
+        function showBookings(type) {
+            if (type === 'tour-guide') {
+                type = 'tour_guide'; // Normalize for filter
+            }
+            
+            // Show all tab first
+            switchTab('all');
+            
+            // Wait for tab to show, then filter
+            setTimeout(() => {
+                const filterBtn = document.querySelector(`#all .filter-btn[onclick*="${type}"]`);
+                if (filterBtn) {
+                    filterBtn.click();
+                }
+            }, 100);
+        }
+
+        // View booking details
+        async function viewBookingDetails(bookingId, type) {
+            const modal = new bootstrap.Modal(document.getElementById('bookingDetailsModal'));
+            const content = document.getElementById('bookingDetailsContent');
+            
+            content.innerHTML = `
+                <div class="text-center py-4">
+                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Loading booking details...</p>
+                </div>
+            `;
+            
+            modal.show();
+            
+            try {
+                // Build correct endpoint based on your routes
+                let endpoint;
+                switch(type) {
+                    case 'hotel':
+                        endpoint = `/bookings/history/hotel/${bookingId}`;
+                        break;
+                    case 'tour_guide':
+                        endpoint = `/bookings/history/tour-guide/${bookingId}`;
+                        break;
+                    case 'transport':
+                        endpoint = `/bookings/history/transport/${bookingId}`;
+                        break;
+                    default:
+                        throw new Error('Invalid booking type');
+                }
+                
+                const response = await fetch(endpoint);
+                if (response.ok) {
+                    const booking = await response.json();
+                    
+                    // Format dates nicely
+                    const formatDate = (dateString) => {
+                        return new Date(dateString).toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                    };
+                    
+                    content.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-info-circle"></i> Booking Information</h5>
+                                        <p><strong>Booking ID:</strong> #${booking.id}</p>
+                                        <p><strong>Status:</strong> <span class="badge bg-${booking.booking_status === 1 ? 'success' : 'warning'}">
+                                            ${booking.booking_status === 1 ? 'Confirmed' : 'Pending'}
+                                        </span></p>
+                                        <p><strong>Created:</strong> ${formatDate(booking.created_at)}</p>
+                                        <p><strong>Amount:</strong> LKR ${parseFloat(booking.total_amount || 0).toFixed(2)}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-concierge-bell"></i> Service Details</h5>
+                                        <p><strong>Name:</strong> ${booking.service_name || 'N/A'}</p>
+                                        <p><strong>Location:</strong> ${booking.location || 'Not specified'}</p>
+                                        ${booking.specialization ? `<p><strong>Languages:</strong> ${booking.specialization}</p>` : ''}
+                                        ${booking.vehicle_details ? `<p><strong>Vehicle:</strong> ${booking.vehicle_details}</p>` : ''}
+                                        ${booking.owner_name ? `<p><strong>Provider:</strong> ${booking.owner_name}</p>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-calendar-alt"></i> Dates & Duration</h5>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <p><strong>Start Date:</strong><br>${formatDate(booking.start_date)}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p><strong>End Date:</strong><br>${formatDate(booking.end_date)}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p><strong>Duration:</strong><br>${booking.duration} ${type === 'tour_guide' ? 'days' : 'nights'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    content.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Could not load booking details. Please try again.
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle"></i>
+                        Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Cancel booking (tourists can only cancel pending bookings)
+        async function cancelBooking(bookingId, type) {
+            if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) return;
+            
+            try {
+                let endpoint;
+                switch(type) {
+                    case 'hotel':
+                        endpoint = `/api/bookings/${bookingId}/status`;
+                        break;
+                    case 'tour_guide':
+                        endpoint = `/api/tour-guide-bookings/${bookingId}/status`;
+                        break;
+                    case 'transport':
+                        endpoint = `/api/transport-bookings/${bookingId}/status`;
+                        break;
+                    default:
+                        alert('Invalid booking type');
+                        return;
+                }
+                
+                const response = await fetch(endpoint, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 2 }) // 2 = cancelled
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Booking cancelled successfully!');
+                        location.reload();
+                    } else {
+                        alert('Failed to cancel booking: ' + result.message);
+                    }
+                } else {
+                    alert('Failed to cancel booking. Please try again.');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Share booking
+        function shareBooking(bookingId, type) {
+            const modal = new bootstrap.Modal(document.getElementById('shareModal'));
+            const shareLinkInput = document.getElementById('shareLink');
+            
+            // Generate shareable link
+            const shareLink = `${window.location.origin}/bookings/share/${type}/${bookingId}`;
+            shareLinkInput.value = shareLink;
+            
+            modal.show();
+        }
+
+        // Share functions
+        function shareViaEmail() {
+            const subject = 'Check out my booking on TravelPilot';
+            const body = `I wanted to share my booking details with you:\n\n${document.getElementById('shareLink').value}\n\nLet me know what you think!`;
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        function shareViaWhatsApp() {
+            const text = 'Check out my booking on TravelPilot! ' + document.getElementById('shareLink').value;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function shareViaFacebook() {
+            const url = document.getElementById('shareLink').value;
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        function copyShareLink() {
+            const shareLink = document.getElementById('shareLink');
+            shareLink.select();
+            shareLink.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            
+            // Show feedback
+            const originalText = event.target.innerHTML;
+            event.target.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            event.target.classList.remove('btn-view');
+            event.target.style.background = 'linear-gradient(45deg, #2ecc71, #27ae60)';
+            
+            setTimeout(() => {
+                event.target.innerHTML = originalText;
+                event.target.style.background = '';
+                event.target.classList.add('btn-view');
+            }, 2000);
+        }
+
+        // Leave review for completed booking
+        function leaveReview(bookingId, type) {
+            alert(`Review feature coming soon for ${type} booking #${bookingId}!`);
+        }
+
+        // Calculate remaining days (for display)
+        function calculateRemainingDays(dateString) {
+            const end = new Date(dateString);
+            const today = new Date();
+            const diffTime = end - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays > 0 ? diffDays : 0;
+        }
+    </script>
+</body>
+</html>
