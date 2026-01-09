@@ -2889,7 +2889,14 @@ export const getAllUserBookings = (req, res) => {
             stats,
             hotelBookings,
             guideBookings,
-            transportBookings
+            transportBookings,
+            calculateRemainingDays: function(endDate) {
+        const end = new Date(endDate);
+        const today = new Date();
+        const diffTime = end - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays > 0 ? diffDays : 0;
+    }
         });
     })
     .catch(error => {
@@ -2908,7 +2915,12 @@ export const getUserBookingsByType = (req, res) => {
     }
 
     const userId = user.id;
-    const type = req.params.type; // 'hotel', 'tour-guide', or 'transport'
+    let type = req.params.type; // 'hotel', 'tour-guide', or 'transport'
+    
+    // Normalize the type name
+    if (type === 'tour-guide') {
+        type = 'tour_guide'; // Convert to database format
+    }
     
     let sql;
     
@@ -2928,7 +2940,7 @@ export const getUserBookingsByType = (req, res) => {
                 ORDER BY hb.created_at DESC
             `;
             break;
-        case 'tour-guide':
+        case 'tour_guide':
             sql = `
                 SELECT 
                     tgb.*,
@@ -2936,6 +2948,7 @@ export const getUserBookingsByType = (req, res) => {
                     CONCAT(tg.city, ', ', tg.district) as service_location,
                     tg.photos as service_photos,
                     tg.languages,
+                    tg.price_per_day,
                     u.name as owner_name
                 FROM tour_guide_bookings tgb
                 LEFT JOIN tour_guides tg ON tgb.guide_id = tg.id
@@ -2951,9 +2964,12 @@ export const getUserBookingsByType = (req, res) => {
                     tp.name as service_name,
                     CONCAT(tp.city, ', ', tp.district) as service_location,
                     tp.photos as service_photos,
+                    v.vehicle_type,
+                    v.price_per_km,
                     u.name as owner_name
                 FROM transport_provider_bookings tpb
                 LEFT JOIN transport_providers tp ON tpb.transport_provider_id = tp.id
+                LEFT JOIN transport_provider_vehicles v ON tpb.vehicle_id = v.id
                 LEFT JOIN users u ON tp.user_id = u.id
                 WHERE tpb.user_id = ?
                 ORDER BY tpb.created_at DESC
@@ -2971,7 +2987,7 @@ export const getUserBookingsByType = (req, res) => {
         
         // Format bookings
         bookings.forEach(booking => {
-            booking.type = type.replace('-', '_'); // Convert 'tour-guide' to 'tour_guide'
+            booking.type = type; // Use the normalized type
             
             // Set dates based on type
             if (type === 'hotel') {
@@ -2982,7 +2998,11 @@ export const getUserBookingsByType = (req, res) => {
                 booking.duration = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
                 booking.start_formatted = formatDate(checkIn);
                 booking.end_formatted = formatDate(checkOut);
-            } else if (type === 'tour-guide') {
+                
+                // Calculate remaining days
+                booking.remaining_days = calculateRemainingDays(booking.end_date);
+                
+            } else if (type === 'tour_guide') {
                 booking.start_date = booking.booking_date;
                 const endDate = new Date(booking.booking_date);
                 endDate.setDate(endDate.getDate() + booking.no_of_days);
@@ -2990,6 +3010,10 @@ export const getUserBookingsByType = (req, res) => {
                 booking.duration = booking.no_of_days;
                 booking.start_formatted = formatDate(new Date(booking.booking_date));
                 booking.end_formatted = formatDate(endDate);
+                
+                // Calculate remaining days
+                booking.remaining_days = calculateRemainingDays(booking.end_date);
+                
             } else {
                 booking.start_date = booking.start_date;
                 booking.end_date = booking.end_date;
@@ -2998,6 +3022,9 @@ export const getUserBookingsByType = (req, res) => {
                 booking.duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
                 booking.start_formatted = formatDate(start);
                 booking.end_formatted = formatDate(end);
+                
+                // Calculate remaining days
+                booking.remaining_days = calculateRemainingDays(booking.end_date);
             }
             
             // Status
@@ -3031,10 +3058,10 @@ export const getUserBookingsByType = (req, res) => {
                 upcoming: upcomingBookings.length,
                 completed: completedBookings.length,
                 hotels: type === 'hotel' ? bookings.length : 0,
-                guides: type === 'tour-guide' ? bookings.length : 0,
+                guides: type === 'tour_guide' ? bookings.length : 0,
                 transport: type === 'transport' ? bookings.length : 0
             },
-            filterType: type,
+            filterType: req.params.type, // Use the original type from URL
             typeName: getTypeName(type)
         });
     });
@@ -3051,9 +3078,9 @@ export const generateTravelSuggestions = (req, res) => {
 
     const userId = user.id;
     
-    // Get user's completed bookings to analyze preferences
+    // First, get all bookings to maintain the page structure
     Promise.all([
-        // Get hotel locations
+        // Get hotel locations for analysis
         new Promise((resolve) => {
             const sql = `
                 SELECT DISTINCT CONCAT(h.city, ', ', h.district) as location 
@@ -3066,7 +3093,7 @@ export const generateTravelSuggestions = (req, res) => {
             });
         }),
         
-        // Get guide languages (using languages instead of specialization)
+        // Get guide languages for analysis
         new Promise((resolve) => {
             const sql = `
                 SELECT DISTINCT tg.languages 
@@ -3079,7 +3106,7 @@ export const generateTravelSuggestions = (req, res) => {
             });
         }),
         
-        // Get transport destinations
+        // Get transport destinations for analysis
         new Promise((resolve) => {
             const sql = `
                 SELECT DISTINCT destination_locations 
@@ -3095,9 +3122,30 @@ export const generateTravelSuggestions = (req, res) => {
                 });
                 resolve(destinations);
             });
+        }),
+        
+        // Get all bookings for stats
+        new Promise((resolve) => {
+            // Get hotel bookings count
+            const hotelSql = `SELECT COUNT(*) as count FROM hotel_bookings WHERE user_id = ?`;
+            const guideSql = `SELECT COUNT(*) as count FROM tour_guide_bookings WHERE user_id = ?`;
+            const transportSql = `SELECT COUNT(*) as count FROM transport_provider_bookings WHERE user_id = ?`;
+            
+            Promise.all([
+                new Promise((res) => db.query(hotelSql, [userId], (err, r) => res(err ? 0 : r[0].count))),
+                new Promise((res) => db.query(guideSql, [userId], (err, r) => res(err ? 0 : r[0].count))),
+                new Promise((res) => db.query(transportSql, [userId], (err, r) => res(err ? 0 : r[0].count)))
+            ]).then(([hotels, guides, transport]) => {
+                resolve({
+                    hotels: parseInt(hotels),
+                    guides: parseInt(guides),
+                    transport: parseInt(transport),
+                    total: parseInt(hotels) + parseInt(guides) + parseInt(transport)
+                });
+            });
         })
     ])
-    .then(([hotelLocations, guideLanguages, transportDestinations]) => {
+    .then(([hotelLocations, guideLanguages, transportDestinations, stats]) => {
         // Analyze user preferences
         const preferences = analyzePreferences(hotelLocations, guideLanguages, transportDestinations);
         
@@ -3107,21 +3155,125 @@ export const generateTravelSuggestions = (req, res) => {
         // Get popular destinations in Sri Lanka
         const popularDestinations = getPopularDestinations();
         
-        res.render('touristViewBookings', {
-            user,
-            showSuggestions: true,
-            preferences,
-            suggestions,
-            popularDestinations,
-            hotelLocations: [...new Set(hotelLocations)],
-            guideLanguages: [...new Set(guideLanguages)],
-            transportDestinations: [...new Set(transportDestinations)],
-            stats: { total: 0, ongoing: 0, upcoming: 0, completed: 0, hotels: 0, guides: 0, transport: 0 }
-        });
+        // Create a simple HTML for suggestions to be loaded via AJAX
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            // AJAX request - return only suggestions HTML
+            const suggestionsHTML = `
+                <div class="suggestions-grid">
+                    <!-- User Preferences -->
+                    <div class="preferences-card">
+                        <h3><i class="fas fa-user-check"></i> Your Travel Profile</h3>
+                        <div class="preference-section">
+                            <h4>Preferred Destinations:</h4>
+                            ${preferences.preferredDestinations.length > 0 
+                                ? `<ul class="preferences-list">
+                                    ${preferences.preferredDestinations.map(dest => `<li>${dest}</li>`).join('')}
+                                   </ul>`
+                                : '<p class="text-muted">Not enough data to determine</p>'
+                            }
+                        </div>
+                        <div class="preference-section">
+                            <h4>Interests:</h4>
+                            ${preferences.interests.length > 0 
+                                ? `<ul class="preferences-list">
+                                    ${preferences.interests.map(interest => `<li>${interest}</li>`).join('')}
+                                   </ul>`
+                                : '<p class="text-muted">Not enough data to determine</p>'
+                            }
+                        </div>
+                    </div>
+                    
+                    <!-- Personalized Suggestions -->
+                    <div class="suggestions-list">
+                        <h3><i class="fas fa-map-marked-alt"></i> Recommended Itineraries</h3>
+                        ${suggestions.map((suggestion, index) => `
+                            <div class="suggestion-card">
+                                <div class="suggestion-header">
+                                    <h4>${suggestion.title}</h4>
+                                    <span class="badge bg-info">${suggestion.duration}</span>
+                                </div>
+                                <p class="suggestion-description">${suggestion.description}</p>
+                                <div class="suggestion-details">
+                                    <span class="detail-item">
+                                        <i class="fas fa-money-bill-wave"></i> ${suggestion.estimatedCost}
+                                    </span>
+                                    <span class="detail-item">
+                                        <i class="fas fa-mountain"></i> ${suggestion.difficulty}
+                                    </span>
+                                </div>
+                                <div class="suggestion-activities">
+                                    <strong>Activities:</strong>
+                                    <p>${suggestion.activities.join(', ')}</p>
+                                </div>
+                                <button class="btn btn-outline-light btn-sm mt-2" onclick="planThisTrip(${index})">
+                                    <i class="fas fa-plus"></i> Add to Plan
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <!-- Popular Destinations -->
+                    <div class="popular-destinations">
+                        <h3><i class="fas fa-star"></i> Popular in Sri Lanka</h3>
+                        <div class="destinations-grid">
+                            ${popularDestinations.map(destination => `
+                                <div class="destination-card">
+                                    <h5>${destination.name}</h5>
+                                    <span class="destination-type">${destination.type}</span>
+                                    <p class="destination-description">${destination.description}</p>
+                                    <div class="destination-highlights">
+                                        <strong>Best Season:</strong> ${destination.bestSeason}<br>
+                                        <strong>Highlights:</strong> ${destination.highlights.join(', ')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            res.send(suggestionsHTML);
+        } else {
+            // Full page request - render the complete page
+            res.render('touristViewBookings', {
+                user,
+                showSuggestions: true,
+                preferences,
+                suggestions,
+                popularDestinations,
+                hotelLocations: [...new Set(hotelLocations)],
+                guideLanguages: [...new Set(guideLanguages)],
+                transportDestinations: [...new Set(transportDestinations)],
+                stats: {
+                    total: stats.total,
+                    ongoing: 0,
+                    upcoming: 0,
+                    completed: 0,
+                    hotels: stats.hotels,
+                    guides: stats.guides,
+                    transport: stats.transport
+                },
+                bookings: [], // Empty array since we're showing suggestions
+                ongoingBookings: [],
+                upcomingBookings: [],
+                completedBookings: [],
+                calculateRemainingDays: function(endDate) {
+                    const end = new Date(endDate);
+                    const today = new Date();
+                    const diffTime = end - today;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays > 0 ? diffDays : 0;
+                }
+            });
+        }
     })
     .catch(error => {
         console.error("Error generating suggestions:", error);
-        res.status(500).send("Error generating travel suggestions");
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            res.status(500).send('<div class="alert alert-danger">Error generating suggestions. Please try again.</div>');
+        } else {
+            res.status(500).send("Error generating travel suggestions");
+        }
     });
 };
 
