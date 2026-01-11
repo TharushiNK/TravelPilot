@@ -14,6 +14,7 @@ import { getUsers, signUpController, getHotelDetails,addHotelController,
 import { login, logoutController } from './authController.js'
 import { upload } from './config/multer.js'
 import { getCurrentWeatherJSON, getForecast, getWeather } from './apiController.js'
+import { aiController } from './services/aiService.js'
 const router = express.Router()
 
 //test route--http://localhost:3000/
@@ -215,12 +216,14 @@ router.get('/bookings/history', getAllUserBookings);
 // Filtered bookings by type
 router.get('/bookings/history/:type', getUserBookingsByType);
 
-// Travel suggestions page
-router.get('/bookings/suggestions', generateTravelSuggestions);
+// Travel suggestions
+router.get('/bookings/history/suggestions/generate', generateTravelSuggestions)
 
 // Share itinerary
 router.post('/bookings/share/:id', shareItinerary);
 
+//-----handling ai----
+router.post('/api/gemini/chat', aiController);
 
 //handle logout
 router.get('/logout', logoutController);
