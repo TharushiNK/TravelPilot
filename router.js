@@ -7,10 +7,8 @@ import { getUsers, signUpController, getHotelDetails,addHotelController,
     getAllGuidesForTourist, getGuideDetailsById, createGuideBookingController, createTransportBooking, 
     getTransportProviderById, getAllTransportProviders, getTransportBookingsByProviderId,updateTransportBookingStatus,
     getTourGuideBookingsByGuideId,updateTourGuideBookingStatus,
-    getAllUserBookings,
-    getUserBookingsByType,
-    generateTravelSuggestions,
-    shareItinerary} from './controller.js'
+    getAllUserBookings,getUserBookingsByType,generateTravelSuggestions,shareItinerary,publishSummaryController,
+    deleteTourSummary,publishItineraryController,getDestinations,getTourDetails,contactUsController,getAdminDashboard,getContactUsPage} from './controller.js'
 import { login, logoutController } from './authController.js'
 import { upload } from './config/multer.js'
 import { getCurrentWeatherJSON, getForecast, getWeather } from './apiController.js'
@@ -227,6 +225,19 @@ router.post('/api/gemini/chat', aiController);
 
 //handle logout
 router.get('/logout', logoutController);
+
+//-----------------------------------------------------------------------------
+
+router.get('/contactUs', getContactUsPage);
+router.get('/admin', getAdminDashboard)
+router.post('/publish-itinerary', upload.array('dayImages', 15), publishItineraryController);
+router.get('/destinations', getDestinations);
+router.get('/tour/:id', getTourDetails);
+router.get('/admin/delete-summary/:id', deleteTourSummary)
+router.post('/publish-summary', upload.single('mainImage'), publishSummaryController);
+router.post('/contactUs',contactUsController)
+
+//-----------------------------------------------------------------------------
 
 //handling invalid urls
 router.get('/*any',(req,res)=>{
