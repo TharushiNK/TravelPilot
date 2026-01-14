@@ -3485,3 +3485,164 @@ function getPopularDestinations() {
         }
     ];
 }
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
+// --- NEW/UPDATED: Fetch Tour Details with Itinerary ---
+export const getTourDetails = (req, res) => {
+    const tourId = req.params.id;
+    
+    // 1. Fetch the specific tour summary from 'tours' table
+    const sqlMain = "SELECT * FROM tours WHERE id = ?";
+    db.query(sqlMain, [tourId], (err, tourResult) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Database Error");
+        }
+        if (tourResult.length === 0) {
+            return res.status(404).send("Tour not found");
+        }
+
+        // 2. Fetch the detailed itinerary from 'itinerary' table
+        /*const sqlItinerary = "SELECT * FROM itinerary WHERE tour_id = ? ORDER BY day_number ASC";
+        db.query(sqlItinerary, [tourId], (err, itineraryResult) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send("Error fetching itinerary");
+            }*/
+
+            // 3. Fetch related tours (all except current one) from 'tours' table
+            const sqlRelated = "SELECT * FROM tours WHERE id != ? LIMIT 4";
+            db.query(sqlRelated, [tourId], (err, relatedResult) => {
+                res.render('tour-details', { 
+                    tour: tourResult[0], 
+                    //itinerary: itineraryResult, 
+                    relatedTours: relatedResult 
+                });
+            });
+        });
+    };
+
+// --- NEW: Publish Itinerary Logic for Admin ---
+export const publishItineraryController = (req, res) => {
+    const { tour_id, dayTitle, activities } = req.body;
+    const files = req.files; 
+
+    if (!dayTitle || !Array.isArray(dayTitle)) {
+        return res.status(400).send("Invalid itinerary data");
+    }
+
+    // Prepare data for bulk insert into 'itinerary' table
+    const values = dayTitle.map((title, index) => [
+        tour_id,
+        index + 1, // day_number
+        title,
+        activities[index],
+        files[index] ? files[index].filename : null
+    ]);
+
+    // Updated table name to 'itinerary'
+    const sql = `INSERT INTO itinerary (tour_id, day_number, day_title, activities, image_url) VALUES ?`;
+
+    db.query(sql, [values], (err, result) => {
+        if (err) {
+            console.error("Error saving itinerary:", err);
+            return res.status(500).send("Database error while saving itinerary");
+        }
+        res.redirect('/admin'); 
+    });
+};
+
+// destinations
+export const getDestinations = (req, res) => {
+    // Updated table name to 'tours'
+    const sql = "SELECT * FROM tours ORDER BY id DESC";
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Error fetching destinations");
+        }
+        res.render('destinations', { 
+            title: 'Destinations', 
+            summaries: results 
+        });
+    });
+};
+
+// --- FIXED TOUR SUMMARY PUBLISH ROUTE ---
+export const publishSummaryController = (req, res) => {
+    const { title, duration, main_description } = req.body;
+    const image_path = req.file ? req.file.filename : null;
+    const sql = "INSERT INTO tours (title, duration, description, image_path) VALUES (?, ?, ?, ?)";
+    
+    db.query(sql, [title, duration, main_description, image_path], (err, result) => {
+        if (err) {
+            console.error("Publish Error:", err);
+            return res.status(500).send("Database Error: " + err.message);
+        }
+        res.redirect('/admin'); 
+    });
+};
+
+// --- FIXED: PUBLISH ITINERARY ROUTE ---
+//router.post('/publish-itinerary', upload.array('dayImages', 15), publishItineraryController);
+
+export const deleteTourSummary = (req, res) => {
+    const sql = "DELETE FROM tours WHERE id = ?";
+    db.query(sql, [req.params.id], (err) => {
+        if (err) console.error(err);
+        res.redirect('/admin');
+    });
+};
+
+export const contactUsController = (req, res) => {
+    const { name, email, phone, country, message } = req.body;
+    if (!name || !email || !message) {
+        req.session.formData = { name, email, phone, country, message };
+        req.session.errorMessage = 'Name, email, and message are required';
+        return res.redirect('/contactUs');
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        req.session.formData = { name, email, phone, country, message };
+        req.session.errorMessage = 'Please enter a valid email address';
+        return res.redirect('/contactUs');
+    }
+    const sql = `INSERT INTO contact_messages (name, email, phone, country, message) VALUES (?, ?, ?, ?, ?)`;
+    db.query(sql, [name, email, phone, country, message], (err, result) => {
+        if (err) {
+            req.session.formData = { name, email, phone, country, message };
+            req.session.errorMessage = 'Database error. Please try again.';
+            return res.redirect('/contactUs');
+        }
+        delete req.session.formData;
+        req.session.successMessage = 'Message sent successfully!';
+        res.redirect('/contactUs');
+    });
+};
+
+export const getAdminDashboard = (req, res) => {
+    const sql = "SELECT * FROM tours ORDER BY id DESC";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching summaries:", err);
+            return res.render('admin', { tours: [] });
+        }
+        res.render('admin', { tours: results });
+    });
+};
+
+export const getContactUsPage = (req, res) => {
+    res.render('contactUs', {
+        success: req.session.successMessage || null,
+        error: req.session.errorMessage || null,
+        user: req.session.user || null,
+        formData: req.session.formData || null
+    });
+    delete req.session.successMessage;
+    delete req.session.errorMessage;
+    delete req.session.formData;
+};
+//--------------------------------------------------------------
