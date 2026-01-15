@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>TravelPilot — <%= tour.title %></title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        :root { --accent: #b98546; --accent-dark: #8B5E3C; --text-dark: #4b2a1d; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #fffaf5; }
+        .navbar { display: flex; justify-content: space-between; padding: 20px 5%; background: #000; color: #fff; }
+        .logo { font-size: 24px; font-weight: bold; }
+        .travel { color: #fff; } .pilot { color: var(--accent); }
+        .nav-link { color: #fff; text-decoration: none; margin-left: 20px; }
+        
+        .hero { 
+            height: 60vh; 
+            background-size: cover; 
+            background-position: center; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            text-align: center;
+        }
+        .hero-content h1 { font-family: 'Playfair Display', serif; font-size: 3rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        
+        .container { padding: 50px 10%; }
+        .tour-meta { margin-bottom: 40px; }
+        .day { display: flex; gap: 40px; margin-bottom: 60px; align-items: center; }
+        .day .img { flex: 1; }
+        .day .img img { width: 100%; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .day .text { flex: 1; }
+        .day h3 { color: var(--text-dark); font-size: 24px; }
+        .book-small { display: inline-block; padding: 10px 25px; background: var(--accent); color: white; text-decoration: none; border-radius: 5px; margin-top: 15px; }
+        
+        .route-section { text-align: center; padding: 50px; background: #fff; }
+        .route-section img { max-width: 800px; width: 100%; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><span class="travel">Travel</span><span class="pilot">Pilot</span></div>
+        <div class="nav-right">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/destinations" class="nav-link">Destinations</a>
+        </div>
+    </nav>
+
+    <header class="hero" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= tour.image_path %>');">
+        <div class="hero-content">
+            <h1><%= tour.title %></h1>
+            <p class="hero-sub">CULTURAL & HERITAGE</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+    <div class="content">
+        <div class="tour-meta">
+            <div style="font-weight:600; color: var(--accent);"><%= tour.duration %></div>
+            <h2 style="font-size: 32px; color: var(--text-dark);"><%= tour.title %></h2>
+            <p><%= tour.main_description %></p>
+        </div>
+
+        <% if(typeof itinerary !== 'undefined' && itinerary.length > 0) { %>
+            <% itinerary.forEach((day, index) => { %>
+                <section class="day">
+                    <% if(index % 2 === 0) { %>
+                        <div class="img">
+                            <img src="/uploads/<%= day.image_url %>" class="main-image">
+                        </div>
+                        <div class="text">
+                            <h3>Day <%= day.day_number %> — <%= day.day_title %></h3>
+                            <p><%= day.activities %></p>
+                            <a class="book-small" href="#">Book Now</a>
+                        </div>
+                    <% } else { %>
+                        <div class="text">
+                            <h3>Day <%= day.day_number %> — <%= day.day_title %></h3>
+                            <p><%= day.activities %></p>
+                            <a class="book-small" href="#">Book Now</a>
+                        </div>
+                        <div class="img">
+                            <img src="/uploads/<%= day.image_url %>" class="main-image">
+                        </div>
+                    <% } %>
+                </section>
+            <% }); %>
+        <% } else { %>
+            <p style="text-align:center; padding: 20px; border: 1px dashed #ccc;">
+                Itinerary details are being updated for this tour.
+            </p>
+        <% } %>
+    </div>
+</div>
+    </main>
+
+    <section class="route-section">
+        <h2 style="color: var(--text-dark);">Route Map</h2>
+        <img src="/img1.jpg" alt="Route Map"> </section>
+
+    <section style="padding: 60px 0; background-color: #f7f3ed;">
+        <h2 style="text-align: center; color: var(--text-dark); font-weight: 800; margin-bottom: 30px;">RELATED TOURS</h2>
+        <div style="display: flex; overflow-x: auto; gap: 22px; padding: 0 5% 20px;">
+            <% if(typeof relatedTours !== 'undefined' && relatedTours.length > 0) { %>
+                <% relatedTours.forEach(item => { %>
+                    <div style="min-width: 280px; height: 350px; border-radius: 16px; overflow: hidden; position: relative;">
+                        <img src="<%= item.image_path %>" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; bottom: 0; width: 100%; padding: 15px; background: rgba(75,42,29,0.9); color:white; box-sizing: border-box;">
+                            <div style="font-size: 18px; font-weight: 700; margin-bottom: 5px;"><%= item.title %></div>
+                            <a href="/tour/<%= item.id %>" style="color: #d4a77e; text-decoration: none; font-size: 14px;">VIEW DIRECTION &rarr;</a>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+    </section>
+
+</body>
+</html>
